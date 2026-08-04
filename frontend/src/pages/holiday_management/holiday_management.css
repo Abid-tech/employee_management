@@ -1,0 +1,568 @@
+/* ==========================================================================
+   Holiday Management page styles
+   Uses the design token CSS variables defined in index.css:
+   --color-navy, --color-cream, --color-sage, --color-brown
+   ========================================================================== */
+
+/* --- Page wrapper -------------------------------------------------------- */
+#holiday-management {
+    padding: 30px 0;
+    min-height: 70vh;
+    background-color: var(--color-cream);
+}
+
+/* --- Role toggle switch (top-right corner) ------------------------------- */
+.role-toggle-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.role-toggle-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.role-toggle-btn {
+    display: flex;
+    background: var(--color-sage);
+    border-radius: 30px;
+    overflow: hidden;
+    border: 2px solid var(--color-navy);
+}
+
+.role-toggle-btn button {
+    border: none;
+    padding: 6px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    color: var(--color-navy);
+    transition: all 0.3s ease;
+}
+
+.role-toggle-btn button.active {
+    background: var(--color-navy);
+    color: var(--color-cream);
+}
+
+.role-toggle-btn button:hover:not(.active) {
+    background: rgba(10, 41, 71, 0.1);
+}
+
+/* --- Card panels (used for forms and lists) ------------------------------ */
+.hm-card {
+    background: #fff;
+    border: 1px solid var(--color-sage);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(10, 41, 71, 0.06);
+    transition: box-shadow 0.3s ease;
+}
+
+.hm-card:hover {
+    box-shadow: 0 4px 18px rgba(10, 41, 71, 0.1);
+}
+
+.hm-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-navy);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-sage);
+}
+
+/* --- Form styling -------------------------------------------------------- */
+.hm-form .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-navy);
+    margin-bottom: 5px;
+}
+
+.hm-form .form-control,
+.hm-form .form-select {
+    border-radius: 8px;
+    font-size: 13px;
+    padding: 9px 12px;
+    border: 1px solid var(--color-sage);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hm-form .form-control:focus,
+.hm-form .form-select:focus {
+    border-color: var(--color-brown);
+    box-shadow: 0 0 0 0.15rem rgba(139, 94, 60, 0.2);
+}
+
+.hm-btn-primary {
+    background: var(--color-brown);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.15s ease;
+}
+
+.hm-btn-primary:hover {
+    background: #724d30;
+    transform: translateY(-1px);
+}
+
+.hm-btn-primary:active {
+    transform: translateY(0);
+}
+
+.hm-btn-secondary {
+    background: var(--color-sage);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-navy);
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.hm-btn-secondary:hover {
+    background: #c0c1ad;
+}
+
+/* --- Holiday list -------------------------------------------------------- */
+.holiday-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: var(--color-cream);
+    border: 1px solid var(--color-sage);
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.holiday-list-item:hover {
+    background: #eedfc3;
+    transform: translateX(2px);
+}
+
+.holiday-list-info {
+    flex: 1;
+}
+
+.holiday-list-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.holiday-list-date {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.holiday-type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.holiday-type-badge.national {
+    background: #e3f0ff;
+    color: #1a5cb0;
+}
+
+.holiday-type-badge.religious {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.holiday-type-badge.company {
+    background: #dff4e6;
+    color: #1f7a42;
+}
+
+.holiday-list-actions {
+    display: flex;
+    gap: 6px;
+    margin-left: 12px;
+}
+
+.holiday-list-actions button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.btn-edit {
+    color: var(--color-brown);
+}
+
+.btn-edit:hover {
+    background: rgba(139, 94, 60, 0.1);
+}
+
+.btn-delete {
+    color: #d63031;
+}
+
+.btn-delete:hover {
+    background: rgba(214, 48, 49, 0.1);
+}
+
+/* --- Employee list ------------------------------------------------------- */
+.employee-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    background: var(--color-cream);
+    border: 1px solid var(--color-sage);
+    font-size: 13px;
+    transition: background 0.2s ease;
+}
+
+.employee-list-item:hover {
+    background: #eedfc3;
+}
+
+.employee-name {
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.employee-role {
+    font-size: 12px;
+    color: #666;
+    background: var(--color-sage);
+    padding: 2px 10px;
+    border-radius: 10px;
+}
+
+/* --- Calendar ------------------------------------------------------------ */
+.calendar-wrapper {
+    background: #fff;
+    border: 1px solid var(--color-sage);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 2px 10px rgba(10, 41, 71, 0.06);
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.calendar-header h5 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-navy);
+    margin: 0;
+}
+
+.calendar-nav-btn {
+    background: var(--color-sage);
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-navy);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.calendar-nav-btn:hover {
+    background: var(--color-brown);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day-header {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-navy);
+    padding: 6px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.calendar-day {
+    text-align: center;
+    padding: 8px 4px;
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: default;
+    min-height: 42px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.calendar-day.empty {
+    cursor: default;
+}
+
+.calendar-day.today {
+    border: 2px solid var(--color-navy);
+    font-weight: 700;
+}
+
+.calendar-day.has-holiday {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.calendar-day.has-holiday:hover {
+    transform: scale(1.08);
+}
+
+/* Color coding by holiday type on the calendar */
+.calendar-day.has-holiday.national-bg {
+    background: #e3f0ff;
+    color: #1a5cb0;
+}
+
+.calendar-day.has-holiday.religious-bg {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.calendar-day.has-holiday.company-bg {
+    background: #dff4e6;
+    color: #1f7a42;
+}
+
+/* Small colored dot below the day number for holidays */
+.holiday-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 2px;
+}
+
+.holiday-dot.national-dot {
+    background: #1a5cb0;
+}
+
+.holiday-dot.religious-dot {
+    background: #7c3aed;
+}
+
+.holiday-dot.company-dot {
+    background: #1f7a42;
+}
+
+/* --- Holiday detail panel (shown when a calendar day is clicked) --------- */
+.calendar-detail {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: var(--color-cream);
+    border-radius: 10px;
+    border: 1px solid var(--color-sage);
+    animation: fadeIn 0.2s ease;
+}
+
+.calendar-detail-date {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.calendar-detail-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-navy);
+}
+
+/* --- Employee read-only view --------------------------------------------- */
+.employee-view-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--color-navy);
+}
+
+.employee-view-message h5 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.employee-view-message p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.upcoming-holiday-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid var(--color-sage);
+    margin-bottom: 8px;
+    transition: transform 0.15s ease;
+}
+
+.upcoming-holiday-item:hover {
+    transform: translateX(3px);
+}
+
+.upcoming-date-box {
+    min-width: 48px;
+    text-align: center;
+    background: var(--color-navy);
+    color: var(--color-cream);
+    border-radius: 8px;
+    padding: 6px 8px;
+}
+
+.upcoming-date-box .day {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.upcoming-date-box .month {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Feedback messages --------------------------------------------------- */
+.hm-alert {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    animation: fadeIn 0.3s ease;
+}
+
+.hm-alert-success {
+    background: #dff4e6;
+    color: #1f7a42;
+    border: 1px solid #b8e6c8;
+}
+
+.hm-alert-error {
+    background: #ffe5e5;
+    color: #d63031;
+    border: 1px solid #ffb8b8;
+}
+
+/* --- Confirm dialog overlay ---------------------------------------------- */
+.confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 41, 71, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+    animation: fadeIn 0.2s ease;
+}
+
+.confirm-box {
+    background: #fff;
+    border-radius: 14px;
+    padding: 28px;
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(10, 41, 71, 0.15);
+}
+
+.confirm-box h5 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-navy);
+    margin-bottom: 8px;
+}
+
+.confirm-box p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 18px;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* --- Empty state --------------------------------------------------------- */
+.empty-state {
+    text-align: center;
+    padding: 24px;
+    color: #999;
+    font-size: 13px;
+}
+
+/* --- Keyframes ----------------------------------------------------------- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive tweaks --------------------------------------------------- */
+@media (max-width: 768px) {
+    .holiday-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .holiday-list-actions {
+        margin-left: 0;
+    }
+
+    .calendar-day {
+        padding: 6px 2px;
+        min-height: 36px;
+        font-size: 12px;
+    }
+}

@@ -1,29 +1,29 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
-const cors = require('cors'); 
+const cors = require('cors');
 const app = express()
 
-
-
-app.use(express.json()); 
+// Allow requests from the Vercel frontend (set FRONTEND_URL in Render env vars)
+// In dev, cors() with no args allows everything — fine for localhost
+app.use(cors({
+    origin: process.env.FRONTEND_URL || '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors())
 
 // connect to db
 mongoose.connect(process.env.MONGODB_URI)
 .then(()=>{
-    app.listen(5000, ()=>{
-    console.log("Listening to port 5000")
+    app.listen(process.env.PORT || 5000, ()=>{
+    console.log(`Listening to port ${process.env.PORT || 5000}`)
 })
 })
 .catch((error)=>{
     console.log(error)
 })
 
-
-
-// API Endpoints
-app.use('/leave-management',require('./routes/leave_management'))
-
-
+// API Endpoints — Holiday Management only
+app.use('/api/holidays', require('./routes/holidayRoutes'))
+app.use('/api/employees', require('./routes/employeeRoutes'))

@@ -1,13 +1,10 @@
-import { useState } from 'react'
-import { Route,Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Header from './components/header/header'
 import Footer from './components/footer/footer'
-import Home from './pages/home/home'
-import Leave from './pages/Leave_management/leave_management'
-import AdminDashboard from './pages/admin_dashboard/admin_dashboard'
+import HolidayManagement from './pages/holiday_management/holiday_management'
+
 function App() {
- 
 
   return (
     <>
@@ -15,9 +12,8 @@ function App() {
       <Header/>
       <div className="flex-grow-1">
         <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/Leave-management' element={<Leave/>}/>
-          <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
+          {/* Holiday Management is now the only (and default) page */}
+          <Route path='/' element={<HolidayManagement/>}/>
         </Routes>
       </div>
       <Footer/>
