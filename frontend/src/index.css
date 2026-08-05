@@ -21,6 +21,15 @@
     padding: 0;
 }
 
+hr{
+    padding: 0;
+    margin: 5px 0;
+}
+.small, small{
+    font-size: 10px;
+}
+
+
 
 /* Header part start */
 .navbar{
@@ -40,11 +49,189 @@
 }
 /* Header part end */
 
+/* Leave management start */
+#leave-management{
+    margin: 30px 0;
+}
+
+
+/* Leave form start */
+.leave-form{
+    border: 1px solid rgba(0,0,0,.15);
+    padding: 20px;
+    border-radius: 20px;
+}
+.form-top h4{
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue-color);
+}
+
+.main-form-part{
+    margin-top: 10px;
+}
+
+.form-label{
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue-color);
+    margin-bottom: 6px;
+}
+
+.form-control,
+.form-select{
+    border-radius: 8px;
+    font-size: 12px;
+    padding: 10px 12px;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color: var(--blue-color);
+    box-shadow: 0 0 0 .15rem rgba(10,41,71,.2);
+}
+
+.form-check-label{
+    font-size: 12px;
+}
+
+textarea{
+    resize: none;
+}
+
+.btn-primary{
+    background: var(--blue-color);
+    border-color: var(--blue-color);
+    border-radius: 8px;
+    padding: 10px 30px;
+    font-weight: 600;
+}
+
+.btn-primary:hover{
+    background: #12385d;
+    border-color: #12385d;
+}
+
+.leave-form-btn button{
+    font-size: 14px;
+}
+/* Leave form end */
+
+/* Leave history start */
+
+.leave-history{
+    margin: 30px 0;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 18px;
+    padding: 20px;
+    background: #fff;
+}
+
+.history-top h4{
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue-color);
+}
+
+.leave-history table{
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.leave-history thead th{
+    border-bottom: 2px solid #e9ecef;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue-color);
+}
+
+.leave-history tbody td{
+    font-size: 13px;
+    vertical-align: middle;
+    color: #444;
+}
+
+
+.leave-type{
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.leave-type.annual{
+    background: #dff4e6;
+    color: #1f7a42;
+}
+
+.leave-type.medical{
+    background: #ffe7d9;
+    color: #d35400;
+}
+
+.leave-type.casual{
+    background: #e8ecff;
+    color: #304ffe;
+}
+
+.leave-type.emergency{
+    background: #ffe5e5;
+    color: #d63031;
+}
+
+.status{
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status.pending{
+    background: #fff0d8;
+    color: #e67e22;
+}
+
+.status.accepted{
+    background: #dff4e6;
+    color: #1f7a42;
+}
+
+.status.rejected{
+    background: #ffe0e0;
+    color: #d63031;
+}
+/* Leave history end */
+
+
+/* Leave management end */
+
+
+
+/* Admin dashboard part start */
+.status-select {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+/* Admin dashboard part end */
+
+
+
+
+
 
 /* Footer part start */
 #footer{
     text-align: center;
     color: var(--beige-color);
     background-color: var(--blue-color);
+    padding: 10px 0;
 }
 /* Footer part end */
+
