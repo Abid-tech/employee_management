@@ -5,6 +5,7 @@ import Header from './components/header/header'
 import Footer from './components/footer/footer'
 import Home from './pages/home/home'
 import Leave from './pages/Leave_management/leave_management'
+import AdminDashboard from './pages/admin_dashboard/admin_dashboard'
 function App() {
  
 
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/Leave-management' element={<Leave/>}/>
+          <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
         </Routes>
       </div>
       <Footer/>
