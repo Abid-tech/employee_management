@@ -5,6 +5,8 @@ import Header from './components/header/header'
 import Footer from './components/footer/footer'
 import Home from './pages/home/home'
 import Leave from './pages/Leave_management/leave_management'
+import BookRoom from './pages/BookRoom/BookRoom'
+import AddRoom from './pages/AddRoom/AddRoom'
 function App() {
  
 
@@ -16,6 +18,8 @@ function App() {
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/Leave-management' element={<Leave/>}/>
+          <Route path='/book-room' element={<BookRoom/>}/>
+          <Route path='/add-room' element={<AddRoom/>}/>
         </Routes>
       </div>
       <Footer/>
