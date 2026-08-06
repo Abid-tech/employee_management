@@ -1,0 +1,92 @@
+%PDF-1.4
+1 0 obj
+<</Type/Catalog/Pages 2 0 R>>
+endobj
+2 0 obj
+<</Type/Pages/Kids[4 0 R 6 0 R]/Count 2>>
+endobj
+3 0 obj
+<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>
+endobj
+4 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</Font<</F1 3 0 R>>>>/Contents 5 0 R>>
+endobj
+5 0 obj
+<</Length 3654>>
+stream
+BT /F1 11 Tf 56 760 Td (Client Brief — Doorbell Courier Tracking Platform) Tj ET
+BT /F1 11 Tf 56 744 Td () Tj ET
+BT /F1 11 Tf 56 728 Td (Prepared for Northwind Digital) Tj ET
+BT /F1 11 Tf 56 712 Td (Contact: Nafisa Haque, Chief Operating Officer, Doorbell Logistics) Tj ET
+BT /F1 11 Tf 56 696 Td () Tj ET
+BT /F1 11 Tf 56 680 Td (Background) Tj ET
+BT /F1 11 Tf 56 664 Td () Tj ET
+BT /F1 11 Tf 56 648 Td (Doorbell Logistics moves about twelve thousand parcels a week across Dhaka and) Tj ET
+BT /F1 11 Tf 56 632 Td (Chattogram with a fleet of two hundred riders. Every parcel is tracked on a) Tj ET
+BT /F1 11 Tf 56 616 Td (paper manifest that a rider hands back at the end of a shift, so the office) Tj ET
+BT /F1 11 Tf 56 600 Td (cannot answer "where is my parcel" until the next morning. Customers call the) Tj ET
+BT /F1 11 Tf 56 584 Td (support line instead, and roughly a third of those calls are people asking a) Tj ET
+BT /F1 11 Tf 56 568 Td (question nobody in the building can answer yet.) Tj ET
+BT /F1 11 Tf 56 552 Td () Tj ET
+BT /F1 11 Tf 56 536 Td (They want a platform where riders scan each parcel at pickup and delivery,) Tj ET
+BT /F1 11 Tf 56 520 Td (customers follow their own parcel on a public tracking page, and the operations) Tj ET
+BT /F1 11 Tf 56 504 Td (desk sees every rider on one live map.) Tj ET
+BT /F1 11 Tf 56 488 Td () Tj ET
+BT /F1 11 Tf 56 472 Td (What we need built) Tj ET
+BT /F1 11 Tf 56 456 Td () Tj ET
+BT /F1 11 Tf 56 440 Td (- Build the rider mobile screen for scanning a parcel barcode at pickup and drop-off) Tj ET
+BT /F1 11 Tf 56 424 Td (- Create the parcel tracking API that returns the current status and location history) Tj ET
+BT /F1 11 Tf 56 408 Td (- Set up the database schema for parcels, riders, routes and scan events) Tj ET
+BT /F1 11 Tf 56 392 Td (- Design the public tracking screen that a customer opens from an SMS link) Tj ET
+BT /F1 11 Tf 56 376 Td (- Build the operations dashboard showing every active rider on one map) Tj ET
+BT /F1 11 Tf 56 360 Td (- Integrate the SMS gateway so customers get a message at dispatch and on delivery) Tj ET
+BT /F1 11 Tf 56 344 Td (- Write end to end tests for the scan, dispatch and delivery paths) Tj ET
+BT /F1 11 Tf 56 328 Td (- Research how two competing courier firms handle failed delivery attempts) Tj ET
+BT /F1 11 Tf 56 312 Td (- Deploy the platform to a staging environment for the operations team to trial) Tj ET
+BT /F1 11 Tf 56 296 Td (- Draft the rider training manual in Bangla with screenshots) Tj ET
+BT /F1 11 Tf 56 280 Td (- Prepare the launch announcement for the customer newsletter) Tj ET
+BT /F1 11 Tf 56 264 Td (- Update the rider onboarding policy to cover the new scanning process) Tj ET
+BT /F1 11 Tf 56 248 Td () Tj ET
+BT /F1 11 Tf 56 232 Td (Constraints) Tj ET
+BT /F1 11 Tf 56 216 Td () Tj ET
+BT /F1 11 Tf 56 200 Td (The barcode scanning screen and the tracking API are critical. Doorbell has) Tj ET
+BT /F1 11 Tf 56 184 Td (promised the new tracking page to its three largest retail clients before the) Tj ET
+BT /F1 11 Tf 56 168 Td (Eid rush, and neither of those can slip.) Tj ET
+BT /F1 11 Tf 56 152 Td () Tj ET
+BT /F1 11 Tf 56 136 Td (The operations map is important but can follow three weeks later, once scanning) Tj ET
+BT /F1 11 Tf 56 120 Td (data is actually flowing.) Tj ET
+BT /F1 11 Tf 56 104 Td () Tj ET
+BT /F1 11 Tf 56 88 Td (The customer newsletter and the rider training manual are nice to have for) Tj ET
+BT /F1 11 Tf 56 72 Td (launch day and can be finished afterwards if time runs short.) Tj ET
+BT /F1 11 Tf 56 56 Td () Tj ET
+BT /F1 11 Tf 56 40 Td (A security review is required before any real customer addresses are loaded.) Tj ET
+endstream
+endobj
+6 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</Font<</F1 3 0 R>>>>/Contents 7 0 R>>
+endobj
+7 0 obj
+<</Length 344>>
+stream
+BT /F1 11 Tf 56 760 Td () Tj ET
+BT /F1 11 Tf 56 744 Td (Out of scope) Tj ET
+BT /F1 11 Tf 56 728 Td () Tj ET
+BT /F1 11 Tf 56 712 Td (Cash on delivery reconciliation, which stays in the existing finance system.) Tj ET
+BT /F1 11 Tf 56 696 Td (Route optimisation is a later phase and is not part of this work.) Tj ET
+BT /F1 11 Tf 56 680 Td () Tj ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000054 00000 n 
+0000000111 00000 n 
+0000000199 00000 n 
+0000000311 00000 n 
+0000004015 00000 n 
+0000004127 00000 n 
+trailer<</Size 8/Root 1 0 R>>
+startxref
+4520
+%%EOF

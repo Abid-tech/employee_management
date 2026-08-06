@@ -1,0 +1,335 @@
+/* --- Projects list --------------------------------------------------------- */
+
+.project-new-body {
+    display: grid;
+    grid-template-columns: 1fr 180px auto;
+    gap: 14px;
+    align-items: end;
+}
+
+.project-totals {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin: 18px 0 14px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.project-totals > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 16px;
+    background: var(--surface);
+}
+
+.project-totals strong {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy-800);
+    line-height: 1.1;
+}
+
+.project-totals span { font-size: 11.5px; color: var(--ink-muted); }
+.project-totals .is-late strong { color: var(--critical); }
+
+.project-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.project-card {
+    display: block;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--speed) var(--ease), box-shadow var(--speed) var(--ease),
+                transform var(--speed) var(--ease);
+}
+
+.project-card:hover {
+    border-color: var(--navy-300);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+}
+
+.project-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.project-card h2 {
+    margin: 0 0 3px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy-800);
+}
+
+.project-card-meta { margin: 0; font-size: 12px; }
+
+/* The bar is the point of the card: one glance, one number. */
+.project-bar {
+    position: relative;
+    height: 8px;
+    margin: 12px 0 8px;
+    background: var(--neutral-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.project-bar-fill {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--medium);
+    transition: width var(--speed) var(--ease);
+}
+
+/* The health-* and health-fill-* colours live in styles/theme.css — the orbit
+   shows the same badges and bars. */
+
+.project-card-foot {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 12px;
+}
+
+.project-percent {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy-800);
+    min-width: 42px;
+}
+
+.project-due { margin-left: auto; }
+.project-due.is-late { color: var(--critical); font-weight: 600; }
+
+/* --- Project detail -------------------------------------------------------- */
+
+.project-count { font-size: 12px; font-weight: 600; }
+
+.project-detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 16px;
+    align-items: start;
+}
+
+.project-summary {
+    margin: 0 0 4px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+}
+
+.project-big {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.project-big strong {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--navy-800);
+    line-height: 1;
+}
+
+.project-stage-list {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.project-stage-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+}
+
+.project-stage-list .count { margin-left: auto; font-weight: 700; color: var(--navy-800); }
+
+.stage-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--line-strong);
+}
+
+.stage-todo { background: var(--line-strong); }
+.stage-in_progress { background: var(--medium); }
+.stage-review { background: var(--high); }
+.stage-done { background: var(--ok); }
+
+.dept-rows { display: grid; gap: 10px; }
+
+.dept-row-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+}
+
+.dept-bar {
+    height: 6px;
+    background: var(--neutral-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.dept-bar span {
+    display: block;
+    height: 100%;
+    background: var(--navy-600);
+    border-radius: 999px;
+}
+
+.project-facts { display: grid; gap: 0; margin: 0; }
+
+.project-facts > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 12.5px;
+}
+
+.project-facts > div:last-child { border-bottom: 0; }
+.project-facts dt { color: var(--ink-muted); }
+.project-facts dd { margin: 0; font-weight: 600; color: var(--navy-800); text-align: right; }
+.project-facts dd.is-late { color: var(--critical); }
+
+.project-task { border-bottom: 1px solid var(--line); }
+.project-task:last-child { border-bottom: 0; }
+
+.project-task-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 11px 16px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-task-row:hover { background: var(--surface-sunken); }
+
+/* Assigned and due side by side, each with a small label above the value. */
+.project-task-dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin-top: 4px;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+}
+
+.project-task-dates span { display: inline-flex; align-items: baseline; gap: 5px; }
+.project-task-dates .is-late { color: var(--critical); font-weight: 600; }
+
+.project-task-dates em {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 9.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.75;
+}
+
+/* --- The checklist inside a task ------------------------------------------ */
+
+.project-subtasks {
+    margin: 0;
+    padding: 0 16px 12px 34px;
+    list-style: none;
+    display: grid;
+    gap: 3px;
+}
+
+.project-subtasks li {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink-soft);
+}
+
+.subtask-mark {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 4px;
+    font-size: 9px;
+    line-height: 1;
+    color: #fff;
+}
+
+.project-subtasks .is-done .subtask-mark { background: var(--ok); border-color: var(--ok); }
+.project-subtasks .is-done .subtask-title { text-decoration: line-through; color: var(--ink-muted); }
+
+.subtask-title { min-width: 0; }
+.subtask-when { margin-left: auto; flex-shrink: 0; font-size: 10.5px; color: var(--ink-muted); }
+
+.project-task-title { font-size: 13px; font-weight: 600; color: var(--navy-800); }
+
+.project-task-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 3px;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+}
+
+.project-task-meta .is-late { color: var(--critical); font-weight: 600; }
+
+.project-task-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--ink-muted);
+}
+
+.mini-bar {
+    width: 64px;
+    height: 6px;
+    background: var(--neutral-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.mini-bar span { display: block; height: 100%; background: var(--medium); border-radius: 999px; }
+
+/* --- Narrow screens -------------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .project-detail-grid { grid-template-columns: 1fr; }
+    .project-totals { grid-template-columns: repeat(2, 1fr); }
+    .project-new-body { grid-template-columns: 1fr; }
+    .project-card-foot { flex-wrap: wrap; }
+    .project-due { margin-left: 0; width: 100%; }
+    .project-task-row { grid-template-columns: 1fr; }
+    .project-task-right { justify-content: flex-start; }
+}

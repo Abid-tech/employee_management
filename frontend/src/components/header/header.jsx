@@ -24,6 +24,12 @@ function Header(){
                                 <Link className="nav-link" to="/Leave-management">Leave management</Link>
                             </li>
                             <li className="nav-item">
+                                <Link className="nav-link" to="/tasks">Task orbit</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/projects">Projects</Link>
+                            </li>
+                            <li className="nav-item">
                                 <Link className="nav-link" to="/">Attendence</Link>
                             </li>
                            

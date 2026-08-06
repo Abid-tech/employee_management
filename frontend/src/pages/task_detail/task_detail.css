@@ -1,0 +1,322 @@
+/* .detail-badges, .detail-main and .detail-side now live in styles/theme.css —
+   the project pages are built from the same primitives. */
+
+.page-title h1 { max-width: 42ch; line-height: 1.3; }
+
+.detail-error {
+    padding: 11px 14px;
+    background: var(--critical-soft);
+    border-left: 3px solid var(--critical);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: #8A3226;
+}
+
+.detail-back-btn { align-self: flex-start; }
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 16px;
+    align-items: start;
+}
+
+
+.detail-description {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    white-space: pre-wrap;
+}
+
+/* --- Checklist ------------------------------------------------------------ */
+
+.checklist-count { font-size: 12px; font-variant-numeric: tabular-nums; }
+.checklist-hint { margin-bottom: 12px; font-size: 12.5px; }
+
+.checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+}
+
+.checklist li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: var(--radius-sm);
+    transition: background var(--speed) var(--ease);
+}
+
+.checklist li > label { flex: 1; min-width: 0; }
+
+/* When the item was ticked. Quiet, but it is the difference between a checklist
+   and a record of what happened. */
+.checklist-when {
+    flex-shrink: 0;
+    padding-right: 8px;
+    font-size: 11px;
+    color: var(--ink-muted);
+    white-space: nowrap;
+}
+
+.checklist li:hover { background: var(--surface-sunken); }
+
+.checklist label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 9px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.checklist input[type='checkbox'] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--navy-600);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.checklist-done span { color: var(--ink-muted); text-decoration: line-through; }
+
+.checklist-add { display: flex; gap: 8px; }
+
+/* --- Files ---------------------------------------------------------------- */
+
+.file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.file-list li { display: flex; align-items: center; gap: 6px; }
+
+.file-row {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    flex: 1;
+    min-width: 0;
+    padding: 9px 10px;
+    background: var(--surface-sunken);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    transition: border-color var(--speed) var(--ease), background var(--speed) var(--ease);
+}
+
+.file-row:hover { border-color: var(--navy-300); background: var(--surface); }
+
+/* A folded corner drawn with a gradient rather than an icon file. */
+.file-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 27px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 3px;
+    background-image: linear-gradient(225deg, var(--line-strong) 0 8px, transparent 8px);
+}
+
+.file-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
+.file-text strong { font-size: 12.5px; color: var(--navy-800); word-break: break-all; }
+.file-text span { font-size: 11.5px; }
+
+.file-remove {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    background: transparent;
+    border: 0;
+    border-radius: 4px;
+    color: var(--ink-muted);
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background var(--speed) var(--ease), color var(--speed) var(--ease);
+}
+
+.file-remove:hover { background: var(--critical-soft); color: var(--critical); }
+
+/* --- Discussion ----------------------------------------------------------- */
+
+.pill-open-q { background: var(--high-soft); color: var(--high); }
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0 0 18px;
+    padding: 0;
+    list-style: none;
+}
+
+.comment { display: flex; gap: 11px; }
+
+.comment-body { flex: 1; min-width: 0; }
+
+/* Questions get a tinted card so an open one is findable at a glance. */
+.comment-question .comment-body {
+    padding: 10px 12px;
+    background: var(--high-soft);
+    border-radius: var(--radius-sm);
+}
+
+.comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 3px;
+}
+
+.comment-meta strong { font-size: 12.5px; color: var(--navy-800); }
+.comment-meta span { font-size: 11.5px; }
+
+.comment-body p { font-size: 13px; line-height: 1.6; color: var(--ink-soft); }
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.comment-toggle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    cursor: pointer;
+}
+
+.comment-toggle input {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--high);
+    cursor: pointer;
+}
+
+/* --- Progress ------------------------------------------------------------- */
+
+.progress-panel { display: flex; align-items: center; gap: 16px; }
+
+.progress-ring {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 86px;
+    height: 86px;
+    flex-shrink: 0;
+}
+
+.progress-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.progress-track { fill: none; stroke: var(--neutral-soft); stroke-width: 9; }
+
+.progress-fill {
+    fill: none;
+    stroke-width: 9;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 500ms var(--ease);
+}
+
+/* The ring colour follows priority, matching the planet it came from. */
+.fill-critical { stroke: var(--critical); }
+.fill-high     { stroke: var(--high); }
+.fill-medium   { stroke: var(--medium); }
+.fill-low      { stroke: var(--low); }
+
+.progress-ring span {
+    position: absolute;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy-800);
+    font-variant-numeric: tabular-nums;
+}
+
+.progress-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.progress-text strong { font-size: 14px; color: var(--navy-800); }
+.progress-text span { font-size: 11.5px; line-height: 1.5; }
+
+/* --- Meta ----------------------------------------------------------------- */
+
+.meta-row {
+    display: flex;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.meta-row:first-child { padding-top: 0; }
+.meta-row:last-child { border-bottom: 0; padding-bottom: 0; }
+
+.meta-label {
+    flex-shrink: 0;
+    width: 74px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-muted);
+}
+
+.meta-value {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--navy-800);
+}
+
+.meta-value em {
+    font-size: 11.5px;
+    font-style: normal;
+    font-weight: 500;
+    color: var(--ink-muted);
+}
+
+.meta-late { color: var(--critical); font-weight: 650; }
+
+.meta-person { display: flex; align-items: center; gap: 9px; }
+
+.meta-person > span {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.35;
+}
+
+.avatar {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 650;
+}
+
+.detail-controls { display: flex; flex-direction: column; gap: 14px; }
+
+@media (max-width: 900px) {
+    .detail-grid { grid-template-columns: 1fr; }
+}
