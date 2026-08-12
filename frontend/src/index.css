@@ -222,7 +222,274 @@ textarea{
 /* Admin dashboard part end */
 
 
+/* Registration part start */
+/* Registration Section */
 
+#registration-section{
+    min-height: calc(100vh - 60px);
+    padding: 50px 0;
+    background: #f8f9fb;
+}
+
+
+/* Form Container */
+
+.registration-wrapper{
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 35px;
+    background: #ffffff;
+    border: 1px solid #e6e9ed;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Header */
+
+.registration-header{
+    margin-bottom: 28px;
+}
+
+.registration-header h3{
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--blue-color);
+    margin-bottom: 6px;
+}
+
+.registration-header p{
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}
+
+
+/* Labels */
+
+#registration-section .form-label{
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #27364a;
+}
+
+
+/* Inputs */
+
+#registration-section .form-control,
+#registration-section .form-select{
+    height: 44px;
+    padding: 8px 12px;
+    border: 1px solid #dfe3e8;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #333;
+    background-color: #fff;
+}
+
+
+/* Placeholder */
+
+#registration-section .form-control::placeholder{
+    color: #a5aab1;
+    font-size: 13px;
+}
+
+
+/* Focus */
+
+#registration-section .form-control:focus,
+#registration-section .form-select:focus{
+    border-color: var(--blue-color);
+    box-shadow: 0 0 0 3px rgba(10, 41, 71, 0.08);
+}
+
+
+/* Submit */
+
+.registration-submit{
+    margin-top: 30px;
+    text-align: center;
+}
+
+.registration-btn{
+    min-width: 180px;
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: none;
+    background: var(--blue-color);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.registration-btn:hover{
+    background: #123c65;
+    color: #fff;
+}
+/* Registration part end */
+
+
+/* Login part start */
+/* Login Section */
+
+#login-section{
+    min-height: calc(100vh - 60px);
+    padding: 70px 0;
+    background: #f8f9fb;
+
+    display: flex;
+    align-items: center;
+}
+
+
+/* Login Card */
+
+.login-wrapper{
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 35px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6e9ed;
+    border-radius: 16px;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Header */
+
+.login-header{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h3{
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--blue-color);
+    margin-bottom: 7px;
+}
+
+.login-header p{
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}
+
+
+/* Label */
+
+#login-section .form-label{
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #27364a;
+}
+
+
+/* Input */
+
+#login-section .form-control{
+    height: 44px;
+    padding: 8px 12px;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 8px;
+
+    font-size: 13px;
+}
+
+#login-section .form-control::placeholder{
+    color: #a5aab1;
+    font-size: 13px;
+}
+
+
+/* Input Focus */
+
+#login-section .form-control:focus{
+    border-color: var(--blue-color);
+
+    box-shadow: 0 0 0 3px rgba(10, 41, 71, 0.08);
+}
+
+
+/* Forgot Password */
+
+.forgot-password{
+    text-align: right;
+    margin-top: 5px;
+}
+
+.forgot-password a{
+    font-size: 12px;
+    color: var(--blue-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.forgot-password a:hover{
+    text-decoration: underline;
+}
+
+
+/* Login Button */
+
+.login-submit{
+    margin-top: 25px;
+}
+
+.login-btn{
+    width: 100%;
+    padding: 10px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: var(--blue-color);
+    color: #fff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.login-btn:hover{
+    background: #123c65;
+    color: #fff;
+}
+
+
+/* Signup */
+
+.signup-link{
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+
+    border-top: 1px solid #eeeeee;
+
+    font-size: 13px;
+    color: #777;
+}
+
+.signup-link a{
+    color: var(--blue-color);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signup-link a:hover{
+    text-decoration: underline;
+}
+/* Login part end */
 
 
 

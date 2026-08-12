@@ -6,6 +6,8 @@ import Footer from './components/footer/footer'
 import Home from './pages/home/home'
 import Leave from './pages/Leave_management/leave_management'
 import AdminDashboard from './pages/admin_dashboard/admin_dashboard'
+import Registration from './pages/registration/registration'
+import Login from './pages/login/login'
 function App() {
  
 
@@ -18,6 +20,8 @@ function App() {
           <Route path='/' element={<Home/>}/>
           <Route path='/Leave-management' element={<Leave/>}/>
           <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
+          <Route path='/registration' element={<Registration/>}/>
+          <Route path='/login' element={<Login/>}/>
         </Routes>
       </div>
       <Footer/>
