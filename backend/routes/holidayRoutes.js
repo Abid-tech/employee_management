@@ -7,11 +7,10 @@ const {
     deleteHoliday
 } = require('../controller/holidayController')
 
-// Each route maps an HTTP method + path to a controller function.
-// The base path "/api/holidays" is set in server.js when we mount this router.
-router.get('/', getHolidays)          // GET    /api/holidays
-router.post('/', createHoliday)       // POST   /api/holidays
-router.put('/:id', updateHoliday)     // PUT    /api/holidays/:id
-router.delete('/:id', deleteHoliday)  // DELETE /api/holidays/:id
+router.get('/', getHolidays)
+router.post('/', createHoliday)
+router.put('/:id', updateHoliday)
+router.delete('/:id', deleteHoliday)
 
 module.exports = router
+

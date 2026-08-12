@@ -1,9 +1,15 @@
 const express = require('express')
 const router = express.Router()
-const { getEmployees, createEmployee } = require('../controller/employeeController')
+const {
+    getEmployees,
+    createEmployee,
+    updateEmployee,
+    deleteEmployee,
+} = require('../controller/employeeController')
 
-// Base path "/api/employees" is set in server.js when we mount this router.
-router.get('/', getEmployees)      // GET  /api/employees
-router.post('/', createEmployee)   // POST /api/employees
+router.get('/', getEmployees)
+router.post('/', createEmployee)
+router.put('/:id', updateEmployee)
+router.delete('/:id', deleteEmployee)
 
 module.exports = router

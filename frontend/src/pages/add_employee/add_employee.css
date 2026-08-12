@@ -1,0 +1,78 @@
+#add-employee-page {
+    padding: 30px 0;
+    min-height: 70vh;
+    background-color: var(--color-cream);
+}
+
+.ae-page-title {
+    margin-bottom: 24px;
+}
+
+.ae-page-title h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-navy);
+    margin-bottom: 4px;
+}
+
+.ae-page-title p {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+}
+
+.ae-form-card {
+    position: sticky;
+    top: 20px;
+}
+
+/* Table */
+.ae-table-wrap {
+    overflow-x: auto;
+}
+
+.ae-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 13px;
+}
+
+.ae-table thead th {
+    background: var(--color-navy);
+    color: var(--color-cream);
+    padding: 10px 14px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.ae-table thead th:first-child { border-radius: 10px 0 0 0; }
+.ae-table thead th:last-child { border-radius: 0 10px 0 0; }
+
+.ae-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.ae-table tbody tr:hover {
+    background: #eedfc3;
+}
+
+.ae-table tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-sage);
+    vertical-align: middle;
+}
+
+.ae-emp-name {
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.ae-emp-email {
+    font-size: 11px;
+    color: #888;
+    margin-top: 1px;
+}

@@ -1,11 +1,5 @@
 const mongoose = require('mongoose')
 
-// ---------------------------------------------------------------------------
-// Employee schema
-// Minimal for sprint 1 — just a name and a role string.
-// The role is free-text (not an enum) because the admin UI lets users
-// pick from a preset list OR type a custom role via an "Other" option.
-// ---------------------------------------------------------------------------
 const employeeSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -16,6 +10,35 @@ const employeeSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Employee role is required'],
         trim: true,
+    },
+    team: {
+        type: String,
+        default: '',
+        trim: true,
+    },
+    employeeId: {
+        type: String,
+        default: '',
+        trim: true,
+    },
+    email: {
+        type: String,
+        default: '',
+        trim: true,
+        lowercase: true,
+    },
+    joiningDate: {
+        type: Date,
+        default: null,
+    },
+    department: {
+        type: String,
+        default: '',
+        trim: true,
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
     },
 }, {
     timestamps: true,

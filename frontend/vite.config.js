@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     // Forward any /api/* requests to the Express backend during development.
-    // This avoids CORS issues — in production you'd use a reverse proxy (nginx etc).
+    // This avoids CORS issues - in production you'd use a reverse proxy (nginx etc).
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
