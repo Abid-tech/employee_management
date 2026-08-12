@@ -1,0 +1,214 @@
+.import { display: flex; flex-direction: column; gap: 16px; }
+
+.import-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+}
+
+.import-input { display: flex; flex-direction: column; gap: 13px; }
+
+/* --- Engine badge --------------------------------------------------------- */
+
+.engine-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 10px;
+    background: var(--surface-sunken);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+.engine-dot { width: 7px; height: 7px; background: var(--line-strong); border-radius: 50%; }
+
+/* A halo marks a live API key, so it is obvious which engine is answering. */
+.engine-dot-live { background: var(--ok); box-shadow: 0 0 0 3px var(--ok-soft); }
+
+/* --- Project grouping on the review screen -------------------------------- */
+
+.draft-group-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy-800);
+    cursor: pointer;
+}
+
+.draft-project {
+    display: grid;
+    grid-template-columns: 1fr 180px;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+@media (max-width: 700px) {
+    .draft-project { grid-template-columns: 1fr; }
+}
+
+/* --- Dropzone ------------------------------------------------------------- */
+
+.dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 130px;
+    padding: 20px;
+    background: var(--surface-sunken);
+    border: 2px dashed var(--line-strong);
+    border-radius: var(--radius);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--speed) var(--ease), background var(--speed) var(--ease);
+}
+
+.dropzone:hover { border-color: var(--navy-300); }
+.dropzone-over { border-color: var(--navy-600); background: var(--medium-soft); }
+.dropzone-filled { border-style: solid; border-color: var(--ok); background: var(--ok-soft); }
+
+.dropzone strong { font-size: 13.5px; color: var(--navy-800); word-break: break-all; }
+.dropzone span { font-size: 11.5px; }
+
+.or-line {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ink-muted);
+    font-size: 11.5px;
+}
+
+.or-line::before, .or-line::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+}
+
+.import-textarea { min-height: 140px; font-size: 12.5px; line-height: 1.6; }
+.import-textarea:disabled { background: var(--surface-sunken); color: var(--ink-muted); }
+
+.sample-button { align-self: flex-start; }
+
+.import-steps {
+    padding: 13px 15px;
+    background: var(--surface-sunken);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.import-steps ol { margin: 9px 0 0; padding-left: 18px; }
+.import-steps li { padding: 3px 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+
+.import-go { padding: 11px; }
+
+/* --- Draft review --------------------------------------------------------- */
+
+.draft-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.draft-summary {
+    margin-top: 5px;
+    max-width: 60ch;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy-800);
+    line-height: 1.5;
+}
+
+.draft-source { margin-top: 6px; font-size: 11.5px; }
+
+.draft-notice {
+    margin-top: 12px;
+    padding: 9px 12px;
+    background: var(--high-soft);
+    border-left: 3px solid var(--high);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    line-height: 1.5;
+    color: #8A5A22;
+}
+
+.draft-totals { display: flex; gap: 24px; }
+.draft-totals > div { display: flex; flex-direction: column; }
+
+.draft-totals strong {
+    font-size: 21px;
+    font-weight: 680;
+    color: var(--navy-800);
+    font-variant-numeric: tabular-nums;
+}
+
+.draft-totals span { font-size: 11px; color: var(--ink-muted); }
+
+.draft-list { display: flex; flex-direction: column; gap: 9px; }
+
+.draft-task {
+    display: flex;
+    gap: 12px;
+    padding: 13px 15px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    animation: rise 240ms var(--ease) both;
+    transition: opacity var(--speed) var(--ease);
+}
+
+/* Dropped rows stay in place, faded, so a change of mind is one click away. */
+.draft-task-out { opacity: 0.45; border-style: dashed; }
+
+.draft-include input {
+    width: 16px;
+    height: 16px;
+    margin-top: 9px;
+    accent-color: var(--navy-600);
+    cursor: pointer;
+}
+
+.draft-body { display: flex; flex-direction: column; gap: 9px; flex: 1; min-width: 0; }
+
+.draft-title { font-size: 13.5px; font-weight: 620; color: var(--navy-800); }
+
+.draft-reason {
+    padding-left: 9px;
+    border-left: 2px solid var(--sage);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink-muted);
+}
+
+.draft-controls { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
+
+.draft-control { display: flex; flex-direction: column; gap: 4px; min-width: 168px; }
+.draft-control-sm { min-width: 100px; }
+.draft-control span { font-size: 11px; font-weight: 600; color: var(--ink-muted); }
+
+.draft-actions { position: sticky; bottom: 16px; box-shadow: var(--shadow-lg); }
+
+.draft-actions-body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.draft-actions-body p { font-size: 12.5px; }
+
+@media (max-width: 900px) {
+    .import-grid { grid-template-columns: 1fr; }
+    .draft-control, .draft-control-sm { min-width: 100%; }
+}

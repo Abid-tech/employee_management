@@ -15,13 +15,19 @@ function Header(){
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <Link className="nav-link" to="/">Admin dashboard</Link>
+                                <Link className="nav-link" to="/admin-dashboard">Admin dashboard</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/">Employee dashboard</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/Leave-management">Leave management</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/tasks">Task orbit</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/projects">Projects</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/">Attendence</Link>

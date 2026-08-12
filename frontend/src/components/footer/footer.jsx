@@ -5,7 +5,7 @@ function Footer(){
 
     return(
         <>
-            <section id="footer" className="py-3 mt-auto">
+            <section id="footer">
                 <div className="container">
                     <div id="footer-content">
                         <h6>© 2026 team. All rights reserved.</h6>

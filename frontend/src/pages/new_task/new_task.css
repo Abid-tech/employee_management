@@ -1,0 +1,177 @@
+/* --- Mode switch ---------------------------------------------------------- */
+
+.mode-switch {
+    display: inline-flex;
+    padding: 3px;
+    background: var(--surface-sunken);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+}
+
+.mode-option {
+    padding: 7px 15px;
+    background: transparent;
+    border: 0;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: background var(--speed) var(--ease), color var(--speed) var(--ease);
+}
+
+.mode-option:hover { color: var(--navy-700); }
+
+.mode-option-on {
+    background: var(--surface);
+    color: var(--navy-800);
+    box-shadow: var(--shadow-sm);
+}
+
+.new-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 16px;
+    align-items: start;
+}
+
+/* hidden on the wrapper does not win against display: grid without this. */
+.new-layout[hidden] { display: none; }
+
+.new-form { display: flex; flex-direction: column; }
+
+.form-body { display: flex; flex-direction: column; gap: 15px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 14px 16px;
+    background: var(--surface-sunken);
+    border-top: 1px solid var(--line);
+    border-radius: 0 0 var(--radius) var(--radius);
+}
+
+/* .form-error now lives in styles/theme.css — three pages show it. */
+
+/* --- Priority picker ------------------------------------------------------ */
+
+/* Buttons rather than a dropdown: the choice decides which orbit the task lands
+   in, so all four options stay visible with their colours. */
+.priority-picker { display: flex; gap: 7px; flex-wrap: wrap; }
+
+.priority-option {
+    flex: 1;
+    min-width: 82px;
+    padding: 9px 12px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    font-weight: 650;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: border-color var(--speed) var(--ease), background var(--speed) var(--ease),
+                color var(--speed) var(--ease);
+}
+
+.priority-option:hover { border-color: var(--navy-300); }
+
+.priority-critical.priority-on { background: var(--critical); border-color: var(--critical); color: #fff; }
+.priority-high.priority-on     { background: var(--high);     border-color: var(--high);     color: #fff; }
+.priority-medium.priority-on   { background: var(--medium);   border-color: var(--medium);   color: #fff; }
+.priority-low.priority-on      { background: var(--low);      border-color: var(--low);      color: #fff; }
+
+/* --- Preview -------------------------------------------------------------- */
+
+.preview { position: sticky; top: 78px; }
+
+.preview-body { display: flex; flex-direction: column; gap: 14px; }
+
+.preview-stage {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    display: grid;
+    place-items: center;
+}
+
+.preview-ring {
+    position: absolute;
+    width: var(--d);
+    height: var(--d);
+    border: 1px dashed var(--line-strong);
+    border-radius: 50%;
+    opacity: 0.55;
+    transition: border-color var(--speed) var(--ease), opacity var(--speed) var(--ease);
+}
+
+.preview-ring-on {
+    border-style: solid;
+    border-color: var(--navy-400);
+    opacity: 1;
+}
+
+.preview-core {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    background: var(--navy-800);
+    border-radius: 50%;
+    color: var(--cream);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Sliding between rings is the whole point of the preview, so this transition
+   is slower than the rest of the interface — it should be noticed. */
+.preview-planet {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: var(--shadow);
+    /* width, height and transform come from the component — see the note there. */
+    transition: transform 420ms var(--ease), width 260ms var(--ease),
+                height 260ms var(--ease), background 260ms var(--ease);
+}
+
+.preview-planet-critical { background: var(--critical); }
+.preview-planet-high     { background: var(--high); }
+.preview-planet-medium   { background: var(--medium); }
+.preview-planet-low      { background: var(--low); }
+
+.preview-text { display: flex; flex-direction: column; gap: 3px; }
+.preview-text strong { font-size: 13.5px; color: var(--navy-800); }
+.preview-text span { font-size: 11.5px; line-height: 1.55; }
+
+.preview-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+}
+
+.preview-facts > div { display: flex; justify-content: space-between; gap: 12px; }
+
+.preview-facts dt { font-size: 11.5px; color: var(--ink-muted); }
+
+.preview-facts dd {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 650;
+    color: var(--navy-800);
+    text-align: right;
+}
+
+@media (max-width: 900px) {
+    .new-layout { grid-template-columns: 1fr; }
+    .preview { position: static; }
+    .form-row, .form-row-3 { grid-template-columns: 1fr; }
+}
