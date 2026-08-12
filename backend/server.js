@@ -1,3 +1,10 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import roomRoutes from './routes/roomRoutes.js';
+
+dotenv.config();
 // Anchored to this file rather than the working directory, so `node
 // backend/server.js` from the project root picks up the same .env as
 // `npm run dev` from inside backend/. Behaves identically either way.
@@ -8,7 +15,22 @@ const cors = require('cors');
 const app = express()
 
 
+const app = express();
+const PORT = process.env.PORT || 5001;
 
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  
+  .catch((error) => console.error('MongoDB connection error:', error));
+
+  
+mongoose.connection.once("open", async () => {
+  console.log("Connected DB:", mongoose.connection.db.databaseName);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
@@ -24,7 +46,14 @@ mongoose.connect(process.env.MONGODB_URI)
     console.log(error)
 })
 
+  const count = await mongoose.connection.db
+    .collection("rooms")
+    .countDocuments();
 
+  console.log("Native Mongo Count:", count);
+});
+// Routes
+app.use('/api', roomRoutes);
 
 // API Endpoints
 app.use('/leave-management',require('./routes/leave_management'))

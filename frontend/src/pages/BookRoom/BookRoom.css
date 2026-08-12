@@ -1,0 +1,150 @@
+.book-room-page {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 150px);
+}
+
+.page-title {
+  color: var(--blue-color);
+  font-weight: 700;
+}
+
+.filter-section {
+  background-color: white;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.filter-section .form-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #495057;
+}
+
+.btn-filter {
+  background-color: var(--blue-color);
+  border-color: var(--blue-color);
+  color: var(--beige-color);
+}
+
+.btn-filter:hover {
+  background-color: #0a2947cc;
+  border-color: #0a2947cc;
+  color: white;
+}
+
+.room-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.room-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.room-card .card-title {
+  color: var(--blue-color);
+  font-weight: 700;
+}
+
+.room-info p {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.feature-tags .badge {
+  background-color: #e9ecef !important;
+  color: #495057 !important;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.slot-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.slot-indicator {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: #e9ecef;
+}
+
+.slot-indicator.available {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.slot-indicator.booked {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.room-card .card-footer {
+  padding: 12px 16px 16px;
+}
+
+.modal.show {
+  display: block;
+  background: rgba(0,0,0,0.5);
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+.timeline-chart {
+  padding: 10px 0;
+}
+
+.timeline-item {
+  padding: 4px 0;
+}
+
+.timeline-time {
+  font-size: 12px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.timeline-bar {
+  position: relative;
+}
+
+.timeline-bar .bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+}
+
+.timeline-bar .bar.available {
+  background-color: #28a745;
+  color: white;
+}
+
+.timeline-bar .bar.booked {
+  background-color: #dc3545;
+  color: white;
+}
+
+.bar-label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .room-card {
+    margin-bottom: 16px;
+  }
+  
+  .filter-section .row > div {
+    margin-bottom: 12px;
+  }
+}

@@ -5,6 +5,8 @@ import Header from './components/header/header'
 import Footer from './components/footer/footer'
 import Home from './pages/home/home'
 import Leave from './pages/Leave_management/leave_management'
+import BookRoom from './pages/BookRoom/BookRoom'
+import AddRoom from './pages/AddRoom/AddRoom'
 import AdminDashboard from './pages/admin_dashboard/admin_dashboard'
 // --- Module 3: Task & Objective Management ---------------------------------
 import Module3Layout from './pages/module3_layout'
@@ -25,17 +27,19 @@ function App() {
         <Routes>
           <Route path='/' element={<Home/>}/>
           <Route path='/Leave-management' element={<Leave/>}/>
-          <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
+            <Route path='/book-room' element={<BookRoom/>}/>
+            <Route path='/add-room' element={<AddRoom/>}/>
+            <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
           {/* --- Module 3 -------------------------------------------------
               Wrapped in a layout route so every page inside gets the .m3
               scope its stylesheet depends on. */}
-          <Route element={<Module3Layout/>}>
+            <Route element={<Module3Layout/>}>
             <Route path='/tasks' element={<TaskOrbit/>}/>
             <Route path='/tasks/new' element={<NewTask/>}/>
             <Route path='/tasks/:id' element={<TaskDetail/>}/>
             <Route path='/projects' element={<Projects/>}/>
             <Route path='/projects/:id' element={<ProjectDetail/>}/>
-          </Route>
+         
           {/* --------------------------------------------------------------- */}
         </Routes>
       </div>
