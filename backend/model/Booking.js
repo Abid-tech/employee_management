@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
   roomNo: { type: String, required: true },
@@ -9,4 +9,4 @@ const bookingSchema = new mongoose.Schema({
   bookedAt: { type: Date, default: Date.now }
 });
 
-export default mongoose.model('Booking', bookingSchema);
+module.exports = mongoose.model('Booking', bookingSchema);

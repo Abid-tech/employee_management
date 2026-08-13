@@ -60,7 +60,7 @@ function AddRoom() {
 
     try {
 
-      await axios.post("http://localhost:5001/api/rooms", {
+      await axios.post("http://localhost:5000/api/rooms", {
 
         roomNo: form.roomNo,
         vacantLimit: Number(form.vacantLimit),

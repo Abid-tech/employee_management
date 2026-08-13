@@ -16,6 +16,12 @@ import NewTask from './pages/new_task/new_task'
 import Projects from './pages/projects/projects'
 import ProjectDetail from './pages/projects/project_detail'
 // ---------------------------------------------------------------------------
+// --- Module 4: Employee Performance Management ------------------------------
+import PerformanceLayout from './pages/performance/performance_layout'
+import Performance from './pages/performance/performance'
+import PerformanceProfile from './pages/performance/performance_profile'
+import PerformanceReport from './pages/performance/performance_report'
+// ---------------------------------------------------------------------------
 function App() {
 
 
@@ -39,7 +45,17 @@ function App() {
             <Route path='/tasks/:id' element={<TaskDetail/>}/>
             <Route path='/projects' element={<Projects/>}/>
             <Route path='/projects/:id' element={<ProjectDetail/>}/>
-         
+            </Route>
+          {/* --------------------------------------------------------------- */}
+
+          {/* --- Module 4 -------------------------------------------------
+              Same pattern as Module 3: a layout route so every page inside
+              gets the .perf scope its stylesheet depends on. */}
+            <Route element={<PerformanceLayout/>}>
+            <Route path='/performance' element={<Performance/>}/>
+            <Route path='/performance/reports' element={<PerformanceReport/>}/>
+            <Route path='/performance/employee/:id' element={<PerformanceProfile/>}/>
+            </Route>
           {/* --------------------------------------------------------------- */}
         </Routes>
       </div>
