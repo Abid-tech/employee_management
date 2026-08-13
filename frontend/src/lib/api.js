@@ -6,7 +6,13 @@
 
 const BASE = '/api'
 
-const request = async (path, { method = 'GET', body, formData } = {}) => {
+// A backend that accepts the connection but never replies — two instances
+// fighting over the port, say — would otherwise leave every page on "Loading..."
+// for good, with nothing on screen to explain it. Giving up after a while turns
+// that into the error message the pages already know how to show.
+const TIMEOUT = 15000
+
+const request = async (path, { method = 'GET', body, formData, timeout = TIMEOUT } = {}) => {
     let response
 
     try {
@@ -15,10 +21,14 @@ const request = async (path, { method = 'GET', body, formData } = {}) => {
             // The browser must set its own multipart boundary, so no
             // Content-Type header when sending a FormData.
             headers: body && !formData ? { 'Content-Type': 'application/json' } : undefined,
-            body: formData || (body ? JSON.stringify(body) : undefined)
+            body: formData || (body ? JSON.stringify(body) : undefined),
+            signal: AbortSignal.timeout(timeout)
         })
-    } catch {
-        throw new Error('Could not reach the server. Is the API running on port 4000?')
+    } catch (err) {
+        if (err.name === 'TimeoutError' || err.name === 'AbortError') {
+            throw new Error('The server took too long to answer. Check the API terminal — it may have failed to start.')
+        }
+        throw new Error('Could not reach the server. Is the API running on port 5000?')
     }
 
     let payload
@@ -82,7 +92,9 @@ export const api = {
         if (file) formData.append('document', file)
         if (text) formData.append('text', text)
         if (notes) formData.append('notes', notes)
-        return request('/ai/analyse', { method: 'POST', formData })
+        // Reading a document and drafting tasks from it is slow work — parsing a
+        // large PDF, then a round trip to Gemini. Well past the default budget.
+        return request('/ai/analyse', { method: 'POST', formData, timeout: 120000 })
     },
 
     createFromDraft: (tasks, project) =>
