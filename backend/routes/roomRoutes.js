@@ -1,6 +1,6 @@
-import express from 'express';
-import Room from '../model/Room.js';
-import Booking from '../model/Booking.js';
+const express = require('express');
+const Room = require('../model/Room.js');
+const Booking = require('../model/Booking.js');
 
 const router = express.Router();
 
@@ -181,4 +181,4 @@ router.get('/bookings/:roomNo/:date', async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;

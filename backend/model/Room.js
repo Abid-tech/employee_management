@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const slotSchema = new mongoose.Schema({
   start: { type: String, required: true },
@@ -19,4 +19,4 @@ const roomSchema = new mongoose.Schema({
   availability: [availabilitySchema]
 });
 
-export default mongoose.model('Room', roomSchema);
+module.exports = mongoose.model('Room', roomSchema);

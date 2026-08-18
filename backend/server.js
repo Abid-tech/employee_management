@@ -9,54 +9,18 @@ dotenv.config();
 // backend/server.js` from the project root picks up the same .env as
 // `npm run dev` from inside backend/. Behaves identically either way.
 require('dotenv').config({ path: require('path').join(__dirname, '.env') })
+
 const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors');
+const cors = require('cors')
+const connectDB = require('./config/db')
+
 const app = express()
-
-
-const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000
 
 // Middleware
-app.use(cors());
-app.use(express.json());
-
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  
-  .catch((error) => console.error('MongoDB connection error:', error));
-
-  
-mongoose.connection.once("open", async () => {
-  console.log("Connected DB:", mongoose.connection.db.databaseName);
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(cors())
-
-// connect to db
-mongoose.connect(process.env.MONGODB_URI)
-.then(()=>{
-    app.listen(5000, ()=>{
-    console.log("Listening to port 5000")
-})
-})
-.catch((error)=>{
-    console.log(error)
-})
-
-  const count = await mongoose.connection.db
-    .collection("rooms")
-    .countDocuments();
-
-  console.log("Native Mongo Count:", count);
-});
-// Routes
-app.use('/api', roomRoutes);
-
-// API Endpoints
-app.use('/leave-management',require('./routes/leave_management'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // --- Module 3: Task & Objective Management ---------------------------------
 // Express 5 leaves req.body undefined when no parser matched — a POST sent with
@@ -69,9 +33,20 @@ app.use((req, res, next) => {
     next()
 })
 
+// --- Routes ----------------------------------------------------------------
+// Room booking
+app.use('/api', require('./routes/roomRoutes'))
+
+// Leave management
+app.use('/leave-management', require('./routes/leave_management'))
+
+// Task & objective management
 app.use('/api/tasks', require('./routes/task_routes'))
 app.use('/api/objectives', require('./routes/objective_routes'))
 app.use('/api/ai', require('./routes/ai_routes'))
+
+// Employee performance management
+app.use('/api/performance', require('./routes/performance_routes'))
 
 app.use(require('./middleware/upload').handleUploadErrors)
 
@@ -93,5 +68,52 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Something went wrong on our side.' })
 })
 // ---------------------------------------------------------------------------
+
+// Is something already answering on PORT? A second `npm run dev` in another
+// terminal is the usual reason, and it used to fail in the worst possible way:
+// the duplicate connected to Atlas, lost the bind, and sat there holding an idle
+// connection pool while serving nothing — so the pages it should have answered
+// span on "Loading..." with no clue why. Checking first means a duplicate stops
+// before it opens a pool at all.
+const portIsTaken = () => new Promise(resolve => {
+    const socket = require('net').connect({ port: PORT, host: '127.0.0.1' })
+    const done = (taken) => { socket.destroy(); resolve(taken) }
+    socket.setTimeout(1000)
+    socket.once('connect', () => done(true))
+    socket.once('timeout', () => done(false))
+    socket.once('error', () => done(false))
+})
+
+// Connect once, then listen. On Vercel the module is imported instead of run
+// directly, so the export stays and the listen is skipped.
+const start = async () => {
+    if (await portIsTaken()) {
+        console.error(`Port ${PORT} is already in use — the API is probably running in another terminal. Stop that one first.`)
+        process.exit(1)
+    }
+
+    try {
+        const mongoose = require('mongoose')
+        await connectDB()
+        console.log('Connected DB:', mongoose.connection.db.databaseName)
+
+        // Backstop for the gap between the check above and the bind below.
+        // EADDRINUSE arrives as an event rather than a throw, so the try/catch
+        // around this would never see it.
+        const server = app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
+        server.on('error', async (error) => {
+            console.error(error.code === 'EADDRINUSE'
+                ? `Port ${PORT} is already in use — the API is probably running in another terminal. Stop that one first.`
+                : `Server error: ${error.message}`)
+            await mongoose.connection.close().catch(() => {})
+            process.exit(1)
+        })
+    } catch (error) {
+        console.error('MongoDB connection error:', error.message)
+        process.exit(1)
+    }
+}
+
+if (require.main === module) start()
 
 module.exports = app

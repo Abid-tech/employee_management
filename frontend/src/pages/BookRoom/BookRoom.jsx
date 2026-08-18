@@ -23,7 +23,7 @@ const BookRoom = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [roomDetails, setRoomDetails] = useState(null);
 
-  const API_URL = 'http://localhost:5001/api';
+  const API_URL = 'http://localhost:5000/api';
 
   useEffect(() => {
     fetchRooms();
