@@ -11,10 +11,13 @@ function AdminDashboard() {
 
     const fetchLeaves = async () => {
         try {
-            const response = await fetch("http://localhost:5000/leave-management")
+            const response = await fetch("http://localhost:5000/leave-management", {
+                method: "GET",
+                credentials: "include",
+            })
             const data = await response.json()
             console.log("Fetched leaves:", data)
-            setLeaves(data)
+            setLeaves(data.leaves)
         } catch (err) {
             console.error("Error fetching leaves:", err)
         }
@@ -26,6 +29,7 @@ function AdminDashboard() {
         try {
             const response = await fetch(`http://localhost:5000/leave-management/${id}`, {
                 method: "PUT",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },
