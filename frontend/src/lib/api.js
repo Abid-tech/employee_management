@@ -41,6 +41,7 @@ export const api = {
 
     // Calendar
     getCalendarEvents: (start, end) => f(`/calendar/events?start=${start}&end=${end}`),
+    getSubscribeUrl: () => f('/calendar/subscribe-link'),
     getReminders: () => f('/calendar/reminders'),
     createReminder: (data) => f('/calendar/reminders', { method: 'POST', body: data }),
     updateReminder: (id, data) => f(`/calendar/reminders/${id}`, { method: 'PUT', body: data }),

@@ -13,7 +13,7 @@ const {
 router.get('/events', getCalendarEvents)
 
 // Google Calendar subscribe URL from Module 2
-router.get('/subscribe-link', (req, res) => {
+router.get('/subscribe-link', authMiddleware, (req, res) => {
     const url = process.env.GOOGLE_CALENDAR_SUBSCRIBE_URL
     if (!url) {
         return res.status(404).json({ error: 'Subscribe URL not configured' })

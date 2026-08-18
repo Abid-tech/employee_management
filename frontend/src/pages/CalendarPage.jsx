@@ -9,6 +9,7 @@ function CalendarPage({ user }) {
     const [selectedDay, setSelectedDay] = useState(null)
     const [showReminderForm, setShowReminderForm] = useState(false)
     const [reminderForm, setReminderForm] = useState({ title: '', date: '', time: '', note: '', isAlarm: false })
+    const [subscribeUrl, setSubscribeUrl] = useState('')
     const alarmTimers = useRef([])
 
     const year = currentDate.getFullYear()
@@ -19,6 +20,7 @@ function CalendarPage({ user }) {
         const end = new Date(year, month + 1, 0).toISOString()
         api.getCalendarEvents(start, end).then(setEvents).catch(() => {})
         api.getReminders().then(setReminders).catch(() => {})
+        api.getSubscribeUrl().then(data => setSubscribeUrl(data.url || '')).catch(() => {})
     }, [year, month])
 
     useEffect(() => {
@@ -267,6 +269,24 @@ function CalendarPage({ user }) {
                                     + New Reminder
                                 </button>
                             )}
+                        </div>
+                    )}
+
+                    {subscribeUrl && (
+                        <div className="card-widget mt-3">
+                            <h6>Subscribe</h6>
+                            <a
+                                href={subscribeUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-primary-custom d-block text-center"
+                                style={{ textDecoration: 'none' }}
+                            >
+                                Subscribe to Company Calendar
+                            </a>
+                            <p className="text-muted-custom mt-2 mb-0" style={{ fontSize: 11 }}>
+                                Adds company holidays to your personal Google Calendar automatically.
+                            </p>
                         </div>
                     )}
 
