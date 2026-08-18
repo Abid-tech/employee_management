@@ -1,3 +1,10 @@
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import roomRoutes from './routes/roomRoutes.js';
+
+dotenv.config();
 // Anchored to this file rather than the working directory, so `node
 // backend/server.js` from the project root picks up the same .env as
 // `npm run dev` from inside backend/. Behaves identically either way.
