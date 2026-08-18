@@ -1,0 +1,11 @@
+name,date,type,description,isRecurring
+Independence Day,2026-03-26,National,Bangladesh Independence Day,true
+Victory Day,2026-12-16,National,Bangladesh Victory Day,true
+International Mother Language Day,2026-02-21,National,Ekushey February,true
+Eid ul-Fitr,2026-03-31,Religious,End of Ramadan,false
+Eid ul-Adha,2026-06-07,Religious,Festival of Sacrifice,false
+Shab-e-Barat,2026-02-14,Religious,Night of Fortune,false
+May Day,2026-05-01,National,International Workers Day,true
+Company Anniversary,2026-09-15,Company,Annual company celebration,true
+Year-End Break,2026-12-31,Company,End of year office closure,false
+Pohela Boishakh,2026-04-14,National,Bengali New Year,true

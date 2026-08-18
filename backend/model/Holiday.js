@@ -28,6 +28,20 @@ const holidaySchema = new mongoose.Schema({
         type: String,
         default: '',
     },
+    isRecurring: {
+        type: Boolean,
+        default: false,
+    },
+    recurringMonth: {
+        type: Number,
+        min: 1,
+        max: 12,
+    },
+    recurringDay: {
+        type: Number,
+        min: 1,
+        max: 31,
+    },
 }, {
     timestamps: true,
 })

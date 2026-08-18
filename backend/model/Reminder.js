@@ -4,7 +4,11 @@ const reminderSchema = new mongoose.Schema({
     employeeId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Employee',
-        required: [true, 'Employee ID is required'],
+        index: true,
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         index: true,
     },
     title: {
@@ -15,6 +19,10 @@ const reminderSchema = new mongoose.Schema({
     date: {
         type: Date,
         required: [true, 'Reminder date is required'],
+    },
+    time: {
+        type: String,
+        default: '',
     },
     note: {
         type: String,
