@@ -1,8 +1,9 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import roomRoutes from './routes/roomRoutes.js';
+require('dotenv').config()
+const express = require('express')
+const mongoose = require('mongoose')
+const cors = require('cors'); 
+const app = express()
+const cookieParser = require("cookie-parser")
 
 dotenv.config();
 // Anchored to this file rather than the working directory, so `node
@@ -14,13 +15,21 @@ const express = require('express')
 const cors = require('cors')
 const connectDB = require('./config/db')
 
-const app = express()
+app.use(cookieParser())
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}))
+
+
+
+
+
 const PORT = process.env.PORT || 5000
 
-// Middleware
-app.use(cors())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+
 
 // --- Module 3: Task & Objective Management ---------------------------------
 // Express 5 leaves req.body undefined when no parser matched — a POST sent with
@@ -97,6 +106,10 @@ const start = async () => {
         await connectDB()
         console.log('Connected DB:', mongoose.connection.db.databaseName)
 
+// API Endpoints
+app.use('/leave-management',require('./routes/leave_management'))
+app.use('/user',require('./routes/user'))
+app.use("/attendance", require("./routes/attendance"))
         // Backstop for the gap between the check above and the bind below.
         // EADDRINUSE arrives as an event rather than a throw, so the try/catch
         // around this would never see it.

@@ -2,57 +2,114 @@ import { useState,useEffect } from "react"
 import "../../index.css"
 
 function Leave(){
-    const [leaveType,setLeaveType] = useState("");
-    const [leaveDuration,setDuration] = useState("");
-    const [priority,setPriority] = useState("");
-    const [startDate,setStartDate] = useState("");
-    const [endDate,setEndDate] = useState("");
-    const [total,countTotal] = useState(0)
-    const [reason,setReason] = useState("")
-    const [replacement,setReplacement] = useState("")
-    const [Allleaves,setAllLeave] = useState([])
+    
+    const [leaveType, setLeaveType] = useState("");
+    const [leaveDuration, setDuration] = useState("");
+    const [priority, setPriority] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [total, countTotal] = useState(0)
+    const [reason, setReason] = useState("")
+    const [replacement, setReplacement] = useState("")
+    const [Allleaves, setAllLeave] = useState([])
+    const [leaveSummary, setLeaveSummary] = useState({
+        totalTaken: 0,
+        totalPending: 0,
+        totalApproved: 0,
+        remainingBalance: 0
+    })
+    const [userBalance, setUserBalance] = useState(0)
+
     useEffect(() => {
-        if(!startDate||!endDate){
+        if (!startDate || !endDate) {
             countTotal(0)
             return
         }
         const start = new Date(startDate)
         const end = new Date(endDate)
-        const diff = ((end-start)/(1000*60*60*24))+1
+        const diff = ((end - start) / (1000 * 60 * 60 * 24)) + 1
 
-        if(diff>0){
+        if (diff > 0) {
             countTotal(diff)
-        }
-        else{
+        } else {
             countTotal("Fix your end date")
         }
-        
-      
-    }, [startDate,endDate])
+    }, [startDate, endDate])
 
-    const HandleSubmit = async (e)=>{
-        e.preventDefault()
+    // Calculate leave summary whenever Allleaves or userBalance changes
+    useEffect(() => {
+        calculateLeaveSummary()
+    }, [Allleaves, userBalance])
 
-        
-        const formData = {
-            leaveType : leaveType,
-            leaveDuration: leaveDuration, 
-            Priority:priority,
-            StartDate:startDate,
-            EndDate:endDate,
-            TotalDays:total,
-            Reason:reason,
-            ReplacementEmployee:replacement
+    const calculateLeaveSummary = () => {
+
+        if (!Allleaves || Allleaves.length === 0) {
+            setLeaveSummary({
+                totalTaken: 0,
+                totalPending: 0,
+                totalApproved: 0,
+                remainingBalance: userBalance
+            })
+            return
         }
 
-        try{
-            const response = await fetch("http://localhost:5000/leave-management",{
+        let totalPending = 0
+        let totalApproved = 0
+        let totalTaken = 0
+
+        Allleaves.forEach(leave => {
+            const days = leave.TotalDays || 0
+            if (leave.status === 'Pending') {
+                totalPending += days
+            } else if (leave.status === 'Accepted') {
+                totalApproved += days
+                totalTaken += days
+            }
+        })
+
+        const remainingBalance = userBalance - totalApproved
+
+        setLeaveSummary({
+            totalTaken: totalTaken,
+            totalPending: totalPending,
+            totalApproved: totalApproved,
+            remainingBalance: Math.max(0, remainingBalance)
+        })
+    }
+
+    const HandleSubmit = async (e) => {
+        e.preventDefault()
+
+        const formData = {
+            leaveType: leaveType,
+            leaveDuration: leaveDuration,
+            Priority: priority,
+            StartDate: startDate,
+            EndDate: endDate,
+            TotalDays: total,
+            Reason: reason,
+            ReplacementEmployee: replacement
+        }
+
+        try {
+            const response = await fetch("http://localhost:5000/leave-management", {
                 method: "POST",
-                headers :  {
+                credentials: 'include',
+                headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(formData)
             })
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert("Please login first")
+                    window.location.href = "/login"
+                    return
+                }
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+
             const result = await response.json()
             console.log(result)
             setLeaveType("");
@@ -65,36 +122,89 @@ function Leave(){
             setReplacement("")
 
             fetchLeavehistory()
-        }catch(err){
+        } catch (err) {
             console.log(err)
         }
     }
 
-    const fetchLeavehistory = async ()=>{
-        try{
-            const response = await fetch("http://localhost:5000/leave-management")
-            const leaves = await response.json()
-            setAllLeave(leaves)
+    const fetchLeavehistory = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/leave-management", {
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            })
 
-        }catch(err){
-            console.log("error message",err)
+            if (!response.ok) {
+                if (response.status === 401) {
+                    window.location.href = "/login"
+                    return
+                }
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+            const data = await response.json()
+            console.log("📋 Leave data:", data)
+            setAllLeave(data.leaves || [])
+        } catch (err) {
+            console.log("error message", err)
+            setAllLeave([])
         }
     }
 
-    useEffect(()=>{
-        fetchLeavehistory()
-    },[])
+    // Fetch user profile to get leave balance
+    const fetchUserProfile = async () => {
+        try {
+            const response = await fetch("http://localhost:5000/user/auth/me", {
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                }
+            })
 
-    const formatDate= (dateString)=>{
-        if (!dateString){
+            if (!response.ok) {
+                if (response.status === 401) {
+                    window.location.href = "/login"
+                    return
+                }
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+
+            const data = await response.json()
+
+            let balance = 0
+            
+            if (data && data.success && data.user) {
+                balance = data.user.leaveBalance || 0
+            } else if (data && data.user) {
+                balance = data.user.leaveBalance || 0
+            } else if (data && data.leaveBalance !== undefined) {
+                balance = data.leaveBalance
+            } 
+
+            setUserBalance(balance)
+
+        } catch (err) {
+            console.log("Error fetching user profile:", err)
+        }
+    }
+
+    useEffect(() => {
+        const loadData = async () => {
+            await fetchLeavehistory()
+            await fetchUserProfile()
+        }
+        loadData()
+    }, [])
+
+    const formatDate = (dateString) => {
+        if (!dateString) {
             return "N/A"
         }
-        else{
-            const date = new Date(dateString)
-            return date.toISOString().split('T')[0]
-        }
+        const date = new Date(dateString)
+        return date.toISOString().split('T')[0]
     }
-    
+
 
 
 
@@ -293,6 +403,68 @@ function Leave(){
                                 </div>
                             </div>
                         </div>
+
+                       {/* Dynamic Leave Summary */}
+                        <div className="col-lg-4">
+                            <div className="leave-status">
+
+                                <div className="leave-status-header">
+                                    <h4>Leave Summary</h4>
+                                </div>
+
+                                <hr />
+
+                                <div className="leave-summary-item">
+                                    <div className="leave-summary-icon taken">
+                                        <span>▣</span>
+                                    </div>
+                                    <span className="leave-summary-label">
+                                        Total Leaves Taken
+                                    </span>
+                                    <strong className="leave-summary-value">
+                                        {leaveSummary.totalTaken} Days
+                                    </strong>
+                                </div>
+
+                                <div className="leave-summary-item">
+                                    <div className="leave-summary-icon pending">
+                                        <span>◷</span>
+                                    </div>
+                                    <span className="leave-summary-label">
+                                        Total Leaves Pending
+                                    </span>
+                                    <strong className="leave-summary-value">
+                                        {leaveSummary.totalPending} Days
+                                    </strong>
+                                </div>
+
+                                <div className="leave-summary-item">
+                                    <div className="leave-summary-icon approved">
+                                        <span>✓</span>
+                                    </div>
+                                    <span className="leave-summary-label">
+                                        Total Leaves Approved
+                                    </span>
+                                    <strong className="leave-summary-value">
+                                        {leaveSummary.totalApproved} Days
+                                    </strong>
+                                </div>
+
+                                <div className="leave-summary-item">
+                                    <div className="leave-summary-icon remaining">
+                                        <span>◔</span>
+                                    </div>
+                                    <span className="leave-summary-label">
+                                        Remaining Leaves
+                                    </span>
+                                    <strong className="leave-summary-value">
+                                        {leaveSummary.remainingBalance} Days
+                                    </strong>
+                                </div>
+
+                            </div>
+                        </div>
+
 
                         <div className="col-lg-12 mt-4">
                             <div className="leave-history">
