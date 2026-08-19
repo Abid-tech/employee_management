@@ -6,11 +6,14 @@ const router = express.Router()
 
 // Module 3 — Task & Objective Management
 router.get('/board', controller.getBoard)
+router.get('/mail-outbox', controller.getMailOutbox)
 router.get('/options', controller.getFormOptions)
 
 router.get('/:id', controller.getTask)
 router.post('/', controller.createTask)
 router.patch('/:id', controller.updateTask)
+router.get('/:id/extend-impact', controller.extendImpact)
+router.post('/:id/extend', controller.extendDeadline)
 router.delete('/:id', controller.deleteTask)
 
 router.post('/:id/subtasks', controller.addSubtask)

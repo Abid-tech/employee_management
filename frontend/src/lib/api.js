@@ -26,9 +26,9 @@ const request = async (path, { method = 'GET', body, formData, timeout = TIMEOUT
         })
     } catch (err) {
         if (err.name === 'TimeoutError' || err.name === 'AbortError') {
-            throw new Error('The server took too long to answer. Check the API terminal — it may have failed to start.')
+            throw new Error('The server took too long to answer. Check the API terminal — it may have failed to start.', { cause: err })
         }
-        throw new Error('Could not reach the server. Is the API running on port 5000?')
+        throw new Error('Could not reach the server. Is the API running on port 5000?', { cause: err })
     }
 
     let payload

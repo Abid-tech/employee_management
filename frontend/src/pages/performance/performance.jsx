@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { performanceApi } from '../../lib/performance_api'
-import { Avatar, Gauge, Icon, MomentumTag, Sparkline } from './performance_ui'
+import { Avatar, Icon, MomentumTag, Sparkline } from './performance_ui'
 
 // Module 4, page 1 — the whole company at a glance.
 //
@@ -20,7 +20,7 @@ const DEPARTMENT_HUES = ['#0A2947', '#2E7D6F', '#8B5E3C', '#2C6E9B', '#B3402F', 
 
 const departmentsIn = (shares) => [...new Set(shares.map(s => s.department))].sort()
 
-export const departmentColour = (department, shares) =>
+const departmentColour = (department, shares) =>
     DEPARTMENT_HUES[departmentsIn(shares).indexOf(department) % DEPARTMENT_HUES.length]
 
 // Mix a colour towards white. Used to separate the people inside one department
@@ -34,7 +34,7 @@ const lighten = (hex, amount) => {
 
 // Largest contributor in a department keeps the pure hue; each person below them
 // is one step lighter.
-export const personColour = (share, shares) => {
+const personColour = (share, shares) => {
     const base = departmentColour(share.department, shares)
     const peers = shares.filter(s => s.department === share.department)
     const rank = peers.findIndex(s => s.id === share.id)
@@ -110,43 +110,48 @@ export default function Performance() {
 
             <div className="p-grid">
 
-                {/* ---- Company headline ---- */}
-                <section className="p-card s12">
-                    <div className="p-lbl">
-                        <span>Company performance · {period}</span>
-                        <span className="p-pill violet">{company.headcount} people · {company.departments} departments</span>
+                {/* ---- Company headline -----------------------------------
+                    A navy band rather than another cream card. The page was
+                    cream panels on a cream ground from top to bottom, which
+                    read as one undifferentiated surface — nothing told the eye
+                    where to start. Putting the single most important number on
+                    the one dark field on the page fixes that with contrast
+                    rather than with decoration, and it is the brand's own navy
+                    and cream doing the work. */}
+                <section className="p-band s12">
+                    <div className="b-head">
+                        <span className="b-eyebrow">Company performance · {period}</span>
+                        <span className="b-chip">{company.headcount} people · {company.departments} departments</span>
                     </div>
 
-                    <div className="p-hero">
-                        <Gauge score={company.score} label={company.grade.label} />
+                    <div className="b-body">
+                        <div className="b-score">
+                            <span className="b-num">{Math.round(company.score)}</span>
+                            <span className="b-of">/100</span>
+                            <span className="b-grade">{company.grade.label}</span>
+                        </div>
 
-                        <div style={{ flex: 1, minWidth: 240 }}>
-                            <div className="p-kpis" style={{ marginTop: 0 }}>
-                                <div className="p-kpi good">
-                                    <div className="k-l">Tasks completed</div>
-                                    <div className="k-n p-num">{company.tasksCompleted}</div>
-                                    <div className="k-s">in this period</div>
-                                </div>
-                                <div className="p-kpi">
-                                    <div className="k-l">Goal progress</div>
-                                    <div className="k-n p-num">{company.goalProgress}%</div>
-                                    <div className="k-s">across live projects</div>
-                                </div>
-                                <div className="p-kpi warn">
-                                    <div className="k-l">Reward points</div>
-                                    <div className="k-n p-num">{company.pointsAwarded.toLocaleString()}</div>
-                                    <div className="k-s">earned company-wide</div>
-                                </div>
-                                <div className={`p-kpi ${company.atRisk ? 'risk' : 'good'}`}>
-                                    <div className="k-l">Wellbeing</div>
-                                    <div className="k-n p-num">{company.atRisk + company.stretched}</div>
-                                    <div className="k-s">{company.atRisk} at risk · {company.stretched} stretched</div>
-                                </div>
+                        <div className="b-stats">
+                            <div className="b-stat">
+                                <span className="s-n">{company.tasksCompleted}</span>
+                                <span className="s-l">Tasks completed</span>
+                            </div>
+                            <div className="b-stat">
+                                <span className="s-n">{company.goalProgress}<i>%</i></span>
+                                <span className="s-l">Goal progress</span>
+                            </div>
+                            <div className="b-stat">
+                                <span className="s-n">{(company.pointsAwarded / 1000).toFixed(1)}<i>k</i></span>
+                                <span className="s-l">Reward points</span>
+                            </div>
+                            <div className={`b-stat ${company.atRisk ? 'alert' : ''}`}>
+                                <span className="s-n">{company.atRisk + company.stretched}</span>
+                                <span className="s-l">{company.atRisk} at risk · {company.stretched} stretched</span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="p-chips">
+                    <div className="p-chips b-chips">
                         <button className={`p-chip ${department === '' ? 'on' : ''}`} onClick={() => setDepartment('')}>
                             All departments
                         </button>
@@ -235,6 +240,15 @@ export default function Performance() {
                         Overload, unowned critical work, single points of failure and people worth
                         recognising — ordered by urgency.
                     </p>
+
+                    {/* "Move work off them" is advice until somebody works out
+                        which work and to whom. That page exists, so the finding
+                        links to it rather than leaving the reader to find it. */}
+                    {actions.some(item => item.kind === 'protect') && (
+                        <Link className="p-btn ghost" to="/performance/rebalance" style={{ marginTop: 10 }}>
+                            <Icon name="users" size={13} /> Work out who can take the load
+                        </Link>
+                    )}
 
                     {actions.length === 0
                         ? <p className="p-state" style={{ padding: '24px 8px' }}>

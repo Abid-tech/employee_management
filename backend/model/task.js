@@ -34,6 +34,23 @@ const taskSchema = new mongoose.Schema({
     subtasks: [subtaskSchema],
     attachments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Attachment' }],
 
+    // Every time a deadline moved, who moved it and why.
+    //
+    // A due date that can be edited silently is not a commitment — the date
+    // simply becomes whatever it needs to be, and a project that slipped four
+    // times looks identical to one that never slipped at all. Keeping the
+    // original alongside each change is what makes "this is the third
+    // extension" a visible fact rather than something only the person who did
+    // it remembers.
+    deadlineChanges: [{
+        from: { type: Date },
+        to: { type: Date },
+        reason: { type: String, default: '', trim: true },
+        byId: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee', default: null },
+        byName: { type: String, default: '', trim: true },
+        at: { type: Date, default: Date.now }
+    }],
+
     // Filled in when the task came out of an imported document.
     source: { type: String, enum: ['manual', 'ai'], default: 'manual' },
     aiReason: { type: String, default: '' }

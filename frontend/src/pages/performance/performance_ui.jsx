@@ -84,7 +84,7 @@ function shade(hex) {
 
 // The same five tones the stylesheet uses, kept here in hex because SVG strokes
 // and gradient stops are built as attribute strings rather than CSS.
-export const toneColour = (tone) => ({
+const toneColour = (tone) => ({
     peak: '#2E7D6F', good: '#4E8163', fair: '#B87333', warn: '#8B5E3C', risk: '#B3402F'
 }[tone] || '#0A2947')
 

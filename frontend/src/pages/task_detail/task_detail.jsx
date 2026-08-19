@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { api } from '../../lib/api'
 import { PRIORITY_LABELS, STATUS_LABELS, formatDate, formatFileSize, initialsOf, relativeDays, timeAgo } from '../../lib/format'
+import DeadlineMove from './deadline_move'
 import './task_detail.css'
 
 // Page 2 — everything about one task, and the few things you can do to it.
@@ -365,6 +366,15 @@ export default function TaskDetail() {
                                         : 'Taken from the status — add a checklist for a finer measure.'}
                                 </span>
                             </div>
+                        </div>
+                    </section>
+
+                    {/* Moving a deadline shows the money consequence first —
+                        the one question a task tool and a time tracker each
+                        only know half of. */}
+                    <section className="panel">
+                        <div className="panel-body">
+                            <DeadlineMove task={task} employees={employees} onDone={setTask} />
                         </div>
                     </section>
 

@@ -26,9 +26,19 @@ app.use((req, res, next) => {
     next()
 })
 
+// Most of this backend is CommonJS, but the room-booking module is written as
+// ES modules. Requiring an ES module hands back its namespace object rather
+// than the export itself, so `app.use` receives `{ default: router }` and
+// throws "argument handler must be a function".
+//
+// Unwrapping it here means that module's own files stay exactly as their author
+// wrote them — the adaptation belongs in the file doing the mounting, not in
+// somebody else's code.
+const useModule = (mod) => (mod && mod.__esModule !== undefined) || (mod && mod.default) ? mod.default : mod
+
 // --- Routes ----------------------------------------------------------------
 // Room booking
-app.use('/api', require('./routes/roomRoutes'))
+app.use('/api', useModule(require('./routes/roomRoutes')))
 
 // Leave management
 app.use('/leave-management', require('./routes/leave_management'))
@@ -40,6 +50,12 @@ app.use('/api/ai', require('./routes/ai_routes'))
 
 // Employee performance management
 app.use('/api/performance', require('./routes/performance_routes'))
+
+// Employee feedback & evaluation
+app.use('/api/feedback', require('./routes/feedback_routes'))
+
+// Project budget tracker & time logging
+app.use('/api/budget', require('./routes/budget_routes'))
 
 app.use(require('./middleware/upload').handleUploadErrors)
 
