@@ -5,13 +5,19 @@ require('dotenv').config({ path: require('path').join(__dirname, '.env') })
 
 const express = require('express')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const connectDB = require('./config/db')
 
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 9505
 
 // Middleware
-app.use(cors())
+//
+// The login flow merged in from main keeps its token in a cookie, so the
+// browser only sends it when the response names the exact origin and allows
+// credentials — origin: true echoes whichever port Vite happened to take.
+app.use(cors({ origin: true, credentials: true }))
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -42,6 +48,12 @@ app.use('/api', useModule(require('./routes/roomRoutes')))
 
 // Leave management
 app.use('/leave-management', require('./routes/leave_management'))
+
+// Accounts, attendance, internal communication and salary
+app.use('/user', require('./routes/user'))
+app.use('/attendance', require('./routes/attendance'))
+app.use('/communication', require('./routes/communication'))
+app.use('/salary', require('./routes/salary'))
 
 // Task & objective management
 app.use('/api/tasks', require('./routes/task_routes'))

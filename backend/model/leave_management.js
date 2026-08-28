@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 
 const leaveSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     leaveType : {
         type: String,
         enum: ['Annual Leave','Medical Leave','Casual Leave','Emergency Leave'],
