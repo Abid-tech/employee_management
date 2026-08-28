@@ -18,6 +18,16 @@ import ProtectedRoute from "./protected"
 // --- Room booking -----------------------------------------------------------
 import BookRoom from './pages/BookRoom/BookRoom'
 import AddRoom from './pages/AddRoom/AddRoom'
+
+// --- Meetings, resources and assets -----------------------------------------
+import MeetingSetup from './pages/MeetingSetup/MeetingSetup'
+import MeetingHost from './pages/MeetingHost/MeetingHost'
+import MeetingParticipant from './pages/MeetingParticipant/MeetingParticipant'
+import AdminResources from './pages/admin_dashboard/AdminResources'
+import EmployeeResources from './pages/employee_dashboard/EmployeeResources'
+import AssetManagement from './pages/admin_dashboard/AssetManagement'
+import MyAssets from './pages/employee_dashboard/MyAssets'
+// ---------------------------------------------------------------------------
 // --- Module 3: Task & Objective Management ---------------------------------
 import Module3Layout from './pages/module3_layout'
 import TaskOrbit from './pages/task_orbit/task_orbit'
@@ -182,6 +192,16 @@ function App() {
                         {/* --- Room booking ------------------------------------------ */}
                         <Route path='/book-room' element={<BookRoom />} />
                         <Route path='/add-room' element={<AddRoom />} />
+
+                        {/* --- Meetings, resources and assets ------------------------- */}
+                        <Route path='/meeting/create' element={<MeetingSetup />} />
+                        <Route path='/meeting/:meetingId/host' element={<MeetingHost />} />
+                        <Route path='/meeting/:meetingId' element={<MeetingParticipant />} />
+                        <Route path='/admin/resources' element={<AdminResources />} />
+                        <Route path='/employee/resources' element={<EmployeeResources />} />
+                        <Route path='/admin/assets' element={<AssetManagement />} />
+                        <Route path='/employee/assets' element={<MyAssets />} />
+                        {/* --------------------------------------------------------------- */}
 
                         {/* --- Module 3 -------------------------------------------------
                             Wrapped in a layout route so every page inside gets the .m3

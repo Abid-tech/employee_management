@@ -4,12 +4,26 @@
 require('dotenv').config({ path: require('path').join(__dirname, '.env') })
 
 const express = require('express')
+const http = require('http')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const { Server } = require('socket.io')
 const connectDB = require('./config/db')
 
 const app = express()
 const PORT = process.env.PORT || 9505
+
+// The meeting module signals over WebSockets, which Express alone cannot carry,
+// so the HTTP server is created here and Socket.IO shares it. On a serverless
+// host this module is imported rather than run, nothing listens, and the socket
+// server simply sits idle — the REST half of every module still works.
+const server = http.createServer(app)
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']
+    }
+})
 
 // Middleware
 //
@@ -85,6 +99,12 @@ app.get('/api/health', async (req, res) => {
 })
 
 // --- Routes ----------------------------------------------------------------
+// Meetings, resources and asset management. Mounted before the rest because the
+// module registers its own upload error handler at the end of its stack, and an
+// error handler only ever sees the routes registered above it — so keeping it
+// here stops it answering for anybody else's uploads.
+require('./routes/meeting_resource_asset')(app, io)
+
 // Room booking
 app.use('/api', useModule(require('./routes/roomRoutes')))
 
@@ -163,7 +183,10 @@ const start = async () => {
         // Backstop for the gap between the check above and the bind below.
         // EADDRINUSE arrives as an event rather than a throw, so the try/catch
         // around this would never see it.
-        const server = app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
+        server.listen(PORT, () => {
+            console.log(`Listening on port ${PORT}`)
+            console.log('Socket.IO signalling ready')
+        })
         server.on('error', async (error) => {
             console.error(error.code === 'EADDRINUSE'
                 ? `Port ${PORT} is already in use — the API is probably running in another terminal. Stop that one first.`
