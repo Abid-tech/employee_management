@@ -22,11 +22,11 @@
     --navy-300: #7D96AE;
 
     /* Surfaces */
-    --canvas: #F6F4EF;
+    --canvas: #FFFFFF;
     --surface: #FFFFFF;
-    --surface-sunken: #FAF8F3;
-    --line: #E4E0D6;
-    --line-strong: #CFC9BA;
+    --surface-sunken: #F7F7F9;
+    --line: #E5E7EB;
+    --line-strong: #C9CDD3;
 
     /* Text */
     --ink: #0A2947;
