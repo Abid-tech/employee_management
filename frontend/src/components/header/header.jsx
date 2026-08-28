@@ -81,38 +81,49 @@ function Header({ user, setUser }) {
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
 
                             {/* ========================= */}
-                            {/* MODULE 3-6 LINKS */}
-                            {/* Task, performance, feedback and budget stay */}
-                            {/* reachable whoever is signed in.             */}
+                            {/* MODULE LINKS — SIGNED IN ONLY */}
+                            {/* A visitor who has not signed in sees only the  */}
+                            {/* two ways in. Showing the whole application to   */}
+                            {/* someone who cannot open any of it advertised a  */}
+                            {/* system they had no account for, and every link   */}
+                            {/* led to the login page anyway.                    */}
                             {/* ========================= */}
 
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/tasks">Task orbit</Link>
-                            </li>
+                            {user && (
 
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/projects">Projects</Link>
-                            </li>
+                                <>
 
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/performance">Performance</Link>
-                            </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/tasks">Task orbit</Link>
+                                    </li>
 
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/feedback">Feedback</Link>
-                            </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/projects">Projects</Link>
+                                    </li>
 
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/budget">Budget</Link>
-                            </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/performance">Performance</Link>
+                                    </li>
 
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/book-room">Book Room</Link>
-                            </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/feedback">Feedback</Link>
+                                    </li>
 
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/meeting/create">Meetings</Link>
-                            </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/budget">Budget</Link>
+                                    </li>
+
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/book-room">Book Room</Link>
+                                    </li>
+
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/meeting/create">Meetings</Link>
+                                    </li>
+
+                                </>
+
+                            )}
 
 
 
@@ -120,16 +131,32 @@ function Header({ user, setUser }) {
 
                             {!user && (
 
-                                <li className="nav-item">
+                                <>
 
-                                    <Link
-                                        className="nav-link"
-                                        to="/login"
-                                    >
-                                        Login
-                                    </Link>
+                                    <li className="nav-item">
 
-                                </li>
+                                        <Link
+                                            className="nav-link"
+                                            to="/login"
+                                        >
+                                            Login
+                                        </Link>
+
+                                    </li>
+
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/registration"
+                                        >
+                                            Register
+                                        </Link>
+
+                                    </li>
+
+                                </>
 
                             )}
 

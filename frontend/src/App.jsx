@@ -135,9 +135,17 @@ function App() {
 
                     <Routes>
 
+                        {/* Signed out, the front door is the login page. Home is
+                            behind the guard like everything else, so arriving at the
+                            site with no session lands on a way in rather than on an
+                            empty page wrapped in a menu that goes nowhere. */}
                         <Route
                             path="/"
-                            element={<Home />}
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <Home />
+                                </ProtectedRoute>
+                            }
                         />
 
                         <Route
@@ -195,17 +203,80 @@ function App() {
                         />
 
                         {/* --- Room booking ------------------------------------------ */}
-                        <Route path='/book-room' element={<BookRoom />} />
-                        <Route path='/add-room' element={<AddRoom />} />
+                        <Route
+                            path='/book-room'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <BookRoom />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='/add-room'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <AddRoom />
+                                </ProtectedRoute>
+                            }
+                        />
 
                         {/* --- Meetings, resources and assets ------------------------- */}
-                        <Route path='/meeting/create' element={<MeetingSetup />} />
-                        <Route path='/meeting/:meetingId/host' element={<MeetingHost />} />
-                        <Route path='/meeting/:meetingId' element={<MeetingParticipant />} />
-                        <Route path='/admin/resources' element={<AdminResources />} />
-                        <Route path='/employee/resources' element={<EmployeeResources />} />
-                        <Route path='/admin/assets' element={<AssetManagement />} />
-                        <Route path='/employee/assets' element={<MyAssets />} />
+                        <Route
+                            path='/meeting/create'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <MeetingSetup />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='/meeting/:meetingId/host'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <MeetingHost />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='/meeting/:meetingId'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <MeetingParticipant />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='/admin/resources'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <AdminResources />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='/employee/resources'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <EmployeeResources />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='/admin/assets'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <AssetManagement />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='/employee/assets'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <MyAssets />
+                                </ProtectedRoute>
+                            }
+                        />
 
                         {/* --- Calendar and holidays ---------------------------------
                             Both read data belonging to other people, so both sit behind
@@ -241,7 +312,11 @@ function App() {
                         {/* --- Module 3 -------------------------------------------------
                             Wrapped in a layout route so every page inside gets the .m3
                             scope its stylesheet depends on. */}
-                        <Route element={<Module3Layout />}>
+                        <Route element={
+                            <ProtectedRoute user={user} loading={loading}>
+                                <Module3Layout />
+                            </ProtectedRoute>
+                        }>
                             <Route path='/tasks' element={<TaskOrbit />} />
                             <Route path='/tasks/new' element={<NewTask />} />
                             <Route path='/tasks/:id' element={<TaskDetail />} />
@@ -253,7 +328,11 @@ function App() {
                         {/* --- Module 4 -------------------------------------------------
                             Same pattern as Module 3: a layout route so every page inside
                             gets the .perf scope its stylesheet depends on. */}
-                        <Route element={<PerformanceLayout />}>
+                        <Route element={
+                            <ProtectedRoute user={user} loading={loading}>
+                                <PerformanceLayout />
+                            </ProtectedRoute>
+                        }>
                             <Route path='/performance' element={<Performance />} />
                             <Route path='/performance/reports' element={<PerformanceReport />} />
                             <Route path='/performance/rebalance' element={<PerformanceRebalance />} />
@@ -264,7 +343,11 @@ function App() {
                             Wrapped so every page inside gets the .fb scope its stylesheet
                             depends on, and shares the "acting as" context the audit trail
                             needs. */}
-                        <Route element={<FeedbackLayout />}>
+                        <Route element={
+                            <ProtectedRoute user={user} loading={loading}>
+                                <FeedbackLayout />
+                            </ProtectedRoute>
+                        }>
                             <Route path='/feedback' element={<Feedback />} />
                             <Route path='/feedback/write' element={<FeedbackWrite />} />
                             <Route path='/feedback/calibration' element={<FeedbackCalibration />} />
@@ -275,7 +358,11 @@ function App() {
                         </Route>
 
                         {/* --- Module 6 — scoped under .bud ------------------------------ */}
-                        <Route element={<BudgetLayout />}>
+                        <Route element={
+                            <ProtectedRoute user={user} loading={loading}>
+                                <BudgetLayout />
+                            </ProtectedRoute>
+                        }>
                             <Route path='/budget' element={<Budget />} />
                             <Route path='/budget/clock' element={<BudgetClock />} />
                             <Route path='/budget/simulate' element={<BudgetSimulate />} />
