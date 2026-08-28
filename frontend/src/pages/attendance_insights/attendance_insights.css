@@ -1,0 +1,235 @@
+/* Attendance insights — the heatmap and seven-day trend the dashboard
+ * requirement asks for. Scoped under .ains, like every other module here. */
+
+.ains {
+    --navy: #0A2947;
+    --cream: #F3E4C9;
+    --sage: #D3D4C0;
+    --clay: #8B5E3C;
+
+    --ink: #0A2947;
+    --ink-soft: #4A5C6E;
+    --ink-faint: #8494A2;
+    --paper: #FFFFFF;
+    --ground: #F7F8F5;
+    --rule: #E2E5DC;
+
+    /* One hue, five steps. A sequential ramp is the only honest encoding for a
+     * quantity; a rainbow would imply categories that are not there. */
+    --l0: #EDEFE9;
+    --l1: #CBD9C6;
+    --l2: #96B695;
+    --l3: #5B8F6B;
+    --l4: #2F6B4F;
+
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+    color: var(--ink);
+    font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.ains *,
+.ains *::before,
+.ains *::after { box-sizing: border-box; }
+
+.ains .ains-state { padding: 40px 0; text-align: center; color: var(--ink-faint); font-size: 14px; }
+.ains .ains-state.is-error { color: #7A2D1E; }
+
+/* ── Head ─────────────────────────────────────────────────────────────── */
+
+.ains .ains-head { margin-bottom: 20px; }
+
+.ains .ains-eyebrow {
+    margin: 0 0 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--clay);
+}
+
+.ains .ains-head h1 { margin: 0; font-size: 30px; font-weight: 600; letter-spacing: -0.01em; }
+.ains .ains-sub { margin: 6px 0 0; max-width: 60ch; font-size: 14px; color: var(--ink-soft); }
+
+/* ── Totals ───────────────────────────────────────────────────────────── */
+
+.ains .ains-totals {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.ains .ains-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 15px 17px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+}
+
+.ains .ains-n {
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    color: var(--navy);
+}
+
+.ains .ains-of { font-size: 15px; font-weight: 500; color: var(--ink-faint); }
+
+.ains .ains-l {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+}
+
+/* ── Cards ────────────────────────────────────────────────────────────── */
+
+.ains .ains-card {
+    padding: 18px;
+    margin-bottom: 16px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+}
+
+.ains .ains-card-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.ains .ains-card-head h2 { margin: 0; font-size: 15px; font-weight: 600; }
+
+.ains .ains-week-total {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Heatmap ──────────────────────────────────────────────────────────── */
+
+.ains .ains-scale {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--ink-faint);
+}
+
+.ains .ains-key,
+.ains .ains-cell {
+    width: 11px;
+    height: 11px;
+    border-radius: 2px;
+    display: block;
+}
+
+.ains .ains-key[data-level="0"], .ains .ains-cell[data-level="0"] { background: var(--l0); }
+.ains .ains-key[data-level="1"], .ains .ains-cell[data-level="1"] { background: var(--l1); }
+.ains .ains-key[data-level="2"], .ains .ains-cell[data-level="2"] { background: var(--l2); }
+.ains .ains-key[data-level="3"], .ains .ains-cell[data-level="3"] { background: var(--l3); }
+.ains .ains-key[data-level="4"], .ains .ains-cell[data-level="4"] { background: var(--l4); }
+
+.ains .ains-heat-scroll { overflow-x: auto; padding-bottom: 4px; }
+.ains .ains-heat { min-width: max-content; }
+
+.ains .ains-months {
+    display: grid;
+    margin-left: 30px;
+    margin-bottom: 4px;
+    font-size: 10px;
+    color: var(--ink-faint);
+}
+
+.ains .ains-heat-body { display: flex; gap: 4px; }
+
+.ains .ains-weekdays {
+    display: grid;
+    grid-template-rows: repeat(7, 13px);
+    width: 26px;
+    font-size: 9.5px;
+    line-height: 13px;
+    color: var(--ink-faint);
+}
+
+.ains .ains-cols { display: grid; }
+.ains .ains-col { display: grid; grid-template-rows: repeat(7, 13px); }
+
+.ains .ains-cell { cursor: pointer; }
+.ains .ains-cell.is-blank { background: transparent; cursor: default; }
+.ains .ains-cell:focus-visible { outline: 2px solid var(--clay); outline-offset: 1px; }
+.ains .ains-cell:hover { outline: 1px solid var(--navy); outline-offset: 0; }
+
+.ains .ains-readout {
+    margin: 12px 0 0;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    min-height: 1.4em;
+}
+
+/* ── Trend ────────────────────────────────────────────────────────────── */
+
+.ains .ains-trend {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+    align-items: end;
+}
+
+.ains .ains-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+
+.ains .ains-bar-track {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 128px;
+    background: var(--ground);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ains .ains-bar {
+    width: 100%;
+    background: var(--navy);
+    border-radius: 4px 4px 0 0;
+    transition: height 240ms ease;
+}
+
+/* A day still clocked into is not a finished day, so it is drawn hatched
+   rather than solid — the number underneath is a running total, not a result. */
+.ains .ains-bar.is-open {
+    background: repeating-linear-gradient(
+        45deg,
+        var(--navy) 0 4px,
+        #2A4E70 4px 8px
+    );
+}
+
+.ains .ains-bar-h {
+    font-size: 12px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+}
+
+.ains .ains-bar-d { font-size: 11px; color: var(--ink-faint); }
+
+.ains .ains-foot { margin: 12px 0 0; font-size: 12px; color: var(--ink-faint); }
+
+@media (prefers-reduced-motion: reduce) {
+    .ains .ains-bar { transition: none; }
+}
+
+body:has(.ains) #footer { display: none; }

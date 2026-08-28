@@ -1,0 +1,358 @@
+/* Company calendar.
+ *
+ * Everything is scoped under .cal for the same reason Modules 3 to 6 scope
+ * theirs: the app already loads Bootstrap alongside four module stylesheets,
+ * and all of them define .card and .btn. Nothing in here may leak.
+ *
+ * Palette is the team's four brand colours — navy, cream, sage, clay — with the
+ * per-source hues chosen to stay distinguishable as 8px dots, which is the
+ * smallest they are ever drawn. */
+
+.cal {
+    --navy: #0A2947;
+    --cream: #F3E4C9;
+    --sage: #D3D4C0;
+    --clay: #8B5E3C;
+
+    --ink: #0A2947;
+    --ink-soft: #4A5C6E;
+    --ink-faint: #8494A2;
+    --paper: #FFFFFF;
+    --ground: #F7F8F5;
+    --rule: #E2E5DC;
+
+    --holiday: #B3452F;
+    --leave: #C08A2E;
+    --meeting: #2E6F8E;
+    --booking: #6B7F52;
+    --deadline: #8B5E3C;
+    --reminder: #6A4B8C;
+
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+    color: var(--ink);
+    font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.cal *,
+.cal *::before,
+.cal *::after { box-sizing: border-box; }
+
+/* ── Head ─────────────────────────────────────────────────────────────── */
+
+.cal .cal-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.cal .cal-eyebrow {
+    margin: 0 0 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--clay);
+}
+
+.cal .cal-title {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+}
+
+.cal .cal-sub {
+    margin: 6px 0 0;
+    max-width: 60ch;
+    font-size: 14px;
+    color: var(--ink-soft);
+}
+
+.cal .cal-nav { display: flex; gap: 6px; align-items: center; }
+
+.cal .cal-nav button {
+    min-width: 38px;
+    height: 38px;
+    padding: 0 12px;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cal .cal-nav button:hover { background: var(--ground); border-color: var(--sage); }
+.cal .cal-nav button:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
+.cal .cal-nav .cal-today { font-size: 13px; font-weight: 600; }
+
+/* ── Legend ───────────────────────────────────────────────────────────── */
+
+.cal .cal-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.cal .cal-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 11px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cal .cal-chip:hover { border-color: var(--sage); }
+.cal .cal-chip:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
+.cal .cal-chip.is-off { opacity: 0.42; }
+
+.cal .cal-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: 0 0 8px;
+    background: var(--ink-faint);
+}
+
+.cal .cal-dot[data-source="holiday"]  { background: var(--holiday); }
+.cal .cal-dot[data-source="leave"]    { background: var(--leave); }
+.cal .cal-dot[data-source="meeting"]  { background: var(--meeting); }
+.cal .cal-dot[data-source="booking"]  { background: var(--booking); }
+.cal .cal-dot[data-source="deadline"] { background: var(--deadline); }
+.cal .cal-dot[data-source="reminder"] { background: var(--reminder); }
+
+.cal .cal-error {
+    margin-bottom: 16px;
+    padding: 11px 14px;
+    font-size: 14px;
+    color: #7A2D1E;
+    background: #F8E7E2;
+    border: 1px solid #E9C6BC;
+    border-radius: 6px;
+}
+
+/* ── Layout ───────────────────────────────────────────────────────────── */
+
+.cal .cal-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 20px;
+    align-items: start;
+}
+
+.cal .cal-grid-wrap {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 14px;
+    min-width: 0;
+}
+
+.cal .cal-weekdays,
+.cal .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.cal .cal-weekdays {
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: center;
+}
+
+.cal .cal-cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    min-height: 82px;
+    padding: 7px 8px;
+    font: inherit;
+    text-align: left;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cal .cal-cell:hover { border-color: var(--sage); }
+.cal .cal-cell:focus-visible { outline: 2px solid var(--clay); outline-offset: 1px; }
+.cal .cal-cell.is-outside { opacity: 0.4; }
+.cal .cal-cell.is-weekend { background: #EFF1EA; }
+.cal .cal-cell.is-today .cal-daynum {
+    color: var(--paper);
+    background: var(--navy);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+}
+.cal .cal-cell.is-selected {
+    border-color: var(--clay);
+    box-shadow: 0 0 0 1px var(--clay);
+}
+
+.cal .cal-daynum { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.cal .cal-marks { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.cal .cal-count {
+    position: absolute;
+    right: 7px;
+    bottom: 6px;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+}
+
+.cal .cal-loading {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: var(--ink-faint);
+    text-align: center;
+}
+
+/* ── Side panels ──────────────────────────────────────────────────────── */
+
+.cal .cal-side { display: flex; flex-direction: column; gap: 14px; }
+
+.cal .cal-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+}
+
+.cal .cal-panel h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+}
+
+.cal .cal-hint { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+.cal .cal-empty { margin: 0; font-size: 13px; color: var(--ink-faint); }
+
+.cal .cal-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+.cal .cal-list li {
+    padding: 9px 11px;
+    background: var(--ground);
+    border-left: 3px solid var(--ink-faint);
+    border-radius: 5px;
+}
+
+.cal .cal-list li[data-source="holiday"]  { border-left-color: var(--holiday); }
+.cal .cal-list li[data-source="leave"]    { border-left-color: var(--leave); }
+.cal .cal-list li[data-source="meeting"]  { border-left-color: var(--meeting); }
+.cal .cal-list li[data-source="booking"]  { border-left-color: var(--booking); }
+.cal .cal-list li[data-source="deadline"] { border-left-color: var(--deadline); }
+.cal .cal-list li[data-source="reminder"] { border-left-color: var(--reminder); }
+
+.cal .cal-list-top { display: flex; align-items: center; gap: 7px; font-size: 13.5px; }
+.cal .cal-list p { margin: 3px 0 0 15px; font-size: 12.5px; color: var(--ink-soft); }
+
+.cal .cal-remove {
+    margin: 6px 0 0 15px;
+    padding: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--holiday);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.cal .cal-panel label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+.cal .cal-panel input,
+.cal .cal-panel textarea {
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    resize: vertical;
+}
+
+.cal .cal-panel input:focus,
+.cal .cal-panel textarea:focus { outline: 2px solid var(--clay); outline-offset: 0; border-color: var(--clay); }
+
+.cal .cal-primary,
+.cal .cal-secondary {
+    padding: 9px 14px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cal .cal-primary { color: var(--cream); background: var(--navy); border: 1px solid var(--navy); }
+.cal .cal-primary:hover:not(:disabled) { background: #0D3459; }
+.cal .cal-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.cal .cal-secondary { color: var(--ink); background: var(--paper); border: 1px solid var(--rule); }
+.cal .cal-secondary:hover { background: var(--ground); border-color: var(--sage); }
+
+.cal .cal-primary:focus-visible,
+.cal .cal-secondary:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
+
+.cal .cal-url {
+    display: block;
+    padding: 8px 10px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11.5px;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+    .cal .cal-body { grid-template-columns: minmax(0, 1fr); }
+    .cal .cal-cell { min-height: 62px; }
+}
+
+/* The app's global footer sits oddly under a full-height calendar, the same
+   reason Module 4 hides it on its own pages. */
+body:has(.cal) #footer { display: none; }

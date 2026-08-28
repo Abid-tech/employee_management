@@ -135,6 +135,42 @@ function Header({ user, setUser }) {
 
 
 
+                            {/* ========================= */}
+                            {/* EVERYONE SIGNED IN */}
+                            {/* ========================= */}
+
+                            {user && (
+
+                                <>
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/calendar"
+                                        >
+                                            Calendar
+                                        </Link>
+
+                                    </li>
+
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/attendance/insights"
+                                        >
+                                            My Attendance
+                                        </Link>
+
+                                    </li>
+
+                                </>
+
+                            )}
+
+
                             {user && user.role === "Employee" && (
 
                                 <>
@@ -204,20 +240,60 @@ function Header({ user, setUser }) {
 
 
                             {/* ========================= */}
-                            {/* ADMIN LINKS */}
+                            {/* ADMIN AND DIRECTOR LINKS */}
                             {/* ========================= */}
 
-                            {user && user.role === "Admin" && (
+                            {user && (user.role === "Admin" || user.role === "Director") && (
 
                                 <>
+
+                                    {user.role === "Admin" && (
+
+                                        <li className="nav-item">
+
+                                            <Link
+                                                className="nav-link"
+                                                to="/admin-dashboard"
+                                            >
+                                                Admin Dashboard
+                                            </Link>
+
+                                        </li>
+
+                                    )}
+
 
                                     <li className="nav-item">
 
                                         <Link
                                             className="nav-link"
-                                            to="/admin-dashboard"
+                                            to="/Leave-management"
                                         >
-                                            Admin Dashboard
+                                            Leave Management
+                                        </Link>
+
+                                    </li>
+
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/attendance"
+                                        >
+                                            Attendance
+                                        </Link>
+
+                                    </li>
+
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/holidays"
+                                        >
+                                            Holidays
                                         </Link>
 
                                     </li>

@@ -122,6 +122,13 @@ app.use('/api/tasks', require('./routes/task_routes'))
 app.use('/api/objectives', require('./routes/objective_routes'))
 app.use('/api/ai', require('./routes/ai_routes'))
 
+// Company holidays and the shared calendar. The calendar reads from every
+// other module rather than owning events of its own, so it is mounted after
+// them — the router itself does not care, but the ordering says what depends
+// on what.
+app.use('/api/holidays', require('./routes/holiday_routes'))
+app.use('/api/calendar', require('./routes/calendar_routes'))
+
 // Employee performance management
 app.use('/api/performance', require('./routes/performance_routes'))
 

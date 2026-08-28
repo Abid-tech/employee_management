@@ -27,6 +27,11 @@ import AdminResources from './pages/admin_dashboard/AdminResources'
 import EmployeeResources from './pages/employee_dashboard/EmployeeResources'
 import AssetManagement from './pages/admin_dashboard/AssetManagement'
 import MyAssets from './pages/employee_dashboard/MyAssets'
+
+// --- Company holidays and the shared calendar -------------------------------
+import Calendar from './pages/calendar/calendar'
+import Holidays from './pages/holidays/holidays'
+import AttendanceInsights from './pages/attendance_insights/attendance_insights'
 // ---------------------------------------------------------------------------
 // --- Module 3: Task & Objective Management ---------------------------------
 import Module3Layout from './pages/module3_layout'
@@ -201,6 +206,36 @@ function App() {
                         <Route path='/employee/resources' element={<EmployeeResources />} />
                         <Route path='/admin/assets' element={<AssetManagement />} />
                         <Route path='/employee/assets' element={<MyAssets />} />
+
+                        {/* --- Calendar and holidays ---------------------------------
+                            Both read data belonging to other people, so both sit behind
+                            a sign-in. The holidays page lets anyone signed in look, and
+                            the API refuses edits from anyone who is not an administrator
+                            or director. */}
+                        <Route
+                            path='/calendar'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <Calendar />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='/holidays'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <Holidays />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='/attendance/insights'
+                            element={
+                                <ProtectedRoute user={user} loading={loading}>
+                                    <AttendanceInsights />
+                                </ProtectedRoute>
+                            }
+                        />
                         {/* --------------------------------------------------------------- */}
 
                         {/* --- Module 3 -------------------------------------------------
