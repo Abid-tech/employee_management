@@ -42,6 +42,22 @@ app.use((req, res, next) => {
 // somebody else's code.
 const useModule = (mod) => (mod && mod.__esModule !== undefined) || (mod && mod.default) ? mod.default : mod
 
+// Make sure the database is connected before any route runs.
+//
+// Running locally, start() connects once and then listens. On a serverless host
+// the module is imported instead, start() never runs, and nothing opens the
+// connection — so every query sat in Mongoose's buffer until it timed out ten
+// seconds later and returned a 500. connectDB caches its promise, so this costs
+// nothing after the first request on a container.
+app.use(async (req, res, next) => {
+    try {
+        await connectDB()
+        next()
+    } catch (err) {
+        next(err)
+    }
+})
+
 // Says whether the API can reach the database, and why not when it cannot.
 // Nothing secret is returned: the host is public in any connection string and
 // the message is the driver's own.
