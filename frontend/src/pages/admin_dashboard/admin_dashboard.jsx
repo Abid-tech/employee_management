@@ -1,7 +1,7 @@
 import { API_BASE } from '../../lib/api_base'
 import { useState, useEffect } from "react"
 import "../../index.css"
-import AdminSalary from "../../components/admin_salary/AdminSalary"
+import AdminSalary from "../../components/admin_salary/adminSalary"
 
 function AdminDashboard() {
     const [leaves, setLeaves] = useState([])
