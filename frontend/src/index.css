@@ -128,17 +128,21 @@ textarea{
 /* Leave history start */
 
 .leave-history{
-    margin: 30px 0;
     border: 1px solid rgba(0,0,0,.15);
     border-radius: 18px;
     padding: 20px;
     background: #fff;
 }
 
+.leave-history button{
+    font-size: 12px;
+
+}
 .history-top h4{
     font-size: 16px;
     font-weight: 700;
     color: var(--blue-color);
+    margin-bottom: 10px;
 }
 
 .leave-history table{
@@ -340,7 +344,1338 @@ textarea{
     cursor: pointer;
     transition: all 0.3s ease;
 }
+
+/* communication part start */
+
+
+#communication-dashboard{
+    min-height: calc(100vh - 60px);
+    padding: 35px 0;
+}
+
+.communication-form{
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e8ec;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.035);
+}
+
+
+/* Header */
+
+.communication-form-header h4{
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.communication-form-header p{
+    margin: 5px 0 0;
+
+    font-size: 10px;
+    color: #7b838e;
+}
+
+.communication-form hr{
+    margin: 15px 0 20px;
+    border-color: #edf0f3;
+}
+
+
+/* Labels */
+
+.communication-form .form-label{
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    color: #293747;
+}
+
+
+
+
+.communication-type-options{
+    display: flex;
+    gap: 10px;
+}
+
+.communication-type-option{
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    border: 1px solid #e2e6eb;
+    border-radius: 8px;
+
+    background: #fafbfc;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.communication-type-option:hover{
+    border-color: #cbd3dc;
+}
+
+.communication-type-option.active{
+    border-color: var(--blue-color);
+    background: #f5f8fb;
+}
+
+.communication-type-option input{
+    width: 15px;
+    height: 15px;
+
+    accent-color: var(--blue-color);
+}
+
+.communication-type-option strong{
+    display: block;
+
+    font-size: 11px;
+    color: #293747;
+}
+
+.communication-type-option small{
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 8px;
+    color: #858d97;
+}
+
+
+
+.communication-form .form-control{
+    min-height: 42px;
+
+    padding: 9px 11px;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 7px;
+
+    font-size: 11px;
+}
+
+.communication-form .form-control::placeholder{
+    font-size: 10px;
+    color: #a1a8b0;
+}
+
+.communication-form .form-control:focus{
+    border-color: var(--blue-color);
+
+    box-shadow:
+        0 0 0 3px rgba(10, 41, 71, .07);
+}
+
+
+/* Message */
+
+.communication-textarea{
+    min-height: 120px !important;
+    resize: vertical;
+}
+
+
+/* Character hint */
+
+.field-hint{
+    margin-top: 4px;
+
+    text-align: right;
+
+    font-size: 8px;
+    color: #9aa1a9;
+}
+
+
+/* Optional */
+
+.optional-text{
+    margin-left: 5px;
+
+    font-size: 8px;
+    font-weight: 400;
+
+    color: #999;
+}
+
+
+
+
+.poll-options-section{
+    margin-bottom: 18px;
+}
+
+.poll-input-row{
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 8px;
+}
+
+.poll-input-row .form-control{
+    flex: 1;
+}
+
+
+/* Remove */
+
+.remove-option-btn{
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    border: none;
+    border-radius: 6px;
+
+    background: #ffe8e8;
+    color: #d9363e;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+.remove-option-btn:hover{
+    background: #ffdada;
+}
+
+
+/* Add */
+
+.add-option-btn{
+    margin-top: 2px;
+
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    color: var(--blue-color);
+
+    font-size: 10px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.add-option-btn:hover{
+    text-decoration: underline;
+}
+
+
+.communication-submit{
+    margin-top: 25px;
+
+    text-align: right;
+}
+
+.communication-submit-btn{
+    padding: 9px 20px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: var(--blue-color);
+    color: #fff;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.communication-submit-btn:hover{
+    background: #123c65;
+    color: #fff;
+}
+
+
+.poll-result{
+    padding: 20px;
+
+    background: #fff;
+
+    border: 1px solid #e5e8ec;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .035);
+}
+
+.poll-result-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.poll-result-header h4{
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.poll-result-header p{
+    margin: 4px 0 0;
+
+    font-size: 9px;
+    color: #7b838e;
+}
+
+.poll-status{
+    padding: 4px 9px;
+
+    border-radius: 5px;
+
+    background: #e5f7ec;
+    color: #18944d;
+
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.poll-result hr{
+    margin: 12px 0;
+
+    border-color: #edf0f3;
+}
+
+.poll-question{
+    display: flex;
+    gap: 7px;
+
+    margin-bottom: 15px;
+}
+
+.poll-question span{
+    font-size: 9px;
+    color: #858d97;
+}
+
+.poll-question strong{
+    font-size: 11px;
+    color: #293747;
+}
+
+.poll-option{
+    margin-bottom: 13px;
+}
+
+.poll-option-info{
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 5px;
+}
+
+.poll-option-info span,
+.poll-option-info strong{
+    font-size: 10px;
+}
+
+.poll-option-info span{
+    color: #5f6874;
+}
+
+.poll-option-info strong{
+    color: #293747;
+}
+
+.poll-progress{
+    width: 100%;
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #edf0f3;
+}
+
+.poll-progress-bar{
+    height: 100%;
+
+    border-radius: 10px;
+
+    background: var(--blue-color);
+}
+
+
+/* communication part end */
+
+
+
+/* Admin salary start */
+/* =========================================
+   SALARY MANAGEMENT
+========================================= */
+
+#salary-generate,
+#salary-manage{
+    padding: 25px 0 5px;
+}
+
+#salary-manage{
+    padding-bottom: 35px;
+}
+
+
+/* =========================================
+   MAIN CARD
+========================================= */
+
+.salary-card{
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #e4e8ed;
+
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .035);
+}
+
+
+/* =========================================
+   CARD HEADER
+========================================= */
+
+.salary-card-header{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+.salary-card-header h4{
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.salary-card-header p{
+    margin: 5px 0 0;
+
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+.salary-header-icon{
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    background: #f1f5f9;
+
+    color: var(--blue-color);
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.salary-card hr{
+    margin: 15px 0 20px;
+
+    border-color: #edf0f3;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.salary-card .form-label{
+    margin-bottom: 6px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    color: #344150;
+}
+
+.salary-card .form-control,
+.salary-card .form-select{
+    min-height: 40px;
+
+    border: 1px solid #dfe4e9;
+
+    border-radius: 7px;
+
+    font-size: 10px;
+
+    color: #374151;
+
+    background-color: #fff;
+}
+
+.salary-card .form-control:focus,
+.salary-card .form-select:focus{
+    border-color: var(--blue-color);
+
+    box-shadow: 0 0 0 3px rgba(10, 41, 71, .07);
+}
+
+
+/* =========================================
+   SALARY INPUT
+========================================= */
+
+.salary-input{
+    position: relative;
+}
+
+.salary-input > span{
+    position: absolute;
+
+    left: 11px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    z-index: 2;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    color: #7b838e;
+}
+
+.salary-input .form-control{
+    padding-left: 28px;
+}
+
+
+/* =========================================
+   ATTENDANCE SUMMARY
+========================================= */
+
+.attendance-summary{
+    margin-top: 22px;
+
+    padding: 16px;
+
+    border: 1px solid #e3e8ed;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+}
+
+.summary-header{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 13px;
+}
+
+.summary-header h5{
+    margin: 0;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.summary-header p{
+    margin: 3px 0 0;
+
+    font-size: 8px;
+
+    color: #8b949e;
+}
+
+.summary-loading{
+    font-size: 9px;
+
+    color: #7b838e;
+}
+
+.summary-loading-box{
+    padding: 12px;
+
+    text-align: center;
+
+    font-size: 9px;
+
+    color: #858d97;
+
+    background: #fff;
+
+    border: 1px solid #e7eaee;
+
+    border-radius: 7px;
+}
+
+.summary-item{
+    min-height: 70px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 11px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e9ed;
+
+    border-radius: 7px;
+}
+
+.summary-item span{
+    font-size: 8px;
+
+    color: #858d97;
+}
+
+.summary-item strong{
+    margin-top: 5px;
+
+    font-size: 15px;
+
+    color: #293747;
+}
+
+.summary-item.net-pay{
+    border-color: #d8eadf;
+
+    background: #f5fbf7;
+}
+
+.summary-item.net-pay strong{
+    color: #21834a;
+}
+
+.summary-empty{
+    padding: 12px;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7eaee;
+
+    text-align: center;
+
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+
+/* =========================================
+   GENERATE BUTTON
+========================================= */
+
+.salary-form-footer{
+    margin-top: 20px;
+
+    display: flex;
+
+    justify-content: flex-end;
+}
+
+.generate-salary-btn{
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: var(--blue-color);
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    transition: .2s ease;
+}
+
+.generate-salary-btn:hover{
+    background: #123b61;
+}
+
+.generate-salary-btn:disabled{
+    opacity: .6;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   SLIP COUNT
+========================================= */
+
+.slip-count{
+    min-width: 20px;
+    height: 20px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-left: 3px;
+
+    padding: 0 6px;
+
+    border-radius: 10px;
+
+    background: #edf2f7;
+
+    color: #66717e;
+
+    font-size: 8px;
+}
+
+
+/* =========================================
+   FILTER
+========================================= */
+
+.salary-filter{
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.salary-filter label{
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+.salary-filter .form-select{
+    width: 140px;
+
+    min-height: 34px;
+
+    padding: 5px 9px;
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.salary-table{
+    margin: 0;
+
+    font-size: 10px;
+}
+
+.salary-table thead th{
+    padding: 10px 8px;
+
+    border-bottom: 1px solid #e4e8ec;
+
+    background: #fafbfc;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .3px;
+
+    color: #7b838e;
+
+    white-space: nowrap;
+}
+
+.salary-table tbody td{
+    padding: 12px 8px;
+
+    border-bottom: 1px solid #eef0f2;
+
+    color: #4c5662;
+}
+
+.salary-table tbody tr:last-child td{
+    border-bottom: none;
+}
+
+.salary-table tbody tr:hover{
+    background: #fafbfd;
+}
+
+.table-number{
+    width: 35px;
+
+    color: #9aa1a9 !important;
+}
+
+
+/* =========================================
+   EMPLOYEE CELL
+========================================= */
+
+.employee-cell{
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.employee-avatar{
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #edf2f7;
+
+    color: var(--blue-color);
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.employee-cell strong{
+    display: block;
+
+    font-size: 10px;
+
+    color: #293747;
+}
+
+.employee-cell small{
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 8px;
+
+    color: #8b949e;
+}
+
+
+/* =========================================
+   PERIOD
+========================================= */
+
+.period-badge{
+    display: inline-block;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    background: #f1f4f7;
+
+    color: #596572;
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   NET PAY
+========================================= */
+
+.net-pay-value{
+    font-size: 10px;
+
+    color: #21834a;
+}
+
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
+.salary-status{
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 8px;
+
+    font-weight: 600;
+}
+
+.salary-status.pending{
+    background: #fff4d6;
+
+    color: #a66a00;
+}
+
+.salary-status.processing{
+    background: #e5f1ff;
+
+    color: #2867a5;
+}
+
+.salary-status.paid{
+    background: #def5e7;
+
+    color: #237746;
+}
+
+
+/* =========================================
+   STATUS SELECT
+========================================= */
+
+.status-select{
+    width: 115px;
+
+    min-height: 32px !important;
+
+    padding: 5px 8px !important;
+
+    font-size: 9px !important;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.salary-empty{
+    height: 180px;
+
+    text-align: center;
+
+    vertical-align: middle;
+}
+
+.salary-empty .empty-icon{
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 8px;
+
+    border-radius: 8px;
+
+    background: #f1f4f7;
+
+    color: #8b949e;
+
+    font-size: 15px;
+}
+
+.salary-empty strong{
+    display: block;
+
+    font-size: 10px;
+
+    color: #596572;
+}
+
+.salary-empty span{
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 8px;
+
+    color: #9aa1a9;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 767px){
+
+    .salary-card{
+        padding: 16px;
+    }
+
+    .salary-card-header{
+        align-items: flex-start;
+    }
+
+    .salary-filter{
+        flex-direction: column;
+
+        align-items: flex-end;
+    }
+
+    .salary-filter label{
+        display: none;
+    }
+
+    .salary-filter .form-select{
+        width: 120px;
+    }
+
+    .communication-type-options{
+        flex-direction: column;
+    }
+
+    .summary-item{
+        min-height: 60px;
+    }
+
+}
+/* Admin salary end */
+
+
+
 /* Admin dashboard part end */
+
+
+
+
+
+/* Employee dashboard part start */
+
+#employee-dashboard{
+    min-height: calc(100vh - 60px);
+
+    padding: 30px 0 40px;
+
+}
+
+
+
+
+.employee-welcome{
+    margin-bottom: 25px;
+}
+
+.employee-welcome h3{
+    margin: 0;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.employee-welcome p{
+    margin: 5px 0 0;
+
+    font-size: 10px;
+
+    color: #7b838e;
+}
+
+
+
+.employee-section{
+    padding: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e8ec;
+
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.035);
+}
+
+
+
+
+.employee-section-header{
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+.employee-section-header h4{
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.employee-section-header p{
+    margin: 3px 0 0;
+
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+
+
+
+.section-icon{
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+}
+
+.announcement-icon{
+    background: #e8f0ff;
+}
+
+.poll-icon{
+    background: #e7f7ee;
+}
+
+
+.announcement-card{
+    height: 100%;
+
+    padding: 15px;
+
+    border: 1px solid #e8ebef;
+
+    border-radius: 9px;
+
+    background: #fafbfc;
+
+    transition: .2s ease;
+}
+
+.announcement-card:hover{
+    border-color: #d5dbe2;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .04);
+}
+
+.announcement-card h5{
+    margin: 0 0 8px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #293747;
+}
+
+.announcement-card p{
+    margin: 0 0 15px;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+
+    color: #626c77;
+}
+
+
+/* Date */
+
+.announcement-date{
+    padding-top: 9px;
+
+    border-top: 1px solid #e9edf1;
+
+    font-size: 8px;
+
+    color: #9299a2;
+}
+
+
+
+.poll-card{
+    padding: 16px;
+
+    border: 1px solid #e8ebef;
+
+    border-radius: 9px;
+
+    background: #fafbfc;
+}
+
+.poll-card h5{
+    margin: 0 0 6px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #293747;
+}
+
+.poll-message{
+    margin: 0 0 14px;
+
+    font-size: 10px;
+
+    color: #626c77;
+}
+
+
+.poll-options{
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.poll-option{
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 9px 10px;
+
+    border: 1px solid #e2e6eb;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.poll-option:hover{
+    border-color: #cbd3dc;
+
+    background: #f8fafc;
+}
+
+.poll-option.selected{
+    border-color: var(--blue-color);
+
+    background: #f4f7fa;
+}
+
+
+/* Radio */
+
+.poll-option input{
+    width: 14px;
+    height: 14px;
+
+    margin: 0;
+
+    accent-color: var(--blue-color);
+}
+
+.poll-option span{
+    font-size: 10px;
+
+    color: #4f5965;
+}
+
+
+
+.poll-vote{
+    margin-top: 15px;
+
+    text-align: right;
+}
+
+.poll-vote button{
+    padding: 8px 20px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: var(--blue-color);
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.poll-vote button:hover{
+    background: #123c65;
+}
+/* Employee dashboard part end */
+
+
+
 
 
 /* Registration part start */

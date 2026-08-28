@@ -217,4 +217,34 @@ const HandleLogout = (req, res) => {
 }
 
 
-module.exports = { HandleRegistration,HandleLogin,HandleAuthMe,HandleLogout }
+
+const HandleGetAllEmployees = async (req, res) => {
+
+    try {
+
+        console.log("=== Fetching employees ===")
+        console.log("User from token:", req.user)
+        
+        const employees = await User.find({ role: "Employee" })
+            .select("firstName lastName email department")
+
+        res.status(200).json({
+            success: true,
+            employees
+        })
+
+    } catch (err) {
+
+        console.log(err)
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch employees"
+        })
+    }
+}
+
+
+
+
+module.exports = { HandleRegistration,HandleLogin,HandleAuthMe,HandleLogout,HandleGetAllEmployees }

@@ -38,7 +38,7 @@ function Registration() {
 
         try {
 
-            const response = await fetch("http://localhost:5000/user/registration", {
+            const response = await fetch("http://localhost:9505/user/registration", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -1,59 +1,54 @@
 import { useEffect, useState } from "react"
-import {MapContainer,TileLayer,Marker,Circle,useMap} from "react-leaflet"
 
-import L from "leaflet"
+import {
+    APIProvider,
+    Map,
+    Marker,
+    Circle,
+    useMap
+} from "@vis.gl/react-google-maps"
 
-import "leaflet/dist/leaflet.css"
 import "../index.css"
 
 
+// ========================================
+// Recenter Google Map
+// ========================================
 
-delete L.Icon.Default.prototype._getIconUrl
-
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-
-    iconUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-
-    shadowUrl:
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png"
-})
-
-
-
-
-
-// Center map when user's location changes
 function RecenterMap({ position }) {
 
     const map = useMap()
 
     useEffect(() => {
 
-        if (position) {
+        if (map && position) {
 
-            map.setView(
-                [position.latitude, position.longitude],
-                17
-            )
+            map.panTo({
+                lat: position.latitude,
+                lng: position.longitude
+            })
+
         }
 
     }, [position, map])
-
 
     return null
 }
 
 
+// ========================================
+// Attendance Component
+// ========================================
+
 function Attendence() {
 
-    const officeLatitude = Number(import.meta.env.VITE_OFFICE_LATITUDE)
+    const officeLatitude =Number(import.meta.env.VITE_OFFICE_LATITUDE)
 
     const officeLongitude = Number(import.meta.env.VITE_OFFICE_LONGITUDE)
 
-    const attendanceRadius = Number(import.meta.env.VITE_ATTENDANCE_RADIUS)
+    const attendanceRadius = Number(import.meta.env.VITE_ATTENDANCE_RADIUS || 50)
+
+    const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
 
 
     const [attendance, setAttendance] = useState(null)
@@ -68,27 +63,26 @@ function Attendence() {
 
     const [processing, setProcessing] = useState(false)
 
-
-
     const [currentTime, setCurrentTime] = useState(new Date())
 
 
+    // ========================================
     // Get today's attendance
+    // ========================================
+
     const fetchAttendance = async () => {
 
         try {
 
             const response = await fetch(
-                "http://localhost:5000/attendance/today",
+                "http://localhost:9505/attendance/today",
                 {
                     method: "GET",
                     credentials: "include"
                 }
             )
 
-
             const data = await response.json()
-
 
             if (response.ok) {
 
@@ -102,31 +96,48 @@ function Attendence() {
                 "Attendance fetch error:",
                 err
             )
+
         }
+
     }
 
 
+    // ========================================
     // Get current location
+    // ========================================
+
     const getLocation = () => {
 
         if (!navigator.geolocation) {
 
-            setLocationError("Geolocation is not supported by your browser.")
+            setLocationError(
+                "Geolocation is not supported by your browser."
+            )
 
             return
         }
 
 
         setLoadingLocation(true)
+
         setLocationError("")
 
 
-        navigator.geolocation.getCurrentPosition((position) => {
+        navigator.geolocation.getCurrentPosition(
+
+            (position) => {
 
                 const newLocation = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    accuracy: position.coords.accuracy
+
+                    latitude:
+                        position.coords.latitude,
+
+                    longitude:
+                        position.coords.longitude,
+
+                    accuracy:
+                        position.coords.accuracy
+
                 }
 
 
@@ -135,16 +146,25 @@ function Attendence() {
 
                 const calculatedDistance =
                     calculateDistance(
+
                         newLocation.latitude,
+
                         newLocation.longitude,
+
                         officeLatitude,
+
                         officeLongitude
+
                     )
+
+                
 
 
                 setDistance(calculatedDistance)
 
+
                 setLoadingLocation(false)
+
             },
 
 
@@ -157,23 +177,34 @@ function Attendence() {
 
 
                 setLocationError(
-                    getLocationErrorMessage(error.code)
+                    getLocationErrorMessage(
+                        error.code
+                    )
                 )
 
+
                 setLoadingLocation(false)
+
             },
 
 
             {
                 enableHighAccuracy: true,
+
                 timeout: 10000,
+
                 maximumAge: 0
             }
+
         )
+
     }
 
 
+    // ========================================
     // Check-in
+    // ========================================
+
     const handleCheckIn = async () => {
 
         if (!location) {
@@ -187,7 +218,7 @@ function Attendence() {
         if (distance > attendanceRadius) {
 
             alert(
-                "You are outside the 50 meter office range."
+                `You are outside the ${attendanceRadius} meter office range.`
             )
 
             return
@@ -200,8 +231,11 @@ function Attendence() {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/attendance/check-in",
+
+                "http://localhost:9505/attendance/check-in",
+
                 {
+
                     method: "POST",
 
                     headers: {
@@ -211,21 +245,36 @@ function Attendence() {
                     credentials: "include",
 
                     body: JSON.stringify({
-                        latitude: location.latitude,
-                        longitude: location.longitude,
-                        accuracy: location.accuracy
+
+                        latitude:
+                            location.latitude,
+
+                        longitude:
+                            location.longitude,
+
+                        accuracy:
+                            location.accuracy
+
                     })
+
                 }
+
             )
 
 
-            const data = await response.json()
+            const data =
+                await response.json()
 
 
             if (response.ok) {
 
-                setAttendance(data.attendance)
-                alert("Check-in successful")
+                setAttendance(
+                    data.attendance
+                )
+
+                alert(
+                    "Check-in successful"
+                )
 
             } else {
 
@@ -233,6 +282,7 @@ function Attendence() {
                     data.message ||
                     "Check-in failed"
                 )
+
             }
 
         } catch (err) {
@@ -242,17 +292,23 @@ function Attendence() {
                 err
             )
 
-            alert("Something went wrong")
+            alert(
+                "Something went wrong"
+            )
 
         } finally {
 
             setProcessing(false)
 
         }
+
     }
 
 
+    // ========================================
     // Check-out
+    // ========================================
+
     const handleCheckOut = async () => {
 
         if (!location) {
@@ -266,7 +322,7 @@ function Attendence() {
         if (distance > attendanceRadius) {
 
             alert(
-                "You are outside the 50 meter office range."
+                `You are outside the ${attendanceRadius} meter office range.`
             )
 
             return
@@ -279,8 +335,11 @@ function Attendence() {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/attendance/check-out",
+
+                "http://localhost:9505/attendance/check-out",
+
                 {
+
                     method: "POST",
 
                     headers: {
@@ -290,22 +349,36 @@ function Attendence() {
                     credentials: "include",
 
                     body: JSON.stringify({
-                        latitude: location.latitude,
-                        longitude: location.longitude,
-                        accuracy: location.accuracy
+
+                        latitude:
+                            location.latitude,
+
+                        longitude:
+                            location.longitude,
+
+                        accuracy:
+                            location.accuracy
+
                     })
+
                 }
+
             )
 
 
-            const data = await response.json()
+            const data =
+                await response.json()
 
 
             if (response.ok) {
 
-                setAttendance(data.attendance)
+                setAttendance(
+                    data.attendance
+                )
 
-                alert("Check-out successful")
+                alert(
+                    "Check-out successful"
+                )
 
             } else {
 
@@ -313,6 +386,7 @@ function Attendence() {
                     data.message ||
                     "Check-out failed"
                 )
+
             }
 
         } catch (err) {
@@ -322,63 +396,88 @@ function Attendence() {
                 err
             )
 
-            alert("Something went wrong")
+            alert(
+                "Something went wrong"
+            )
 
         } finally {
 
             setProcessing(false)
 
         }
+
     }
 
 
+    // ========================================
     // Initial data
+    // ========================================
+
     useEffect(() => {
 
         fetchAttendance()
+
         getLocation()
 
     }, [])
 
 
+    // ========================================
     // Clock
+    // ========================================
+
     useEffect(() => {
 
-        const interval = setInterval(() => {
+        const interval =
+            setInterval(() => {
 
-            setCurrentTime(new Date())
+                setCurrentTime(
+                    new Date()
+                )
 
-        }, 1000)
+            }, 1000)
 
 
-        return () => clearInterval(interval)
+        return () =>
+            clearInterval(interval)
 
     }, [])
 
 
-    const today = currentTime.toLocaleDateString(
-        "en-US",
-        {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        }
-    )
+    // ========================================
+    // Date / Time
+    // ========================================
+
+    const today =
+        currentTime.toLocaleDateString(
+            "en-US",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        )
 
 
-    const time = currentTime.toLocaleTimeString(
-        "en-US",
-        {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit"
-        }
-    )
+    const time =
+        currentTime.toLocaleTimeString(
+            "en-US",
+            {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            }
+        )
 
+
+    // ========================================
+    // Attendance times
+    // ========================================
 
     const checkInTime =
         attendance?.checkIn?.time
+
             ? new Date(
                 attendance.checkIn.time
             ).toLocaleTimeString(
@@ -388,11 +487,13 @@ function Attendence() {
                     minute: "2-digit"
                 }
             )
+
             : "--:--"
 
 
     const checkOutTime =
         attendance?.checkOut?.time
+
             ? new Date(
                 attendance.checkOut.time
             ).toLocaleTimeString(
@@ -402,22 +503,42 @@ function Attendence() {
                     minute: "2-digit"
                 }
             )
+
             : "--:--"
 
 
-    const totalMinutes = attendance?.totalWorkingMinutes || 0
+    // ========================================
+    // Working hours
+    // ========================================
+
+    const totalMinutes =
+        attendance?.totalWorkingMinutes || 0
 
 
-    const hours = Math.floor(totalMinutes / 60)
+    const hours =
+        Math.floor(
+            totalMinutes / 60
+        )
 
 
-    const minutes = totalMinutes % 60
+    const minutes =
+        totalMinutes % 60
 
 
-    const isCheckedIn = Boolean(attendance?.checkIn?.time)
+    // ========================================
+    // Status
+    // ========================================
+
+    const isCheckedIn =
+        Boolean(
+            attendance?.checkIn?.time
+        )
 
 
-    const isCheckedOut = Boolean(attendance?.checkOut?.time)
+    const isCheckedOut =
+        Boolean(
+            attendance?.checkOut?.time
+        )
 
 
     const withinOffice =
@@ -425,12 +546,39 @@ function Attendence() {
         distance <= attendanceRadius
 
 
+    // ========================================
+    // Google Map position
+    // ========================================
+
+    const officePosition = {
+
+        lat: officeLatitude,
+
+        lng: officeLongitude
+
+    }
+
+
+    const userPosition = location
+        ? {
+            lat: location.latitude,
+            lng: location.longitude
+        }
+        : null
+
+
     return (
-        <>
+
+        <APIProvider
+            apiKey={googleMapsApiKey}
+        >
+
             <section className="attendance-section">
 
                 <div className="container">
 
+
+                    {/* ================= SUMMARY ================= */}
 
                     <div className="row g-3 attendance-summary">
 
@@ -442,12 +590,16 @@ function Attendence() {
                             <div className="attendance-card">
 
                                 <div className="attendance-icon blue">
+
                                     <span>◷</span>
+
                                 </div>
 
                                 <div className="attendance-card-info">
 
-                                    <p>Today's Date</p>
+                                    <p>
+                                        Today's Date
+                                    </p>
 
                                     <h5>
                                         {currentTime.toLocaleDateString(
@@ -456,12 +608,15 @@ function Attendence() {
                                     </h5>
 
                                     <small>
+
                                         {currentTime.toLocaleDateString(
                                             "en-US",
                                             {
-                                                weekday: "long"
+                                                weekday:
+                                                    "long"
                                             }
                                         )}
+
                                     </small>
 
                                 </div>
@@ -478,21 +633,27 @@ function Attendence() {
                             <div className="attendance-card">
 
                                 <div className="attendance-icon green">
+
                                     <span>✓</span>
+
                                 </div>
 
                                 <div className="attendance-card-info">
 
-                                    <p>Check-In Time</p>
+                                    <p>
+                                        Check-In Time
+                                    </p>
 
                                     <h5>
                                         {checkInTime}
                                     </h5>
 
                                     <small>
+
                                         {isCheckedIn
                                             ? "Today"
                                             : "Not Checked In"}
+
                                     </small>
 
                                 </div>
@@ -509,21 +670,27 @@ function Attendence() {
                             <div className="attendance-card">
 
                                 <div className="attendance-icon orange">
+
                                     <span>→</span>
+
                                 </div>
 
                                 <div className="attendance-card-info">
 
-                                    <p>Check-Out Time</p>
+                                    <p>
+                                        Check-Out Time
+                                    </p>
 
                                     <h5>
                                         {checkOutTime}
                                     </h5>
 
                                     <small>
+
                                         {isCheckedOut
                                             ? "Today"
                                             : "Not Checked Out"}
+
                                     </small>
 
                                 </div>
@@ -540,15 +707,21 @@ function Attendence() {
                             <div className="attendance-card">
 
                                 <div className="attendance-icon purple">
+
                                     <span>◷</span>
+
                                 </div>
 
                                 <div className="attendance-card-info">
 
-                                    <p>Total Working Hours</p>
+                                    <p>
+                                        Total Working Hours
+                                    </p>
 
                                     <h5>
+
                                         {hours}h {minutes}m
+
                                     </h5>
 
                                     <small>
@@ -564,10 +737,12 @@ function Attendence() {
                     </div>
 
 
+                    {/* ================= MAIN ================= */}
+
                     <div className="row g-3 mt-1">
 
 
-                        {/* LEFT */}
+                        {/* ================= LEFT ================= */}
 
                         <div className="col-lg-4">
 
@@ -617,16 +792,20 @@ function Attendence() {
                                 </div>
 
 
-                                {/* Location status */}
+                                {/* Location Status */}
 
                                 <div className="location-verified">
 
                                     <strong>
 
                                         {loadingLocation
+
                                             ? "Checking Location..."
+
                                             : withinOffice
+
                                                 ? "Location Verified ✓"
+
                                                 : "Outside Office Range"}
 
                                     </strong>
@@ -635,10 +814,14 @@ function Attendence() {
                                     <p>
 
                                         {loadingLocation
+
                                             ? "Getting your current location"
+
                                             : withinOffice
+
                                                 ? "You are within office premises"
-                                                : "You must be within 50 meters of the office"}
+
+                                                : `You must be within ${attendanceRadius} meters of the office`}
 
                                     </p>
 
@@ -646,10 +829,15 @@ function Attendence() {
                                     {location?.accuracy && (
 
                                         <small>
+
                                             GPS Accuracy:{" "}
+
                                             {Math.round(
                                                 location.accuracy
-                                            )} meters
+                                            )}
+
+                                            {" "}meters
+
                                         </small>
 
                                     )}
@@ -663,7 +851,11 @@ function Attendence() {
 
                                     <button
                                         className="btn check-in-btn"
-                                        onClick={handleCheckIn}
+
+                                        onClick={
+                                            handleCheckIn
+                                        }
+
                                         disabled={
                                             isCheckedIn ||
                                             !withinOffice ||
@@ -674,9 +866,13 @@ function Attendence() {
                                         ✓ &nbsp;
 
                                         {processing
+
                                             ? "Processing..."
+
                                             : isCheckedIn
+
                                                 ? "Checked In"
+
                                                 : "Check In"}
 
                                     </button>
@@ -684,7 +880,11 @@ function Attendence() {
 
                                     <button
                                         className="btn check-out-btn"
-                                        onClick={handleCheckOut}
+
+                                        onClick={
+                                            handleCheckOut
+                                        }
+
                                         disabled={
                                             !isCheckedIn ||
                                             isCheckedOut ||
@@ -733,9 +933,11 @@ function Attendence() {
                                     <div className="location-range">
 
                                         <span>
+
                                             {withinOffice
                                                 ? "Within Range"
                                                 : "Outside Range"}
+
                                         </span>
 
                                         <small>
@@ -743,7 +945,9 @@ function Attendence() {
                                             Distance:{" "}
 
                                             {distance !== null
+
                                                 ? `${Math.round(distance)} m`
+
                                                 : "--"}
 
                                         </small>
@@ -757,7 +961,7 @@ function Attendence() {
                         </div>
 
 
-                        {/* RIGHT */}
+                        {/* ================= RIGHT ================= */}
 
                         <div className="col-lg-8">
 
@@ -773,7 +977,10 @@ function Attendence() {
 
                                     <button
                                         className="refresh-btn"
-                                        onClick={getLocation}
+
+                                        onClick={
+                                            getLocation
+                                        }
                                     >
                                         ↻
                                     </button>
@@ -784,79 +991,52 @@ function Attendence() {
                                 <hr />
 
 
-                                {/* Actual Map */}
+                                {/* ================= GOOGLE MAP ================= */}
 
                                 <div className="map-container">
-
-                                    <MapContainer
-                                        center={[
-                                            Number(import.meta.env.VITE_OFFICE_LATITUDE),
-                                            Number(import.meta.env.VITE_OFFICE_LONGITUDE)
-                                        ]}
-                                        zoom={17}
-                                        style={{
-                                            width: "100%",
-                                            height: "100%"
-                                        }}
-                                    >
-
-                                        <TileLayer
-                                            attribution='&copy; OpenStreetMap contributors'
-                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        />
-
-
-                                        {/* Office */}
-
-                                        <Marker
-                                            position={[
-                                                Number(import.meta.env.VITE_OFFICE_LATITUDE),
-                                                Number(import.meta.env.VITE_OFFICE_LONGITUDE)
-                                            ]}
-                                        />
-
-
-                                        {/* 50 meter geofence */}
-
-                                        <Circle
-                                            center={[
-                                                Number(import.meta.env.VITE_OFFICE_LATITUDE),
-                                                Number(import.meta.env.VITE_OFFICE_LONGITUDE)
-                                            ]}
-                                            radius={
-                                                Number(import.meta.env.VITE_ATTENDANCE_RADIUS)
-                                            }
-                                            pathOptions={{
-                                                color: "blue"
+                                        <Map
+                                            center={{
+                                                lat: officeLatitude,
+                                                lng: officeLongitude
                                             }}
-                                        />
+                                            zoom={17}
+                                            style={{
+                                                width: "100%",
+                                                height: "100%"
+                                            }}
+                                        >
+                                            <Marker
+                                                position={{
+                                                    lat: officeLatitude,
+                                                    lng: officeLongitude
+                                                }}
+                                                title="Office Location"
+                                            />
 
+                                            <Circle
+                                                center={{
+                                                    lat: officeLatitude,
+                                                    lng: officeLongitude
+                                                }}
+                                                radius={attendanceRadius}
+                                                strokeColor="#0000FF"
+                                                strokeOpacity={0.8}
+                                                strokeWeight={2}
+                                                fillColor="#0000FF"
+                                                fillOpacity={0.15}
+                                            />
 
-                                        {/* User */}
-
-                                        {location && (
-
-                                            <>
-
+                                            {location && (
                                                 <Marker
-                                                    position={[
-                                                        location.latitude,
-                                                        location.longitude
-                                                    ]}
+                                                    position={{
+                                                        lat: location.latitude,
+                                                        lng: location.longitude
+                                                    }}
+                                                    title="Your Current Location"
                                                 />
-
-
-                                                <RecenterMap
-                                                    position={location}
-                                                />
-
-                                            </>
-
-                                        )}
-
-                                    </MapContainer>
-
-                                </div>
+                                            )}
+                                        </Map>
+                                    </div>
 
 
                                 {/* Verification */}
@@ -877,7 +1057,9 @@ function Attendence() {
                                         <strong>
 
                                             {withinOffice
+
                                                 ? "You are within the office geofence"
+
                                                 : "You are outside the office geofence"}
 
                                         </strong>
@@ -886,8 +1068,10 @@ function Attendence() {
                                         <p>
 
                                             {withinOffice
+
                                                 ? "Your location is verified. You can check-in/out."
-                                                : "Move within 50 meters of the office to check-in/out."}
+
+                                                : `Move within ${attendanceRadius} meters of the office to check-in/out.`}
 
                                         </p>
 
@@ -896,9 +1080,10 @@ function Attendence() {
                                 </div>
 
 
-                                {/* Location details */}
+                                {/* Location Details */}
 
                                 <div className="location-details">
+
 
                                     <div className="detail-row">
 
@@ -909,7 +1094,9 @@ function Attendence() {
                                         <span>
 
                                             {location
+
                                                 ? `${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)}`
+
                                                 : "Location unavailable"}
 
                                         </span>
@@ -926,7 +1113,9 @@ function Attendence() {
                                         <span>
 
                                             {location
+
                                                 ? `${location.latitude.toFixed(6)}° N, ${location.longitude.toFixed(6)}° E`
+
                                                 : "--"}
 
                                         </span>
@@ -943,7 +1132,9 @@ function Attendence() {
                                         <span>
 
                                             {location?.accuracy
+
                                                 ? `${Math.round(location.accuracy)} meters`
+
                                                 : "--"}
 
                                         </span>
@@ -960,7 +1151,9 @@ function Attendence() {
                                         <span>
 
                                             {distance !== null
+
                                                 ? `${Math.round(distance)} meters`
+
                                                 : "--"}
 
                                         </span>
@@ -978,15 +1171,26 @@ function Attendence() {
                 </div>
 
             </section>
-        </>
+
+        </APIProvider>
+
     )
 }
 
 
-// Haversine distance calculation
-function calculateDistance(latitude1,longitude1,latitude2,longitude2) {
+// ========================================
+// Haversine Distance Calculation
+// ========================================
+
+function calculateDistance(
+    latitude1,
+    longitude1,
+    latitude2,
+    longitude2
+) {
 
     const earthRadius = 6371000
+
 
     const lat1 =
         latitude1 * Math.PI / 180
@@ -994,9 +1198,11 @@ function calculateDistance(latitude1,longitude1,latitude2,longitude2) {
     const lat2 =
         latitude2 * Math.PI / 180
 
+
     const differenceLatitude =
         (latitude2 - latitude1) *
         Math.PI / 180
+
 
     const differenceLongitude =
         (longitude2 - longitude1) *
@@ -1004,28 +1210,43 @@ function calculateDistance(latitude1,longitude1,latitude2,longitude2) {
 
 
     const a =
-        Math.sin(differenceLatitude / 2) *
-        Math.sin(differenceLatitude / 2) +
+        Math.sin(
+            differenceLatitude / 2
+        ) *
+        Math.sin(
+            differenceLatitude / 2
+        ) +
 
         Math.cos(lat1) *
         Math.cos(lat2) *
-        Math.sin(differenceLongitude / 2) *
-        Math.sin(differenceLongitude / 2)
+
+        Math.sin(
+            differenceLongitude / 2
+        ) *
+        Math.sin(
+            differenceLongitude / 2 )
 
 
     const c =
-        2 * Math.atan2(
+        2 *
+        Math.atan2(
             Math.sqrt(a),
             Math.sqrt(1 - a)
         )
 
 
     return earthRadius * c
+
 }
 
 
-// Geolocation error messages
-function getLocationErrorMessage(errorCode) {
+// ========================================
+// Geolocation Error Messages
+// ========================================
+
+function getLocationErrorMessage(
+    errorCode
+) {
 
     switch (errorCode) {
 
@@ -1040,7 +1261,9 @@ function getLocationErrorMessage(errorCode) {
 
         default:
             return "Unable to get your location."
+
     }
+
 }
 
 

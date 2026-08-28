@@ -12,7 +12,7 @@ function Header({ user, setUser }) {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/user/logout",
+                "http://localhost:9505/user/logout",
                 {
                     method: "POST",
                     credentials: "include"
@@ -80,9 +80,7 @@ function Header({ user, setUser }) {
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
 
 
-                            {/* ========================= */}
-                            {/* NOT LOGGED IN */}
-                            {/* ========================= */}
+                     
 
                             {!user && (
 
@@ -100,9 +98,6 @@ function Header({ user, setUser }) {
                             )}
 
 
-                            {/* ========================= */}
-                            {/* EMPLOYEE LINKS */}
-                            {/* ========================= */}
 
                             {user && user.role === "Employee" && (
 
@@ -112,7 +107,7 @@ function Header({ user, setUser }) {
 
                                         <Link
                                             className="nav-link"
-                                            to="/"
+                                            to="/employee-dashboard"
                                         >
                                             Employee Dashboard
                                         </Link>

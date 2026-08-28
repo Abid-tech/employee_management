@@ -12,7 +12,8 @@ import Login from "./pages/login/login"
 import Attendance from "./pages/attendance"
 
 import ProtectedRoute from "./protected"
-
+import EmployeeDashboard from "./pages/employee_dashboard/employee_dashboard"
+ 
 
 function App() {
 
@@ -28,7 +29,7 @@ function App() {
             try {
 
                 const response = await fetch(
-                    "http://localhost:5000/user/auth/me",
+                    "http://localhost:9505/user/auth/me",
                     {
                         method: "GET",
                         credentials: "include"
@@ -132,6 +133,19 @@ function App() {
                                     <Attendance />
                                 </ProtectedRoute>
                             }
+                        />
+
+                        <Route
+                                path="/employee-dashboard"
+                                element={
+                                    <ProtectedRoute
+                                        user={user}
+                                        loading={loading}
+                                        requiredRole="Employee"
+                                    >
+                                        <EmployeeDashboard />
+                                    </ProtectedRoute>
+                                }
                         />
 
                     </Routes>
