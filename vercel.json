@@ -1,15 +1,36 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm --prefix frontend install && npm --prefix frontend run build",
+  "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
-  "installCommand": "npm --prefix backend install",
+  "installCommand": "npm install",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/index" },
-    { "source": "/user/:path*", "destination": "/api/index" },
-    { "source": "/attendance/:path*", "destination": "/api/index" },
-    { "source": "/communication/:path*", "destination": "/api/index" },
-    { "source": "/salary/:path*", "destination": "/api/index" },
-    { "source": "/leave-management/:path*", "destination": "/api/index" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/api/:path*",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/user/:path*",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/attendance/:path*",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/communication/:path*",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/salary/:path*",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/leave-management/:path*",
+      "destination": "/api/index"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }
