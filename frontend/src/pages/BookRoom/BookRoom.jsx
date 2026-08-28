@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './BookRoom.css';
+import { API_BASE } from '../../lib/api_base';
 
 const BookRoom = () => {
   const [rooms, setRooms] = useState([]);
@@ -23,7 +24,7 @@ const BookRoom = () => {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [roomDetails, setRoomDetails] = useState(null);
 
-  const API_URL = 'http://localhost:5000/api';
+  const API_URL = `${API_BASE}/api`;
 
   useEffect(() => {
     fetchRooms();

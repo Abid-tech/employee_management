@@ -106,6 +106,14 @@ function Header({ user, setUser }) {
                                 <Link className="nav-link" to="/budget">Budget</Link>
                             </li>
 
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/book-room">Book Room</Link>
+                            </li>
+
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/meeting/create">Meetings</Link>
+                            </li>
+
 
 
                      
@@ -166,6 +174,30 @@ function Header({ user, setUser }) {
 
                                     </li>
 
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/employee/resources"
+                                        >
+                                            Resources
+                                        </Link>
+
+                                    </li>
+
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/employee/assets"
+                                        >
+                                            My Assets
+                                        </Link>
+
+                                    </li>
+
                                 </>
 
                             )}
@@ -177,16 +209,56 @@ function Header({ user, setUser }) {
 
                             {user && user.role === "Admin" && (
 
-                                <li className="nav-item">
+                                <>
 
-                                    <Link
-                                        className="nav-link"
-                                        to="/admin-dashboard"
-                                    >
-                                        Admin Dashboard
-                                    </Link>
+                                    <li className="nav-item">
 
-                                </li>
+                                        <Link
+                                            className="nav-link"
+                                            to="/admin-dashboard"
+                                        >
+                                            Admin Dashboard
+                                        </Link>
+
+                                    </li>
+
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/add-room"
+                                        >
+                                            Add Room
+                                        </Link>
+
+                                    </li>
+
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/admin/resources"
+                                        >
+                                            Resources
+                                        </Link>
+
+                                    </li>
+
+
+                                    <li className="nav-item">
+
+                                        <Link
+                                            className="nav-link"
+                                            to="/admin/assets"
+                                        >
+                                            Assets
+                                        </Link>
+
+                                    </li>
+
+                                </>
 
                             )}
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import "./AddRoom.css";
+import { API_BASE } from "../../lib/api_base";
 
 const FEATURES = [
   "Projector",
@@ -60,7 +61,7 @@ function AddRoom() {
 
     try {
 
-      await axios.post("http://localhost:5000/api/rooms", {
+      await axios.post(`${API_BASE}/api/rooms`, {
 
         roomNo: form.roomNo,
         vacantLimit: Number(form.vacantLimit),
