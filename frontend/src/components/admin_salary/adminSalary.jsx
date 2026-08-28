@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import { useState, useEffect } from "react"
 import "../../index.css"
 
@@ -54,7 +55,7 @@ function AdminSalary() {
         try {
 
             const response = await fetch(
-                "http://localhost:9505/user/employees",
+                `${API_BASE}/user/employees`,
                 {
                     method: "GET",
                     credentials: "include"
@@ -80,7 +81,7 @@ function AdminSalary() {
         try {
 
             const response = await fetch(
-                `http://localhost:9505/salary/attendance-summary?employeeId=${employeeId}&month=${month}&year=${year}`,
+                `${API_BASE}/salary/attendance-summary?employeeId=${employeeId}&month=${month}&year=${year}`,
                 {
                     method: "GET",
                     credentials: "include"
@@ -113,7 +114,7 @@ function AdminSalary() {
             const query = statusFilter ? `?status=${statusFilter}` : ""
 
             const response = await fetch(
-                `http://localhost:9505/salary${query}`,
+                `${API_BASE}/salary${query}`,
                 {
                     method: "GET",
                     credentials: "include"
@@ -163,7 +164,7 @@ function AdminSalary() {
         try {
 
             const response = await fetch(
-                "http://localhost:9505/salary/generate",
+                `${API_BASE}/salary/generate`,
                 {
                     method: "POST",
                     credentials: "include",
@@ -211,7 +212,7 @@ function AdminSalary() {
         try {
 
             const response = await fetch(
-                `http://localhost:9505/salary/${id}/status`,
+                `${API_BASE}/salary/${id}/status`,
                 {
                     method: "PUT",
                     credentials: "include",

@@ -1,6 +1,7 @@
 // Project Budget Tracker talks to the API through here.
 
-const BASE = '/api/budget'
+import { API_BASE } from './api_base'
+const BASE = `${API_BASE}/api/budget`
 const TIMEOUT = 25000
 
 const query = (params = {}) => {

@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import { useState } from "react"
 import "../../index.css"
 
@@ -38,7 +39,7 @@ function Registration() {
 
         try {
 
-            const response = await fetch("http://localhost:9505/user/registration", {
+            const response = await fetch(`${API_BASE}/user/registration`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

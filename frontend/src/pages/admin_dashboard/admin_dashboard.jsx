@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import { useState, useEffect } from "react"
 import "../../index.css"
 import AdminSalary from "../../components/admin_salary/AdminSalary"
@@ -115,7 +116,7 @@ function AdminDashboard() {
             try {
 
                 const response = await fetch(
-                    "http://localhost:9505/communication",
+                    `${API_BASE}/communication`,
                     {
                         method: "POST",
                         credentials: "include",
@@ -212,7 +213,7 @@ function AdminDashboard() {
 
                 // First get all communications to find polls
                 const response = await fetch(
-                    "http://localhost:9505/communication",
+                    `${API_BASE}/communication`,
                     {
                         method: "GET",
                         credentials: "include"
@@ -244,7 +245,7 @@ function AdminDashboard() {
                     
                     try {
                         const resultResponse = await fetch(
-                            `http://localhost:9505/communication/${poll._id}/results`,
+                            `${API_BASE}/communication/${poll._id}/results`,
                             {
                                 method: "GET",
                                 credentials: "include"
@@ -287,7 +288,7 @@ function AdminDashboard() {
 
     const fetchLeaves = async () => {
         try {
-            const response = await fetch("http://localhost:9505/leave-management", {
+            const response = await fetch(`${API_BASE}/leave-management`, {
                 method: "GET",
                 credentials: "include",
             })
@@ -307,7 +308,7 @@ function AdminDashboard() {
             try {
 
                 const response = await fetch(
-                    `http://localhost:9505/leave-management/${id}`,
+                    `${API_BASE}/leave-management/${id}`,
                     {
                         method: "PUT",
                         credentials: "include",

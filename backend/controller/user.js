@@ -2,6 +2,18 @@ const User = require("../model/user.js")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
+// The cookie has to travel between two different hosts in production — the
+// site on one Vercel domain, this API on another — and a browser only sends a
+// cross-site cookie when it is marked Secure with SameSite=None. Locally there
+// is no HTTPS, so it stays lax.
+const isProduction = process.env.NODE_ENV === 'production'
+const cookieOptions = {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax'
+}
+
+
 
 
 const HandleRegistration = async (req, res) => {
@@ -125,9 +137,7 @@ const HandleLogin = async (req, res) => {
 
         // Store JWT in HTTP-only cookie
         res.cookie("token", token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "lax",
+            ...cookieOptions,
             maxAge: 24 * 60 * 60 * 1000
         })
 
@@ -204,11 +214,7 @@ const HandleAuthMe = async (req, res) => {
 
 const HandleLogout = (req, res) => {
 
-    res.clearCookie("token", {
-        httpOnly: true,
-        secure: false,
-        sameSite: "lax"
-    })
+    res.clearCookie("token", cookieOptions)
 
     res.status(200).json({
         success: true,

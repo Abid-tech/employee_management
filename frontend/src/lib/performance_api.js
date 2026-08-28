@@ -4,7 +4,8 @@
 // owns its endpoints end to end, so nothing it needs can break another module's
 // calls and nothing another module changes can break these.
 
-const BASE = '/api/performance'
+import { API_BASE } from './api_base'
+const BASE = `${API_BASE}/api/performance`
 const TIMEOUT = 20000
 
 const query = (params = {}) => {

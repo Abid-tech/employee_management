@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import "../../index.css"
 import { Link, useNavigate } from "react-router-dom"
 
@@ -12,7 +13,7 @@ function Header({ user, setUser }) {
         try {
 
             const response = await fetch(
-                "http://localhost:9505/user/logout",
+                `${API_BASE}/user/logout`,
                 {
                     method: "POST",
                     credentials: "include"

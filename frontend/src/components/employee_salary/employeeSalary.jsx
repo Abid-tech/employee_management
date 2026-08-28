@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import { useState, useEffect } from "react"
 import "../../index.css"
 
@@ -19,7 +20,7 @@ function EmployeeSalary() {
         try {
 
             const response = await fetch(
-                "http://localhost:9505/salary/my",
+                `${API_BASE}/salary/my`,
                 {
                     method: "GET",
                     credentials: "include"

@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import { useState, useEffect } from "react"
 import "../../index.css"
 import EmployeeSalary from "../../components/employee_salary/employeeSalary"
@@ -22,7 +23,7 @@ function EmployeeDashboard() {
         try {
 
             const response = await fetch(
-                "http://localhost:9505/communication",
+                `${API_BASE}/communication`,
                 {
                     method: "GET",
                     credentials: "include"
@@ -136,7 +137,7 @@ function EmployeeDashboard() {
         try {
 
             const response = await fetch(
-                `http://localhost:9505/communication/${pollId}/vote`,
+                `${API_BASE}/communication/${pollId}/vote`,
                 {
                     method: "POST",
                     credentials: "include",

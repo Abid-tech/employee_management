@@ -1,3 +1,4 @@
+import { API_BASE } from '../lib/api_base'
 import { useEffect, useState } from "react"
 
 import {
@@ -75,7 +76,7 @@ function Attendence() {
         try {
 
             const response = await fetch(
-                "http://localhost:9505/attendance/today",
+                `${API_BASE}/attendance/today`,
                 {
                     method: "GET",
                     credentials: "include"
@@ -232,7 +233,7 @@ function Attendence() {
 
             const response = await fetch(
 
-                "http://localhost:9505/attendance/check-in",
+                `${API_BASE}/attendance/check-in`,
 
                 {
 
@@ -336,7 +337,7 @@ function Attendence() {
 
             const response = await fetch(
 
-                "http://localhost:9505/attendance/check-out",
+                `${API_BASE}/attendance/check-out`,
 
                 {
 

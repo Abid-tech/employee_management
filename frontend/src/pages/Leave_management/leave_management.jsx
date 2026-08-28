@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import { useState,useEffect } from "react"
 import "../../index.css"
 
@@ -116,7 +117,7 @@ function Leave(){
         }
 
         try {
-            const response = await fetch("http://localhost:9505/leave-management", {
+            const response = await fetch(`${API_BASE}/leave-management`, {
                 method: "POST",
                 credentials: 'include',
                 headers: {
@@ -156,7 +157,7 @@ function Leave(){
 
     const fetchLeavehistory = async () => {
         try {
-            const response = await fetch("http://localhost:9505/leave-management", {
+            const response = await fetch(`${API_BASE}/leave-management`, {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json',
@@ -185,7 +186,7 @@ function Leave(){
             try {
 
                 const response = await fetch(
-                    "http://localhost:9505/user/auth/me",
+                    `${API_BASE}/user/auth/me`,
                     {
                         credentials: "include",
                         headers: {

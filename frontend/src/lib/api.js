@@ -4,7 +4,8 @@
 // Calls go to /api/... on this origin and Vite forwards them to Express in
 // development (see vite.config.js). The same relative paths work in production.
 
-const BASE = '/api'
+import { API_BASE } from './api_base'
+const BASE = `${API_BASE}/api`
 
 // A backend that accepts the connection but never replies — two instances
 // fighting over the port, say — would otherwise leave every page on "Loading..."

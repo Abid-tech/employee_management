@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "../../index.css"
@@ -18,7 +19,7 @@ function Login({ setUser }) {
         try {
 
             const response = await fetch(
-                "http://localhost:9505/user/login",
+                `${API_BASE}/user/login`,
                 {
                     method: "POST",
 

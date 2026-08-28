@@ -1,3 +1,4 @@
+import { API_BASE } from './lib/api_base'
 import { useState, useEffect } from "react"
 import { Routes, Route } from "react-router-dom"
 import './App.css'
@@ -65,7 +66,7 @@ function App() {
             try {
 
                 const response = await fetch(
-                    "http://localhost:9505/user/auth/me",
+                    `${API_BASE}/user/auth/me`,
                     {
                         method: "GET",
                         credentials: "include"
