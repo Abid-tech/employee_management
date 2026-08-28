@@ -1,3 +1,6 @@
+# Dependencies — every workspace, including the root one the API function uses
+node_modules/
+
 # Backend
 backend/node_modules/
 backend/.env
