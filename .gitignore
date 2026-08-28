@@ -9,5 +9,6 @@ backend/data/performance_demo_manifest.json
 
 # Frontend
 frontend/node_modules/
+frontend/.env
 
 postman/
