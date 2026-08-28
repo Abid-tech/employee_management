@@ -5,7 +5,7 @@
 // https://aistudio.google.com/apikey and put it in backend/.env.
 
 const API_ROOT = 'https://generativelanguage.googleapis.com/v1beta/models'
-const TIMEOUT_MS = 45000
+const TIMEOUT_MS = 120000
 
 const isConfigured = () => Boolean(process.env.GEMINI_API_KEY)
 const modelName = () => process.env.GEMINI_MODEL || 'gemini-2.5-flash'
@@ -70,7 +70,15 @@ ${text}
 Break this document into tasks.`
 }
 
-const generatePlan = async ({ text, departments, employees, notes }) => {
+// Google answers 503 "high demand" and 429 "rate limited" on the free tier often
+// enough that a single attempt is a coin toss. Both are temporary by definition,
+// so they are worth waiting out; anything else is a real error and is raised at
+// once rather than retried into a long silence.
+const RETRY_ON = [429, 503]
+const RETRIES = 3
+const BACKOFF_MS = 2500
+
+const attempt = async ({ text, departments, employees, notes }) => {
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
 
@@ -95,7 +103,9 @@ const generatePlan = async ({ text, departments, employees, notes }) => {
 
         if (!response.ok) {
             const detail = await response.text()
-            throw new Error(`Gemini responded ${response.status}: ${detail.slice(0, 250)}`)
+            const error = new Error(`Gemini responded ${response.status}: ${detail.slice(0, 250)}`)
+            error.status = response.status
+            throw error
         }
 
         const payload = await response.json()
@@ -107,6 +117,24 @@ const generatePlan = async ({ text, departments, employees, notes }) => {
     } finally {
         clearTimeout(timer)
     }
+}
+
+const generatePlan = async (input) => {
+    let last
+
+    for (let tries = 1; tries <= RETRIES; tries++) {
+        try {
+            return await attempt(input)
+        } catch (err) {
+            last = err
+            if (!RETRY_ON.includes(err.status) || tries === RETRIES) throw err
+
+            console.warn(`[gemini] ${err.status} on attempt ${tries} of ${RETRIES}, retrying in ${BACKOFF_MS}ms`)
+            await new Promise(resolve => setTimeout(resolve, BACKOFF_MS))
+        }
+    }
+
+    throw last
 }
 
 module.exports = { isConfigured, modelName, generatePlan }
