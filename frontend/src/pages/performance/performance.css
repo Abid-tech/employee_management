@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap');
 /* ---------------------------------------------------------------------------
    Module 4 — Employee Performance Management.
 
@@ -25,7 +24,7 @@
     /* Surfaces. Cream paper rather than white: the cards are white-ish and only
        read as raised because the canvas underneath them is warm. */
     --p-void: #061A2E;
-    --p-canvas: #F6F4EF;
+    --p-canvas: #FFFFFF;
     --p-surface: #FFFFFF;
     --p-raise: rgba(10, 41, 71, 0.035);
     --p-raise-2: rgba(10, 41, 71, 0.075);
@@ -54,7 +53,7 @@
     --p-r: 6px;
     --p-r-sm: 4px;
     --p-pad: 20px;
-    --p-f: "Roboto", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --p-f: var(--font-family, "Montserrat", sans-serif);
     --p-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
 
     min-height: 100%;
