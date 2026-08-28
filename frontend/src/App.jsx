@@ -157,7 +157,8 @@ function App() {
                             }
                         />
 
-                        <Route path="/attendance"
+                        <Route
+                            path="/attendance"
                             element={
                                 <ProtectedRoute user={user} loading={loading}>
                                     <Attendance />

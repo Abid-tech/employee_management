@@ -171,6 +171,10 @@ function Header({ user, setUser }) {
                             )}
 
 
+                            {/* ========================= */}
+                            {/* ADMIN LINKS */}
+                            {/* ========================= */}
+
                             {user && user.role === "Admin" && (
 
                                 <li className="nav-item">
@@ -187,6 +191,9 @@ function Header({ user, setUser }) {
                             )}
 
 
+                            {/* ========================= */}
+                            {/* USER DROPDOWN */}
+                            {/* ========================= */}
 
                             {user && (
 
