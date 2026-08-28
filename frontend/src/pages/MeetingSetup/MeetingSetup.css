@@ -1,0 +1,392 @@
+:root {
+  --meeting-navy: #0A2947;
+  --meeting-beige: #F3E4C9;
+  --meeting-border: #d9dfe5;
+  --meeting-muted: #687585;
+  --meeting-bg: #f6f8fa;
+}
+
+.meeting-setup-page {
+  min-height: calc(100vh - 90px);
+  background: var(--meeting-bg);
+  padding: 48px 20px 64px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.meeting-setup-card {
+  width: min(940px, 100%);
+  background: #fff;
+  border: 1px solid #e6e9ed;
+  border-radius: 20px;
+  box-shadow: 0 18px 55px rgba(10, 41, 71, 0.08);
+  padding: 38px 42px;
+}
+
+.meeting-setup-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #edf0f3;
+}
+
+.meeting-eyebrow {
+  display: block;
+  color: #7890a6;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+  margin-bottom: 9px;
+}
+
+.meeting-setup-heading h1 {
+  color: var(--meeting-navy);
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 750;
+}
+
+.meeting-setup-heading p {
+  margin-top: 8px;
+  color: var(--meeting-muted);
+  font-size: 13px;
+}
+
+.meeting-step {
+  background: #f2f5f7;
+  color: var(--meeting-navy);
+  padding: 9px 13px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  white-space: nowrap;
+}
+
+.meeting-form {
+  padding-top: 30px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.three-columns {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.access-grid {
+  grid-template-columns: 1.5fr .8fr;
+  margin-top: 24px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-field.full-width {
+  margin-bottom: 22px;
+}
+
+.form-field label {
+  color: var(--meeting-navy);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.form-field input,
+.form-field textarea,
+.form-field select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--meeting-border);
+  border-radius: 9px;
+  background: #fff;
+  color: #1d2b38;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 12px 13px;
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.form-field textarea {
+  resize: vertical;
+  min-height: 86px;
+}
+
+.form-field input:focus,
+.form-field textarea:focus,
+.form-field select:focus {
+  border-color: #7894ad;
+  box-shadow: 0 0 0 3px rgba(10, 41, 71, .06);
+}
+
+.settings-section {
+  margin-top: 30px;
+  border: 1px solid #e5e9ed;
+  border-radius: 13px;
+  overflow: hidden;
+}
+
+.settings-section-heading {
+  background: #fafbfc;
+  padding: 17px 18px;
+  border-bottom: 1px solid #e8ebee;
+}
+
+.settings-section-heading h2 {
+  color: var(--meeting-navy);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.settings-section-heading p {
+  margin-top: 4px;
+  color: var(--meeting-muted);
+  font-size: 11px;
+}
+
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 18px;
+  border-bottom: 1px solid #edf0f2;
+}
+
+.toggle-row:last-child {
+  border-bottom: 0;
+}
+
+.setting-info {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.setting-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: var(--meeting-navy);
+  background: #edf2f6;
+  font-size: 14px;
+}
+
+.setting-info strong,
+.setting-info span:not(.setting-icon) {
+  display: block;
+}
+
+.setting-info strong {
+  color: #263646;
+  font-size: 12px;
+}
+
+.setting-info div span {
+  color: var(--meeting-muted);
+  font-size: 10px;
+  margin-top: 3px;
+}
+
+.switch {
+  width: 44px;
+  height: 24px;
+  border: 0;
+  border-radius: 20px;
+  padding: 3px;
+  background: #cbd2d9;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.switch span {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform .2s;
+}
+
+.switch.active {
+  background: var(--meeting-navy);
+}
+
+.switch.active span {
+  transform: translateX(20px);
+}
+
+.access-options {
+  display: grid;
+  gap: 9px;
+}
+
+.access-option {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  text-align: left;
+  padding: 11px 12px;
+  border: 1px solid var(--meeting-border);
+  border-radius: 9px;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.access-option.selected {
+  border-color: var(--meeting-navy);
+  background: #f7f9fb;
+}
+
+.radio-dot {
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+  flex: 0 0 14px;
+  border: 1.5px solid #9aa7b3;
+  border-radius: 50%;
+  position: relative;
+}
+
+.access-option.selected .radio-dot {
+  border-color: var(--meeting-navy);
+}
+
+.access-option.selected .radio-dot::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--meeting-navy);
+}
+
+.access-option strong,
+.access-option small {
+  display: block;
+}
+
+.access-option strong {
+  color: #293846;
+  font-size: 11px;
+}
+
+.access-option small {
+  color: var(--meeting-muted);
+  font-size: 9px;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+.meeting-link-box {
+  margin-top: 26px;
+  padding: 15px 17px;
+  border-radius: 11px;
+  background: #f5f7f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.link-label {
+  display: block;
+  color: #82909d;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.meeting-link-box strong {
+  color: var(--meeting-navy);
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.secondary-button,
+.primary-button {
+  border-radius: 8px;
+  padding: 11px 17px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: transform .15s, opacity .15s, background .15s;
+}
+
+.secondary-button:hover,
+.primary-button:hover {
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  border: 1px solid #d6dde3;
+  background: #fff;
+  color: var(--meeting-navy);
+}
+
+.primary-button {
+  border: 1px solid var(--meeting-navy);
+  background: var(--meeting-navy);
+  color: #fff;
+  min-width: 145px;
+}
+
+.primary-button span {
+  margin-left: 8px;
+  font-size: 15px;
+}
+
+.setup-actions {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.cancel-button {
+  margin-right: 2px;
+}
+
+@media (max-width: 760px) {
+  .meeting-setup-page {
+    padding: 24px 12px 40px;
+  }
+
+  .meeting-setup-card {
+    padding: 26px 20px;
+    border-radius: 15px;
+  }
+
+  .meeting-setup-heading h1 {
+    font-size: 24px;
+  }
+
+  .three-columns,
+  .access-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .meeting-link-box {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .meeting-link-box .secondary-button {
+    width: 100%;
+  }
+}
