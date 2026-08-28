@@ -20,7 +20,7 @@ export default function PerformanceLayout() {
     return (
         <div className="perf">
             <div className="p-wrap">
-                <header className="p-top">
+                        <header className="p-top">
                     <div className="p-brand">
                         <span className="p-logo"><Icon name="trophy" size={22} /></span>
                         <div>
@@ -33,6 +33,9 @@ export default function PerformanceLayout() {
                         <NavLink to="/performance" end className={({ isActive }) => (isActive ? 'on' : '')}>
                             Overview
                         </NavLink>
+                        <NavLink to="/performance/rebalance" className={({ isActive }) => (isActive ? 'on' : '')}>
+                            Rebalance
+                        </NavLink>
                         <NavLink to="/performance/reports" className={({ isActive }) => (isActive ? 'on' : '')}>
                             Reports
                         </NavLink>
@@ -44,6 +47,8 @@ export default function PerformanceLayout() {
                 <p className="p-ctx">
                     {pathname.includes('/performance/employee')
                         ? <>Individual record</>
+                        : pathname.includes('/rebalance')
+                            ? <>Which work can move, to whom, and what it costs</>
                         : pathname.includes('/reports')
                             ? <>Pick the columns, filter, then export</>
                             : <>Scored from completed tasks, deadlines, logged hours and comments</>}

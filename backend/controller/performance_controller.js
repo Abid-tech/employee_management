@@ -1,4 +1,5 @@
 const service = require('../service/performance_service')
+const staffing = require('../service/staffing_service')
 
 // Module 4 — HTTP only. Every calculation lives in performance_service.
 
@@ -83,4 +84,13 @@ const getRules = asyncRoute(async (req, res) => {
     })
 })
 
-module.exports = { getOverview, getEmployee, getReport, getReportCsv, getRules }
+// --- Rebalancing -------------------------------------------------------------
+
+// Turns the overload findings into specific, costed moves. A read like every
+// other route in this module: it proposes and stops, because reassigning
+// somebody's work is a decision a named human has to make.
+const getRebalance = asyncRoute(async (req, res) => {
+    res.json(await staffing.rebalance())
+})
+
+module.exports = { getOverview, getEmployee, getReport, getReportCsv, getRules, getRebalance }

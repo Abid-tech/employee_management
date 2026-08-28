@@ -4,7 +4,8 @@
 // Calls go to /api/... on this origin and Vite forwards them to Express in
 // development (see vite.config.js). The same relative paths work in production.
 
-const BASE = '/api'
+import { API_BASE } from './api_base'
+const BASE = `${API_BASE}/api`
 
 // A backend that accepts the connection but never replies — two instances
 // fighting over the port, say — would otherwise leave every page on "Loading..."
@@ -26,9 +27,9 @@ const request = async (path, { method = 'GET', body, formData, timeout = TIMEOUT
         })
     } catch (err) {
         if (err.name === 'TimeoutError' || err.name === 'AbortError') {
-            throw new Error('The server took too long to answer. Check the API terminal — it may have failed to start.')
+            throw new Error('The server took too long to answer. Check the API terminal — it may have failed to start.', { cause: err })
         }
-        throw new Error('Could not reach the server. Is the API running on port 5000?')
+        throw new Error('Could not reach the server. Is the API running on port 5000?', { cause: err })
     }
 
     let payload

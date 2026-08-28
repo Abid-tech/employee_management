@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import { useState,useEffect } from "react"
 import "../../index.css"
 
@@ -36,46 +37,70 @@ function Leave(){
         }
     }, [startDate, endDate])
 
-    // Calculate leave summary whenever Allleaves or userBalance changes
+
+
     useEffect(() => {
+
         calculateLeaveSummary()
+
     }, [Allleaves, userBalance])
 
-    const calculateLeaveSummary = () => {
 
-        if (!Allleaves || Allleaves.length === 0) {
-            setLeaveSummary({
-                totalTaken: 0,
-                totalPending: 0,
-                totalApproved: 0,
-                remainingBalance: userBalance
-            })
-            return
-        }
+    const calculateLeaveSummary = () => {
 
         let totalPending = 0
         let totalApproved = 0
         let totalTaken = 0
 
-        Allleaves.forEach(leave => {
-            const days = leave.TotalDays || 0
-            if (leave.status === 'Pending') {
-                totalPending += days
-            } else if (leave.status === 'Accepted') {
-                totalApproved += days
-                totalTaken += days
-            }
-        })
 
-        const remainingBalance = userBalance - totalApproved
+        if (Allleaves && Allleaves.length > 0) {
+
+            Allleaves.forEach(leave => {
+
+                const days = Number(leave.TotalDays) || 0
+
+
+                if (leave.status === "Pending") {
+
+                    totalPending += days
+
+                }
+
+
+                else if (leave.status === "Accepted") {
+
+                    totalApproved += days
+
+                    totalTaken += days
+
+                }
+
+            })
+
+        }
+
+
+        const remainingBalance = Number(userBalance) || 0
+
 
         setLeaveSummary({
+
             totalTaken: totalTaken,
+
             totalPending: totalPending,
+
             totalApproved: totalApproved,
-            remainingBalance: Math.max(0, remainingBalance)
+
+            remainingBalance: Math.max(
+                0,
+                remainingBalance
+            )
+
         })
+
     }
+
+
 
     const HandleSubmit = async (e) => {
         e.preventDefault()
@@ -92,7 +117,7 @@ function Leave(){
         }
 
         try {
-            const response = await fetch("http://localhost:5000/leave-management", {
+            const response = await fetch(`${API_BASE}/leave-management`, {
                 method: "POST",
                 credentials: 'include',
                 headers: {
@@ -121,7 +146,10 @@ function Leave(){
             setReason("")
             setReplacement("")
 
-            fetchLeavehistory()
+
+            await fetchLeavehistory()
+            await fetchUserProfile()
+            
         } catch (err) {
             console.log(err)
         }
@@ -129,7 +157,7 @@ function Leave(){
 
     const fetchLeavehistory = async () => {
         try {
-            const response = await fetch("http://localhost:5000/leave-management", {
+            const response = await fetch(`${API_BASE}/leave-management`, {
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json',
@@ -154,39 +182,60 @@ function Leave(){
 
     // Fetch user profile to get leave balance
     const fetchUserProfile = async () => {
-        try {
-            const response = await fetch("http://localhost:5000/user/auth/me", {
-                credentials: 'include',
-                headers: {
-                    'Accept': 'application/json',
-                }
-            })
 
-            if (!response.ok) {
-                if (response.status === 401) {
-                    window.location.href = "/login"
-                    return
+            try {
+
+                const response = await fetch(
+                    `${API_BASE}/user/auth/me`,
+                    {
+                        credentials: "include",
+                        headers: {
+                            "Accept": "application/json"
+                        }
+                    }
+                )
+
+
+                if (!response.ok) {
+
+                    if (response.status === 401) {
+
+                        window.location.href = "/login"
+
+                        return
+
+                    }
+
+                    throw new Error(
+                        `HTTP error! status: ${response.status}`
+                    )
+
                 }
-                throw new Error(`HTTP error! status: ${response.status}`)
+
+
+                const data = await response.json()
+
+
+                if (
+                    data.success &&
+                    data.user
+                ) {
+
+                    setUserBalance(
+                        Number(data.user.leaveBalance) || 0
+                    )
+
+                }
+
+            } catch (err) {
+
+                console.log(
+                    "Error fetching user profile:",
+                    err
+                )
+
             }
 
-            const data = await response.json()
-
-            let balance = 0
-            
-            if (data && data.success && data.user) {
-                balance = data.user.leaveBalance || 0
-            } else if (data && data.user) {
-                balance = data.user.leaveBalance || 0
-            } else if (data && data.leaveBalance !== undefined) {
-                balance = data.leaveBalance
-            } 
-
-            setUserBalance(balance)
-
-        } catch (err) {
-            console.log("Error fetching user profile:", err)
-        }
     }
 
     useEffect(() => {

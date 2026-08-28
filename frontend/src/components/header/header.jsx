@@ -1,3 +1,4 @@
+import { API_BASE } from '../../lib/api_base'
 import "../../index.css"
 import { Link, useNavigate } from "react-router-dom"
 
@@ -12,7 +13,7 @@ function Header({ user, setUser }) {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/user/logout",
+                `${API_BASE}/user/logout`,
                 {
                     method: "POST",
                     credentials: "include"
@@ -79,10 +80,35 @@ function Header({ user, setUser }) {
 
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
 
+                            {/* ========================= */}
+                            {/* MODULE 3-6 LINKS */}
+                            {/* Task, performance, feedback and budget stay */}
+                            {/* reachable whoever is signed in.             */}
+                            {/* ========================= */}
 
-                            {/* ========================= */}
-                            {/* NOT LOGGED IN */}
-                            {/* ========================= */}
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/tasks">Task orbit</Link>
+                            </li>
+
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/projects">Projects</Link>
+                            </li>
+
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/performance">Performance</Link>
+                            </li>
+
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/feedback">Feedback</Link>
+                            </li>
+
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/budget">Budget</Link>
+                            </li>
+
+
+
+                     
 
                             {!user && (
 
@@ -100,7 +126,6 @@ function Header({ user, setUser }) {
                             )}
 
 
-       
 
                             {user && user.role === "Employee" && (
 
@@ -110,7 +135,7 @@ function Header({ user, setUser }) {
 
                                         <Link
                                             className="nav-link"
-                                            to="/"
+                                            to="/employee-dashboard"
                                         >
                                             Employee Dashboard
                                         </Link>

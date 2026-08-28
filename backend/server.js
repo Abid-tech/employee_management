@@ -1,11 +1,3 @@
-require('dotenv').config()
-const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors'); 
-const app = express()
-const cookieParser = require("cookie-parser")
-
-dotenv.config();
 // Anchored to this file rather than the working directory, so `node
 // backend/server.js` from the project root picks up the same .env as
 // `npm run dev` from inside backend/. Behaves identically either way.
@@ -13,23 +5,21 @@ require('dotenv').config({ path: require('path').join(__dirname, '.env') })
 
 const express = require('express')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const connectDB = require('./config/db')
 
+const app = express()
+const PORT = process.env.PORT || 9505
+
+// Middleware
+//
+// The login flow merged in from main keeps its token in a cookie, so the
+// browser only sends it when the response names the exact origin and allows
+// credentials — origin: true echoes whichever port Vite happened to take.
+app.use(cors({ origin: true, credentials: true }))
 app.use(cookieParser())
-app.use(express.json()); 
-app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
-}))
-
-
-
-
-
-const PORT = process.env.PORT || 5000
-
-
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 // --- Module 3: Task & Objective Management ---------------------------------
 // Express 5 leaves req.body undefined when no parser matched — a POST sent with
@@ -42,12 +32,70 @@ app.use((req, res, next) => {
     next()
 })
 
+// Most of this backend is CommonJS, but the room-booking module is written as
+// ES modules. Requiring an ES module hands back its namespace object rather
+// than the export itself, so `app.use` receives `{ default: router }` and
+// throws "argument handler must be a function".
+//
+// Unwrapping it here means that module's own files stay exactly as their author
+// wrote them — the adaptation belongs in the file doing the mounting, not in
+// somebody else's code.
+const useModule = (mod) => (mod && mod.__esModule !== undefined) || (mod && mod.default) ? mod.default : mod
+
+// Make sure the database is connected before any route runs.
+//
+// Running locally, start() connects once and then listens. On a serverless host
+// the module is imported instead, start() never runs, and nothing opens the
+// connection — so every query sat in Mongoose's buffer until it timed out ten
+// seconds later and returned a 500. connectDB caches its promise, so this costs
+// nothing after the first request on a container.
+app.use(async (req, res, next) => {
+    try {
+        await connectDB()
+        next()
+    } catch (err) {
+        next(err)
+    }
+})
+
+// Says whether the API can reach the database, and why not when it cannot.
+// Nothing secret is returned: the host is public in any connection string and
+// the message is the driver's own.
+app.get('/api/health', async (req, res) => {
+    const mongoose = require('mongoose')
+    const started = Date.now()
+
+    try {
+        await connectDB()
+        res.json({
+            api: 'up',
+            database: 'connected',
+            name: mongoose.connection.db.databaseName,
+            host: mongoose.connection.host,
+            ms: Date.now() - started
+        })
+    } catch (err) {
+        res.status(503).json({
+            api: 'up',
+            database: 'unreachable',
+            reason: err.message,
+            ms: Date.now() - started
+        })
+    }
+})
+
 // --- Routes ----------------------------------------------------------------
 // Room booking
-app.use('/api', require('./routes/roomRoutes'))
+app.use('/api', useModule(require('./routes/roomRoutes')))
 
 // Leave management
 app.use('/leave-management', require('./routes/leave_management'))
+
+// Accounts, attendance, internal communication and salary
+app.use('/user', require('./routes/user'))
+app.use('/attendance', require('./routes/attendance'))
+app.use('/communication', require('./routes/communication'))
+app.use('/salary', require('./routes/salary'))
 
 // Task & objective management
 app.use('/api/tasks', require('./routes/task_routes'))
@@ -56,6 +104,12 @@ app.use('/api/ai', require('./routes/ai_routes'))
 
 // Employee performance management
 app.use('/api/performance', require('./routes/performance_routes'))
+
+// Employee feedback & evaluation
+app.use('/api/feedback', require('./routes/feedback_routes'))
+
+// Project budget tracker & time logging
+app.use('/api/budget', require('./routes/budget_routes'))
 
 app.use(require('./middleware/upload').handleUploadErrors)
 
@@ -106,10 +160,6 @@ const start = async () => {
         await connectDB()
         console.log('Connected DB:', mongoose.connection.db.databaseName)
 
-// API Endpoints
-app.use('/leave-management',require('./routes/leave_management'))
-app.use('/user',require('./routes/user'))
-app.use("/attendance", require("./routes/attendance"))
         // Backstop for the gap between the check above and the bind below.
         // EADDRINUSE arrives as an event rather than a throw, so the try/catch
         // around this would never see it.

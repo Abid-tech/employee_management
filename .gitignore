@@ -1,3 +1,13 @@
+# Dependencies — every workspace, including the root one the API function uses
+node_modules/
+
 # Backend
 backend/node_modules/
 backend/.env
+# Local demo state — holds MongoDB document ids, not source
+backend/data/performance_demo_manifest.json
+
+# Frontend
+frontend/node_modules/
+
+postman/

@@ -1,7 +1,8 @@
-const leaveManagement = require('../model/leave_management')
-const User = require('../model/user')
+const leaveManagement = require("../model/leave_management")
+const User = require("../model/user")
 
-const HandleGetLeave = async(req,res)=>{
+
+const HandleGetLeave = async (req, res) => {
 
     try {
 
@@ -10,6 +11,8 @@ const HandleGetLeave = async(req,res)=>{
 
         let leaves
 
+
+        // Admin and Director can see all leave requests
         if (role === "Admin" || role === "Director") {
 
             leaves = await leaveManagement
@@ -20,20 +23,25 @@ const HandleGetLeave = async(req,res)=>{
                 )
                 .sort({ createdAt: -1 })
 
-        } else {
+        }
 
-            // Employee can see only their own leaves
+        // Employee can see only their own leaves
+        else {
+
             leaves = await leaveManagement
                 .find({
                     user: userId
                 })
                 .sort({ createdAt: -1 })
+
         }
 
 
         res.status(200).json({
+
             success: true,
             leaves
+
         })
 
     } catch (err) {
@@ -41,21 +49,24 @@ const HandleGetLeave = async(req,res)=>{
         console.log(err)
 
         res.status(500).json({
+
             success: false,
             error: err.message
-        })
-    }
 
+        })
+
+    }
 
 }
 
 
-const HandleCreateLeave = async(req,res)=>{
 
-
+const HandleCreateLeave = async (req, res) => {
 
     try {
+
         const userId = req.user.userId
+
 
         const {
             leaveType,
@@ -69,44 +80,73 @@ const HandleCreateLeave = async(req,res)=>{
         } = req.body
 
 
+        // Find logged-in user
         const user = await User.findById(userId)
 
 
         if (!user) {
 
             return res.status(404).json({
+
                 success: false,
                 message: "User not found"
+
             })
+
         }
 
 
-        // Check leave balance
-        if (TotalDays > user.leaveBalance) {
+        // Validate number of leave days
+        const requestedDays = Number(TotalDays)
+
+
+        if (!requestedDays || requestedDays <= 0) {
 
             return res.status(400).json({
+
+                success: false,
+                message: "Invalid number of leave days"
+
+            })
+
+        }
+
+
+        // Check current remaining balance
+        if (requestedDays > user.leaveBalance) {
+
+            return res.status(400).json({
+
                 success: false,
                 message: "You do not have enough leave balance",
                 leaveBalance: user.leaveBalance
+
             })
+
         }
 
 
-        // Create leave
+
         const leave = await leaveManagement.create({
 
-            // IMPORTANT
-            // Comes from JWT, NOT frontend
             user: userId,
 
             leaveType,
+
             leaveDuration,
+
             Priority,
+
             StartDate,
+
             EndDate,
-            TotalDays,
+
+            TotalDays: requestedDays,
+
             Reason,
+
             ReplacementEmployee
+
         })
 
 
@@ -130,8 +170,11 @@ const HandleCreateLeave = async(req,res)=>{
             error: err.message
 
         })
+
     }
+
 }
+
 
 
 
@@ -140,29 +183,33 @@ const HandleUpdateStatus = async (req, res) => {
     try {
 
         const { id } = req.params
+
         const { status } = req.body
 
 
         const validStatuses = [
-            'Pending',
-            'Accepted',
-            'Rejected'
+            "Pending",
+            "Accepted",
+            "Rejected"
         ]
 
 
+        // Validate status
         if (!validStatuses.includes(status)) {
 
             return res.status(400).json({
 
                 success: false,
 
-                error:
-                    'Invalid status. Must be Pending, Accepted, or Rejected'
+                message:
+                    "Invalid status. Must be Pending, Accepted, or Rejected"
 
             })
+
         }
 
 
+        // Find leave
         const leave = await leaveManagement.findById(id)
 
 
@@ -171,51 +218,51 @@ const HandleUpdateStatus = async (req, res) => {
             return res.status(404).json({
 
                 success: false,
-                error: 'Leave request not found'
+
+                message: "Leave request not found"
 
             })
+
         }
 
 
         const oldStatus = leave.status
 
 
-        // Prevent unnecessary balance changes
-        if (
-            oldStatus === "Accepted" &&
-            status === "Accepted"
-        ) {
+        // No change
+        if (oldStatus === status) {
 
             return res.status(400).json({
 
                 success: false,
-                message: "Leave is already accepted"
+
+                message: `Leave is already ${status}`
 
             })
+
         }
 
 
-        // If changing to Accepted
-        if (
-            status === "Accepted" &&
-            oldStatus !== "Accepted"
-        ) {
-
-            const user = await User.findById(leave.user)
+        const user = await User.findById(leave.user)
 
 
-            if (!user) {
+        if (!user) {
 
-                return res.status(404).json({
+            return res.status(404).json({
 
-                    success: false,
-                    message: "User not found"
+                success: false,
 
-                })
-            }
+                message: "User not found"
+
+            })
+
+        }
 
 
-            // Make sure user still has enough leave
+
+        if ( oldStatus === "Pending" &&status === "Accepted") {
+
+  
             if (leave.TotalDays > user.leaveBalance) {
 
                 return res.status(400).json({
@@ -229,16 +276,30 @@ const HandleUpdateStatus = async (req, res) => {
                         user.leaveBalance
 
                 })
+
             }
 
+            user.leaveBalance = user.leaveBalance - leave.TotalDays
 
-            // Deduct leave
-            user.leaveBalance -= leave.TotalDays
 
             await user.save()
+
         }
 
 
+
+        if (
+            oldStatus === "Accepted" &&
+            (status === "Rejected" || status === "Pending")
+        ) {
+
+            user.leaveBalance =
+                user.leaveBalance + leave.TotalDays
+
+
+            await user.save()
+
+        }
 
 
         leave.status = status
@@ -250,9 +311,11 @@ const HandleUpdateStatus = async (req, res) => {
 
             success: true,
 
-            message: "Leave status updated",
+            message: "Leave status updated successfully",
 
-            leave
+            leave,
+
+            leaveBalance: user.leaveBalance
 
         })
 
@@ -266,9 +329,11 @@ const HandleUpdateStatus = async (req, res) => {
             error: err.message
 
         })
+
     }
+
 }
 
 
 
-module.exports = {HandleCreateLeave,HandleGetLeave,HandleUpdateStatus}
+module.exports = {HandleCreateLeave, HandleGetLeave, HandleUpdateStatus}

@@ -1,0 +1,13 @@
+# core.autocrlf is on for this repo, which is right for source but wrong for
+# binaries: without these rules Git rewrote the bytes of a committed PDF on
+# checkout and the file came back with a broken cross-reference table.
+# Marking them binary stores and restores them verbatim.
+*.pdf   binary
+*.docx  binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary

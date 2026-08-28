@@ -129,16 +129,95 @@ const buildTaskDocument = (input) => ({
     assignedAt: input.assigneeId ? new Date() : undefined
 })
 
+// Telling somebody work has landed on them.
+//
+// Deliberately fired after the write has succeeded and never awaited by the
+// caller in a way that could fail it: a task that is genuinely assigned must not
+// come back as an error because a mail server was slow. Failures are recorded in
+// the outbox instead, where they can be seen and retried.
+const announce = async (taskIds) => {
+    if (!taskIds || taskIds.length === 0) return
+
+    try {
+        const mail = require('./mail_service')
+        const tasks = await Task.find({ _id: { $in: taskIds }, assignee: { $ne: null } })
+            .populate('assignee', 'name email department')
+            .populate('objective', 'title')
+
+        await mail.notifyAssignments(tasks)
+    } catch (error) {
+        console.error('[mail] could not send assignment notice:', error.message)
+    }
+}
+
 const createTask = async (input) => {
     const task = await Task.create(buildTaskDocument(input))
+    if (task.assignee) await announce([task._id])
     return getTask(task._id)
 }
 
 // Used when a whole plan is accepted from an imported document, so the lot
 // lands as one action rather than a dozen separate saves.
+//
+// The notice goes out once the whole batch is written, which is what makes a
+// nine-task import arrive as one email per person rather than nine.
 const createManyTasks = async (inputs) => {
     const created = await Task.insertMany(inputs.map(buildTaskDocument))
+    await announce(created.filter(t => t.assignee).map(t => t._id))
     return created.length
+}
+
+// Moving a deadline, on the record.
+//
+// A manager can already change `dueDate` through the ordinary edit path, and
+// that is fine for correcting a typo. This is the deliberate version: it keeps
+// the date it moved from, who moved it, and why, so a task that has been pushed
+// three times says so on its own face.
+//
+// The assignee is told, because a deadline that moves without the person
+// working to it hearing about it is how work gets done to the wrong date.
+const extendDeadline = async (id, { dueDate, reason } = {}, actor) => {
+    const task = await Task.findById(id)
+    if (!task) return null
+
+    if (!dueDate) return { error: 'Choose the new date first.' }
+
+    const next = new Date(dueDate)
+    if (Number.isNaN(next.getTime())) return { error: 'That is not a date I can read.' }
+
+    const previous = task.dueDate ? new Date(task.dueDate) : null
+    if (previous && next.getTime() === previous.getTime()) {
+        return { error: 'That is already the deadline.' }
+    }
+
+    task.deadlineChanges.push({
+        from: previous,
+        to: next,
+        reason: (reason || '').trim(),
+        byId: actor?.id || null,
+        byName: actor?.name || 'A manager',
+        at: new Date()
+    })
+    task.dueDate = next
+    await task.save()
+
+    try {
+        const mail = require('./mail_service')
+        const full = await Task.findById(id)
+            .populate('assignee', 'name email department')
+            .populate('objective', 'title')
+
+        if (full?.assignee?.email) {
+            const moved = previous
+                ? (next > previous ? 'pushed back' : 'brought forward')
+                : 'set'
+            await mail.notifyDeadlineChange(full, { previous, reason, actor, moved })
+        }
+    } catch (error) {
+        console.error('[mail] could not send deadline notice:', error.message)
+    }
+
+    return getTask(id)
 }
 
 const EDITABLE = ['title', 'description', 'department', 'priority', 'status', 'estimateHours', 'spentHours', 'dueDate']
@@ -162,9 +241,14 @@ const stampDates = (task) => {
     if (task.status !== 'done') task.completedAt = undefined
 }
 
-const updateTask = async (id, changes) => {
+const updateTask = async (id, changes, actor) => {
     const task = await Task.findById(id)
     if (!task) return null
+
+    // Noted before the change so a reassignment can be told apart from an edit
+    // to a task that was already theirs — only the former is worth an email.
+    const previousAssignee = task.assignee ? String(task.assignee) : null
+    const previousDue = task.dueDate ? new Date(task.dueDate) : null
 
     for (const key of EDITABLE) {
         if (key in changes) task[key] = changes[key]
@@ -178,8 +262,34 @@ const updateTask = async (id, changes) => {
     // otherwise the orbit and the task page disagree with each other.
     if (task.status === 'todo' && task.subtasks.some(s => s.done)) task.status = 'in_progress'
 
+    // A deadline moved through the ordinary edit path still gets recorded.
+    //
+    // Without this the audit trail had a hole straight through it: `dueDate` is
+    // an editable field, so anyone could move a date with a plain PATCH and
+    // leave no trace, which makes the extension history worth exactly nothing.
+    // The reason is empty here because none was asked for — and that absence is
+    // itself worth seeing on the record.
+    const nextDue = task.dueDate ? new Date(task.dueDate) : null
+    const dueMoved = (previousDue?.getTime() ?? null) !== (nextDue?.getTime() ?? null)
+
+    if (dueMoved && 'dueDate' in changes) {
+        task.deadlineChanges.push({
+            from: previousDue,
+            to: nextDue,
+            reason: '',
+            byId: actor?.id || null,
+            byName: actor?.name || 'Edited directly',
+            at: new Date()
+        })
+    }
+
     stampDates(task)
     await task.save()
+
+    // Only when the work has genuinely moved to somebody new — editing a title
+    // on a task somebody already owns is not worth an email.
+    const nowAssignee = task.assignee ? String(task.assignee) : null
+    if (nowAssignee && nowAssignee !== previousAssignee) await announce([task._id])
     return getTask(task._id)
 }
 
@@ -280,7 +390,7 @@ const deleteAttachment = async (taskId, fileId) => {
 
 module.exports = {
     listTasks, getTask, listDepartments, listEmployees, listObjectives,
-    createTask, createManyTasks, updateTask, toggleSubtask, addSubtask, deleteTask,
+    createTask, createManyTasks, updateTask, extendDeadline, toggleSubtask, addSubtask, deleteTask,
     listComments, addComment,
     addAttachment, getAttachment, deleteAttachment,
     decorate

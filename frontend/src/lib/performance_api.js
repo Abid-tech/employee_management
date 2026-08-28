@@ -4,7 +4,8 @@
 // owns its endpoints end to end, so nothing it needs can break another module's
 // calls and nothing another module changes can break these.
 
-const BASE = '/api/performance'
+import { API_BASE } from './api_base'
+const BASE = `${API_BASE}/api/performance`
 const TIMEOUT = 20000
 
 const query = (params = {}) => {
@@ -21,18 +22,18 @@ const query = (params = {}) => {
     return text ? `?${text}` : ''
 }
 
-const request = async (path, params) => {
+const request = async (path, params, timeout = TIMEOUT) => {
     let response
 
     try {
         response = await fetch(`${BASE}${path}${query(params)}`, {
-            signal: AbortSignal.timeout(TIMEOUT)
+            signal: AbortSignal.timeout(timeout)
         })
     } catch (err) {
         if (err.name === 'TimeoutError' || err.name === 'AbortError') {
-            throw new Error('The server took too long to answer. Check the API terminal.')
+            throw new Error('The server took too long to answer. Check the API terminal.', { cause: err })
         }
-        throw new Error('Could not reach the server. Is the API running on port 5000?')
+        throw new Error('Could not reach the server. Is the API running on port 5000?', { cause: err })
     }
 
     let payload
@@ -50,6 +51,10 @@ export const performanceApi = {
     overview: (filters) => request('/overview', filters),
     employee: (id, filters) => request(`/employee/${id}`, filters),
     report: (filters) => request('/report', filters),
+
+    // Reads the whole company scoring plus the rate table, so it is allowed
+    // longer than the rest of this client.
+    rebalance: () => request('/rebalance', undefined, 45000),
     rules: () => request('/rules'),
 
     // Handed straight to the browser as a download rather than fetched, so the

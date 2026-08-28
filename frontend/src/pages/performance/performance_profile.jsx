@@ -63,7 +63,6 @@ export default function PerformanceProfile() {
 
     const { employee, coach, pillars, peerAverage, companyAverage, percentile, scoreMax = 100 } = data
     const health = STATUS_COPY[employee.sustainability.status]
-    const earned = employee.badges.filter(b => b.earned)
 
     return (
         <div className="p-grid">

@@ -9,6 +9,7 @@ const router = express.Router()
 
 router.get('/overview', controller.getOverview)
 router.get('/rules', controller.getRules)
+router.get('/rebalance', controller.getRebalance)
 
 // Ordered before '/employee/:id' would matter if they shared a prefix; kept
 // separate so the report paths can never be read as an employee id.

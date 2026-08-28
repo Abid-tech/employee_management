@@ -2,20 +2,6 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './solar_system.css'
 
-// Tasks drawn as a solar system.
-//
-// A list tells you what exists. This tells you what is about to hit you: the
-// closer a task orbits the centre, the higher its priority, and the whole ring
-// turns at a speed that matches — critical work visibly moves faster than work
-// that can wait. One glance answers "what is urgent here", which is the
-// question a lead opens the page to ask.
-//
-// The rules, kept deliberately simple so they can be explained in one breath:
-//   ring position + colour = priority   (never anything else)
-//   planet size             = estimated hours
-//   white arc               = how far along it is
-//   red halo                = past its due date
-
 const ORBITS = [
     { priority: 'critical', label: 'Critical', ring: 'Innermost ring', radius: 0.30, speed: 26, cap: 6 },
     { priority: 'high', label: 'High', ring: 'Second ring', radius: 0.50, speed: 42, cap: 8 },

@@ -1,4 +1,5 @@
 const service = require('../service/task_service')
+const mail = require('../service/mail_service')
 const objectiveService = require('../service/objective_service')
 const { PRIORITIES, STATUSES } = require('../model/task')
 
@@ -76,7 +77,11 @@ const updateTask = asyncRoute(async (req, res) => {
         return res.status(400).json({ error: 'That is not a valid priority.' })
     }
 
-    const task = await service.updateTask(req.params.id, req.body)
+    const Employee = require('../model/employee')
+    const person = req.body?.actorId ? await Employee.findById(req.body.actorId).catch(() => null) : null
+
+    const task = await service.updateTask(req.params.id, req.body,
+        person ? { id: person._id, name: person.name } : null)
     if (!task) return res.status(404).json({ error: 'That task no longer exists.' })
 
     res.json({ task })
@@ -148,7 +153,49 @@ const deleteAttachment = asyncRoute(async (req, res) => {
     res.json({ ok: true })
 })
 
+
+// --- Assignment notifications -----------------------------------------------
+// Every notice the system produced, and whether a real mail server carried it.
+// Exposed so the feature can be demonstrated, and audited, without credentials.
+const getMailOutbox = asyncRoute(async (req, res) => {
+    res.json({
+        mail: mail.status(),
+        messages: await mail.listMessages({ limit: req.query.limit, employee: req.query.employee })
+    })
+})
+
+
+// Pushing a deadline, deliberately and on the record.
+const extendDeadline = asyncRoute(async (req, res) => {
+    const Employee = require('../model/employee')
+    const actorId = req.body?.actorId
+    const person = actorId ? await Employee.findById(actorId).catch(() => null) : null
+    const actor = person ? { id: person._id, name: person.name } : { id: null, name: 'A manager' }
+
+    const result = await service.extendDeadline(req.params.id, req.body, actor)
+    if (!result) return res.status(404).json({ error: 'That task no longer exists.' })
+    if (result.error) return res.status(400).json(result)
+
+    res.json({ task: result })
+})
+
+
+// What moving this deadline would cost, before anyone commits to it.
+const extendImpact = asyncRoute(async (req, res) => {
+    const Task = require('../model/task')
+    const budget = require('../service/budget_service')
+
+    const task = await Task.findById(req.params.id).populate('objective', 'title')
+    if (!task) return res.status(404).json({ error: 'That task no longer exists.' })
+    if (!req.query.dueDate) return res.status(400).json({ error: 'Give the date you are considering.' })
+
+    res.json({ impact: await budget.deadlineImpact(task, req.query.dueDate) })
+})
+
 module.exports = {
+    extendImpact,
+    extendDeadline,
+    getMailOutbox,
     getBoard, getFormOptions, getTask, createTask, updateTask,
     toggleSubtask, addSubtask, deleteTask,
     addComment, uploadAttachment, downloadAttachment, deleteAttachment
