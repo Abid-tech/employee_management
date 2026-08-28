@@ -42,6 +42,32 @@ app.use((req, res, next) => {
 // somebody else's code.
 const useModule = (mod) => (mod && mod.__esModule !== undefined) || (mod && mod.default) ? mod.default : mod
 
+// Says whether the API can reach the database, and why not when it cannot.
+// Nothing secret is returned: the host is public in any connection string and
+// the message is the driver's own.
+app.get('/api/health', async (req, res) => {
+    const mongoose = require('mongoose')
+    const started = Date.now()
+
+    try {
+        await connectDB()
+        res.json({
+            api: 'up',
+            database: 'connected',
+            name: mongoose.connection.db.databaseName,
+            host: mongoose.connection.host,
+            ms: Date.now() - started
+        })
+    } catch (err) {
+        res.status(503).json({
+            api: 'up',
+            database: 'unreachable',
+            reason: err.message,
+            ms: Date.now() - started
+        })
+    }
+})
+
 // --- Routes ----------------------------------------------------------------
 // Room booking
 app.use('/api', useModule(require('./routes/roomRoutes')))
