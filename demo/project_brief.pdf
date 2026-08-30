@@ -1,0 +1,73 @@
+%PDF-1.4
+1 0 obj
+<</Type/Catalog/Pages 2 0 R>>
+endobj
+2 0 obj
+<</Type/Pages/Kids[4 0 R]/Count 1>>
+endobj
+3 0 obj
+<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>
+endobj
+4 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</Font<</F1 3 0 R>>>>/Contents 5 0 R>>
+endobj
+5 0 obj
+<</Length 3069>>
+stream
+BT /F1 11 Tf 56 760 Td (Client Brief — Meghna Group Supplier Portal) Tj ET
+BT /F1 11 Tf 56 744 Td () Tj ET
+BT /F1 11 Tf 56 728 Td (Prepared for Northwind Digital) Tj ET
+BT /F1 11 Tf 56 712 Td (Contact: Farhana Rahim, Head of Procurement, Meghna Group) Tj ET
+BT /F1 11 Tf 56 696 Td () Tj ET
+BT /F1 11 Tf 56 680 Td (Background) Tj ET
+BT /F1 11 Tf 56 664 Td () Tj ET
+BT /F1 11 Tf 56 648 Td (Meghna Group works with just over four hundred suppliers across garments and) Tj ET
+BT /F1 11 Tf 56 632 Td (packaging. Purchase orders are sent by email and confirmed by phone, so nobody) Tj ET
+BT /F1 11 Tf 56 616 Td (can say with confidence which orders are outstanding on any given day. The) Tj ET
+BT /F1 11 Tf 56 600 Td (finance team rebuilds the picture in a spreadsheet every Sunday.) Tj ET
+BT /F1 11 Tf 56 584 Td () Tj ET
+BT /F1 11 Tf 56 568 Td (They want a portal where suppliers log in, see their own orders, confirm or) Tj ET
+BT /F1 11 Tf 56 552 Td (query them, and upload invoices themselves.) Tj ET
+BT /F1 11 Tf 56 536 Td () Tj ET
+BT /F1 11 Tf 56 520 Td (What we need built) Tj ET
+BT /F1 11 Tf 56 504 Td () Tj ET
+BT /F1 11 Tf 56 488 Td (- Build a supplier login screen with email verification and password reset) Tj ET
+BT /F1 11 Tf 56 472 Td (- Create the purchase order list endpoint, filtered to the signed-in supplier) Tj ET
+BT /F1 11 Tf 56 456 Td (- Design the order detail screen showing line items, delivery dates and status) Tj ET
+BT /F1 11 Tf 56 440 Td (- Set up the database schema for suppliers, orders and invoice documents) Tj ET
+BT /F1 11 Tf 56 424 Td (- Build the invoice upload flow with file size and format validation) Tj ET
+BT /F1 11 Tf 56 408 Td (- Write end to end tests for the order confirmation path) Tj ET
+BT /F1 11 Tf 56 392 Td (- Deploy the portal to a staging environment for the client to review) Tj ET
+BT /F1 11 Tf 56 376 Td (- Research how three competing supplier portals handle partial deliveries) Tj ET
+BT /F1 11 Tf 56 360 Td (- Draft the supplier onboarding guide in Bangla and English) Tj ET
+BT /F1 11 Tf 56 344 Td (- Prepare the launch announcement for the procurement team) Tj ET
+BT /F1 11 Tf 56 328 Td () Tj ET
+BT /F1 11 Tf 56 312 Td (Constraints) Tj ET
+BT /F1 11 Tf 56 296 Td () Tj ET
+BT /F1 11 Tf 56 280 Td (The login and the order list are critical — the client has committed to a) Tj ET
+BT /F1 11 Tf 56 264 Td (supplier demo in three weeks and neither can slip. Invoice upload is important) Tj ET
+BT /F1 11 Tf 56 248 Td (but can follow a fortnight later.) Tj ET
+BT /F1 11 Tf 56 232 Td () Tj ET
+BT /F1 11 Tf 56 216 Td (The onboarding guide is nice to have for launch and can be finished afterwards) Tj ET
+BT /F1 11 Tf 56 200 Td (if time runs short.) Tj ET
+BT /F1 11 Tf 56 184 Td () Tj ET
+BT /F1 11 Tf 56 168 Td (Security review is required before anything touches real supplier data.) Tj ET
+BT /F1 11 Tf 56 152 Td () Tj ET
+BT /F1 11 Tf 56 136 Td (Out of scope) Tj ET
+BT /F1 11 Tf 56 120 Td () Tj ET
+BT /F1 11 Tf 56 104 Td (Payment processing, which stays in their existing accounting system.) Tj ET
+BT /F1 11 Tf 56 88 Td () Tj ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000054 00000 n 
+0000000105 00000 n 
+0000000193 00000 n 
+0000000305 00000 n 
+trailer<</Size 6/Root 1 0 R>>
+startxref
+3424
+%%EOF

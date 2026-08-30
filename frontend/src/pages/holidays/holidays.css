@@ -1,0 +1,349 @@
+/* Company holidays. Scoped under .hol for the same reason the other modules
+ * scope theirs — Bootstrap and four module stylesheets all define .card,
+ * .btn and .list. */
+
+.hol {
+    --navy: #0A2947;
+    --cream: #F3E4C9;
+    --sage: #D3D4C0;
+    --clay: #8B5E3C;
+
+    --ink: #0A2947;
+    --ink-soft: #4A5C6E;
+    --ink-faint: #8494A2;
+    --paper: #FFFFFF;
+    --ground: #F7F8F5;
+    --rule: #E2E5DC;
+
+    --warn: #B3452F;
+    --warn-bg: #F8E7E2;
+    --ok: #3F6B4F;
+    --ok-bg: #E7F0E9;
+
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+    color: var(--ink);
+    font-family: var(--font-family, "Montserrat", sans-serif);
+}
+
+.hol *,
+.hol *::before,
+.hol *::after { box-sizing: border-box; }
+
+/* ── Head ─────────────────────────────────────────────────────────────── */
+
+.hol .hol-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.hol .hol-eyebrow {
+    margin: 0 0 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--clay);
+}
+
+.hol .hol-head h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.hol .hol-sub {
+    margin: 6px 0 0;
+    max-width: 62ch;
+    font-size: 14px;
+    color: var(--ink-soft);
+}
+
+.hol .hol-years { display: flex; gap: 6px; }
+
+.hol .hol-years button {
+    padding: 8px 13px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.hol .hol-years button:hover { border-color: var(--sage); }
+.hol .hol-years button:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
+.hol .hol-years button.is-on { color: var(--cream); background: var(--navy); border-color: var(--navy); }
+
+/* ── Messages ─────────────────────────────────────────────────────────── */
+
+.hol .hol-msg {
+    margin-bottom: 14px;
+    padding: 11px 14px;
+    font-size: 14px;
+    border-radius: 6px;
+}
+
+.hol .hol-msg.is-error { color: #7A2D1E; background: var(--warn-bg); border: 1px solid #E9C6BC; }
+.hol .hol-msg.is-ok    { color: #2C4C38; background: var(--ok-bg); border: 1px solid #C3D8CA; }
+.hol .hol-msg.is-warn  { color: #6B5116; background: #F8EFD8; border: 1px solid #E3D2A6; }
+
+/* ── Layout ───────────────────────────────────────────────────────────── */
+
+.hol .hol-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 20px;
+    align-items: start;
+}
+
+.hol .hol-list-wrap {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 16px;
+    min-width: 0;
+}
+
+.hol .hol-list-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.hol .hol-list-head h2 { margin: 0; font-size: 15px; font-weight: 600; }
+
+.hol .hol-import {
+    position: relative;
+    overflow: hidden;
+    padding: 8px 13px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.hol .hol-import:hover { border-color: var(--sage); background: var(--ground); }
+.hol .hol-import:focus-within { outline: 2px solid var(--clay); outline-offset: 2px; }
+
+.hol .hol-import input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.hol .hol-empty { margin: 0; padding: 20px 0; font-size: 13.5px; color: var(--ink-faint); text-align: center; }
+
+.hol .hol-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+.hol .hol-list li {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--ground);
+    border-radius: 6px;
+}
+
+.hol .hol-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 0;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+}
+
+.hol .hol-day { font-size: 16px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.hol .hol-mon { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+
+.hol .hol-info { min-width: 0; }
+.hol .hol-info strong { font-size: 14.5px; }
+.hol .hol-info p { margin: 4px 0 0; font-size: 12.5px; color: var(--ink-soft); }
+
+.hol .hol-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+
+.hol .hol-tag {
+    padding: 2px 7px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    color: var(--ink-soft);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+}
+
+.hol .hol-tag[data-type="Public"]   { color: #7A2D1E; background: var(--warn-bg); border-color: #E9C6BC; }
+.hol .hol-tag[data-type="Company"]  { color: #1D4B63; background: #E3EEF3; border-color: #C2D9E3; }
+.hol .hol-tag[data-type="Optional"] { color: #4C4A3C; background: #EEEFE7; border-color: var(--sage); }
+.hol .hol-tag.is-repeat { color: #4A3B63; background: #EDE9F3; border-color: #D3CAE2; }
+.hol .hol-tag.is-proj   { color: var(--ink-faint); }
+.hol .hol-tag.is-warn   { color: #6B5116; background: #F8EFD8; border-color: #E3D2A6; }
+
+.hol .hol-del {
+    padding: 6px 10px;
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--warn);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.hol .hol-del:hover { border-color: var(--warn); background: var(--warn-bg); }
+.hol .hol-del:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
+
+.hol .hol-report {
+    margin-top: 16px;
+    padding: 13px 15px;
+    background: var(--ground);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+}
+
+.hol .hol-report h3 { margin: 0 0 5px; font-size: 13px; font-weight: 700; }
+.hol .hol-report h3 + p { margin: 0; }
+.hol .hol-report p { margin: 0 0 8px; font-size: 13px; color: var(--ink-soft); }
+.hol .hol-report ul { margin: 0 0 10px; padding-left: 18px; font-size: 12.5px; color: var(--ink-soft); }
+.hol .hol-report li { margin-bottom: 3px; }
+
+/* ── Side ─────────────────────────────────────────────────────────────── */
+
+.hol .hol-side { display: flex; flex-direction: column; gap: 14px; }
+
+.hol .hol-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+}
+
+.hol .hol-panel h2 { margin: 0; font-size: 15px; font-weight: 600; }
+
+.hol .hol-panel label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+.hol .hol-panel input[type="text"],
+.hol .hol-panel input[type="date"],
+.hol .hol-panel input:not([type]),
+.hol .hol-panel select,
+.hol .hol-panel textarea {
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    resize: vertical;
+}
+
+.hol .hol-panel input:focus,
+.hol .hol-panel select:focus,
+.hol .hol-panel textarea:focus { outline: 2px solid var(--clay); outline-offset: 0; border-color: var(--clay); }
+
+.hol .hol-check {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--ink);
+    font-size: 13px;
+}
+
+.hol .hol-check input { width: 15px; height: 15px; }
+
+.hol .hol-hint { margin: 0; font-size: 12.5px; line-height: 1.55; color: var(--ink-soft); }
+.hol .hol-clear { margin: 0; font-size: 12.5px; font-weight: 600; color: var(--ok); }
+
+.hol .hol-conflicts {
+    padding: 11px 13px;
+    font-size: 12.5px;
+    background: var(--warn-bg);
+    border: 1px solid #E9C6BC;
+    border-radius: 6px;
+    color: #6B2A1C;
+}
+
+.hol .hol-conflicts strong { display: block; margin-bottom: 6px; font-size: 13px; }
+.hol .hol-conflicts ul { margin: 0 0 8px; padding-left: 16px; }
+.hol .hol-conflicts li { margin-bottom: 4px; }
+.hol .hol-conflicts p { margin: 0; font-size: 12px; opacity: 0.85; }
+
+.hol .hol-kind {
+    display: inline-block;
+    margin-right: 6px;
+    padding: 1px 5px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    background: var(--paper);
+    border-radius: 3px;
+}
+
+.hol .hol-primary {
+    padding: 9px 14px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--cream);
+    background: var(--navy);
+    border: 1px solid var(--navy);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.hol .hol-primary:hover:not(:disabled) { background: #0D3459; }
+.hol .hol-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.hol .hol-primary:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
+
+.hol .hol-panel pre {
+    margin: 0;
+    padding: 10px 12px;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11.5px;
+    line-height: 1.65;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
+@media (max-width: 900px) {
+    .hol .hol-body { grid-template-columns: minmax(0, 1fr); }
+}
+
+body:has(.hol) #footer { display: none; }

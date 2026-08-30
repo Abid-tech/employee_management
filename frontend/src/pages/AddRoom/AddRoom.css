@@ -1,0 +1,334 @@
+/* ================================
+   ADD ROOM PAGE
+================================ */
+
+#add-room {
+    background-color: #f8f9fa;
+    min-height: calc(100vh - 150px);
+}
+
+
+/* ================================
+   MAIN CARD
+================================ */
+
+.add-room-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    border: 1px solid #edf0f2;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.add-room-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-room-header h4 {
+    margin: 0;
+    color: var(--blue-color);
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.add-room-header p {
+    margin: 5px 0 0;
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.room-header-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background-color: #eef3f7;
+    color: var(--blue-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+}
+
+
+/* ================================
+   DIVIDER
+================================ */
+
+.add-room-card hr {
+    margin: 22px 0;
+    border-color: #e9ecef;
+    opacity: 1;
+}
+
+
+/* ================================
+   FORM SECTION
+================================ */
+
+.form-section {
+    background-color: #fafbfc;
+    border: 1px solid #edf0f2;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.form-section-title {
+    color: var(--blue-color);
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 17px;
+}
+
+.form-section-title i {
+    font-size: 14px;
+}
+
+.form-label {
+    color: #495057;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+
+/* ================================
+   INPUTS
+================================ */
+
+.add-room-form .form-control {
+    height: 40px;
+    border: 1px solid #dfe3e7;
+    border-radius: 7px;
+    font-size: 13px;
+    color: #343a40;
+    background-color: #ffffff;
+}
+
+.add-room-form .form-control::placeholder {
+    color: #adb5bd;
+    font-size: 12px;
+}
+
+.add-room-form .form-control:focus {
+    border-color: var(--blue-color);
+    box-shadow: 0 0 0 0.15rem rgba(13, 45, 73, 0.08);
+}
+
+
+/* Input group */
+
+.add-room-form .input-group-text {
+    height: 40px;
+    background-color: #f1f3f5;
+    border-color: #dfe3e7;
+    color: #6c757d;
+    font-size: 12px;
+}
+
+
+/* ================================
+   FEATURES
+================================ */
+
+.feature-help {
+    color: #6c757d;
+    font-size: 12px;
+    margin-top: -7px;
+    margin-bottom: 15px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.feature-option {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    min-height: 42px;
+    padding: 9px 12px;
+
+    background-color: #ffffff;
+    border: 1px solid #e1e5e8;
+    border-radius: 7px;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.feature-option:hover {
+    border-color: var(--blue-color);
+    background-color: #f8fafc;
+}
+
+
+/* Hide default checkbox */
+
+.feature-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* Custom checkbox */
+
+.feature-check {
+    width: 17px;
+    height: 17px;
+
+    border: 1.5px solid #adb5bd;
+    border-radius: 4px;
+
+    margin-right: 9px;
+
+    flex-shrink: 0;
+
+    position: relative;
+}
+
+
+/* Checked state */
+
+.feature-option input:checked + .feature-check {
+    background-color: var(--blue-color);
+    border-color: var(--blue-color);
+}
+
+.feature-option input:checked + .feature-check::after {
+    content: "✓";
+
+    position: absolute;
+
+    left: 3px;
+    top: -1px;
+
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.feature-option:has(input:checked) {
+    border-color: var(--blue-color);
+    background-color: #f5f8fa;
+}
+
+.feature-name {
+    color: #495057;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* ================================
+   SUBMIT BUTTON
+================================ */
+
+.form-actions {
+    margin-top: 24px;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+.submit-btn {
+    min-width: 150px;
+
+    padding: 10px 20px;
+
+    border: none;
+    border-radius: 7px;
+
+    background-color: var(--blue-color);
+    color: var(--beige-color);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+    background-color: #0a2947;
+    color: #ffffff;
+}
+
+.submit-btn i {
+    font-size: 13px;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 992px) {
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 768px) {
+
+    #add-room {
+        min-height: 100vh;
+    }
+
+    .add-room-card {
+        padding: 22px 18px;
+    }
+
+    .add-room-header h4 {
+        font-size: 20px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form-section {
+        padding: 16px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .room-header-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 17px;
+    }
+
+    .submit-btn {
+        width: 100%;
+    }
+
+    .form-actions {
+        display: block;
+    }
+
+}

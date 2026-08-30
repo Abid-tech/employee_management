@@ -1,0 +1,3633 @@
+/* Import font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+/* Common CSS */
+:root{
+    --font-family : "Montserrat", sans-serif;
+    --blue-color : #0A2947;
+    --beige-color: #F3E4C9;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family);
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6{
+    margin: 0;
+    padding: 0;
+}
+
+hr{
+    padding: 0;
+    margin: 5px 0;
+}
+.small, small{
+    font-size: 10px;
+}
+
+
+
+/* Header part start */
+
+
+
+
+/* Home part start */
+/* =========================================================
+   HOME PAGE
+========================================================= */
+
+.home-page {
+    min-height: 100vh;
+    background: #f8faff;
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   LEFT SIDE
+========================================================= */
+
+.home-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 50px;
+    background: #eaf0ff;
+    color: #0d6efd;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.home-title {
+    font-size: 52px;
+    line-height: 1.15;
+    font-weight: 700;
+    color: #14213d;
+    max-width: 650px;
+}
+
+
+.home-title span {
+    color: #0d6efd;
+}
+
+
+.home-description {
+    max-width: 600px;
+    margin-top: 20px;
+    font-size: 17px;
+    line-height: 1.8;
+    color: #667085;
+}
+
+
+/* =========================================================
+   FEATURES
+========================================================= */
+
+.home-feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+
+.feature-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    font-size: 20px;
+}
+
+
+.home-feature h6 {
+    margin: 2px 0 5px;
+    color: #172554;
+    font-weight: 600;
+}
+
+
+.home-feature p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #7a8499;
+}
+
+
+/* Different feature backgrounds */
+
+.employee-icon {
+    background: #eaf0ff;
+    color: #2563eb;
+}
+
+
+.attendance-icon {
+    background: #e8f8ef;
+    color: #16a34a;
+}
+
+
+.leave-icon {
+    background: #fff3e8;
+    color: #f97316;
+}
+
+
+.payroll-icon {
+    background: #f2eaff;
+    color: #7c3aed;
+}
+
+
+/* =========================================================
+   RIGHT AUTHENTICATION CARD
+========================================================= */
+/* ================= AUTH CARD ================= */
+
+.auth-card {
+    background: #ffffff;
+    padding: 28px 30px;
+    border-radius: 14px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+
+    /* Keep the card visually compact */
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+.auth-card-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #eef4fb;
+    color: var(--blue-color);
+
+    font-size: 24px;
+}
+
+.auth-card h2 {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--blue-color);
+}
+
+.auth-card-description {
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6c757d;
+
+    max-width: 280px;
+    margin: 0 auto 22px;
+}
+
+.auth-login-btn,
+.auth-register-btn {
+    width: 100%;
+    padding: 9px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 7px;
+}
+
+.auth-login-btn {
+    margin-bottom: 10px;
+}
+
+.auth-register-btn {
+    margin-bottom: 18px;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 5px 0 15px;
+
+    color: #adb5bd;
+    font-size: 11px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e9ecef;
+}
+
+.auth-features {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+
+    font-size: 11px;
+    color: #6c757d;
+}
+
+.auth-features div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.auth-features i {
+    color: var(--blue-color);
+    font-size: 13px;
+}
+/* =========================================================
+   BACKGROUND DECORATIONS
+========================================================= */
+
+.home-decoration {
+    position: absolute;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+.home-decoration-one {
+    width: 350px;
+    height: 350px;
+
+    background: rgba(37, 99, 235, 0.05);
+
+    bottom: -180px;
+    left: -100px;
+}
+
+
+.home-decoration-two {
+    width: 280px;
+    height: 280px;
+
+    background: rgba(124, 58, 237, 0.04);
+
+    top: -120px;
+    right: -80px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 991px) {
+
+    .home-page {
+        padding: 50px 0;
+    }
+
+    .home-title {
+        font-size: 42px;
+    }
+
+    .auth-card {
+        margin-top: 20px;
+    }
+
+}
+
+
+@media (max-width: 576px) {
+
+    .home-title {
+        font-size: 34px;
+    }
+
+    .home-description {
+        font-size: 15px;
+    }
+
+    .auth-card {
+        padding: 30px 24px;
+    }
+
+    .auth-features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+}
+/* Home part end */
+
+
+/* =================================
+   NAVBAR
+================================= */
+
+
+.navbar .navbar-brand h4 {
+    color: var(--beige-color);
+    font-size: 21px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show{
+    color: var(--beige-color)
+}
+
+.navbar .nav-link {
+    color: var(--beige-color);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 10px;
+}
+
+.navbar .nav-link:hover {
+    color: #ffffff;
+}
+
+
+/* =================================
+   MORE DROPDOWN
+================================= */
+
+.more-dropdown-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.employee-more-menu {
+    min-width: 210px;
+    padding: 6px;
+    border: none;
+    border-radius: 8px;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+
+.employee-more-menu .dropdown-item {
+    padding: 8px 11px;
+    border-radius: 5px;
+
+    font-size: 13px;
+    color: #495057;
+}
+
+.employee-more-menu .dropdown-item:hover {
+    background-color: #f1f4f6;
+    color: var(--blue-color);
+}
+
+.employee-more-menu .dropdown-item i {
+    width: 18px;
+    font-size: 13px;
+}
+
+
+/* =================================
+   USER DROPDOWN
+================================= */
+
+.user-dropdown-btn {
+    color: var(--beige-color) !important;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.user-dropdown-btn:hover {
+    color: #ffffff !important;
+}
+
+
+.navbar{
+    padding: 5px 0;
+    margin: 0;
+    background-color: var(--blue-color);
+    color: var(--beige-color);
+}
+.navbar-brand h4{
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--beige-color);
+}
+.navbar-nav .nav-link{
+    font-size: 14px;
+    color: var(--beige-color);
+}
+
+.logout-btn button{
+    font-size: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--blue-color);
+}
+/* Header part end */
+
+/* Leave management start */
+#leave-management{
+    margin: 30px 0;
+}
+
+
+/* Leave form start */
+.leave-form{
+    border: 1px solid rgba(0,0,0,.15);
+    padding: 20px;
+    border-radius: 20px;
+}
+.form-top h4{
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue-color);
+}
+
+.main-form-part{
+    margin-top: 10px;
+}
+
+.form-label{
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue-color);
+    margin-bottom: 6px;
+}
+
+.form-control,
+.form-select{
+    border-radius: 8px;
+    font-size: 12px;
+    padding: 10px 12px;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color: var(--blue-color);
+    box-shadow: 0 0 0 .15rem rgba(10,41,71,.2);
+}
+
+.form-check-label{
+    font-size: 12px;
+}
+
+textarea{
+    resize: none;
+}
+
+.btn-primary{
+    background: var(--blue-color);
+    border-color: var(--blue-color);
+    border-radius: 8px;
+    padding: 10px 30px;
+    font-weight: 600;
+}
+
+.btn-primary:hover{
+    background: #12385d;
+    border-color: #12385d;
+}
+
+.leave-form-btn button{
+    font-size: 14px;
+}
+/* Leave form end */
+
+/* Leave history start */
+
+.leave-history{
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 18px;
+    padding: 20px;
+    background: #fff;
+}
+
+.leave-history button{
+    font-size: 12px;
+
+}
+.history-top h4{
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--blue-color);
+    margin-bottom: 10px;
+}
+
+.leave-history table{
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.leave-history thead th{
+    border-bottom: 2px solid #e9ecef;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue-color);
+}
+
+.leave-history tbody td{
+    font-size: 13px;
+    vertical-align: middle;
+    color: #444;
+}
+
+
+.leave-type{
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.leave-type.annual{
+    background: #dff4e6;
+    color: #1f7a42;
+}
+
+.leave-type.medical{
+    background: #ffe7d9;
+    color: #d35400;
+}
+
+.leave-type.casual{
+    background: #e8ecff;
+    color: #304ffe;
+}
+
+.leave-type.emergency{
+    background: #ffe5e5;
+    color: #d63031;
+}
+
+.status{
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status.pending{
+    background: #fff0d8;
+    color: #e67e22;
+}
+
+.status.accepted{
+    background: #dff4e6;
+    color: #1f7a42;
+}
+
+.status.rejected{
+    background: #ffe0e0;
+    color: #d63031;
+}
+/* Leave history end */
+
+
+
+/* Leave status part start */
+
+.leave-status{
+    padding: 16px;
+
+    background: #fff;
+
+    border: 1px solid #e5e8ec;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+
+
+.leave-status-header h4{
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.leave-status hr{
+    margin: 10px 0;
+
+    border-color: #edf0f3;
+}
+
+
+.leave-summary-item{
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 9px 10px;
+
+    margin-bottom: 7px;
+
+    background: #f7f9fc;
+
+    border-radius: 7px;
+}
+
+.leave-summary-item:last-child{
+    margin-bottom: 0;
+}
+
+
+
+.leave-summary-icon{
+    width: 26px;
+    height: 26px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+
+.leave-summary-icon.taken{
+    background: #e8f0ff;
+    color: #1769e0;
+}
+
+.leave-summary-icon.pending{
+    background: #fff2df;
+    color: #f28a00;
+}
+
+.leave-summary-icon.approved{
+    background: #e3f7eb;
+    color: #18a957;
+}
+
+.leave-summary-icon.remaining{
+    background: #edf0f8;
+    color: #40547b;
+}
+
+
+
+.leave-summary-label{
+    flex: 1;
+
+    font-size: 11px;
+
+    color: #5f6874;
+}
+
+
+
+.leave-summary-value{
+    font-size: 11px;
+    font-weight: 700;
+
+    color: #27364a;
+
+    white-space: nowrap;
+}
+/* Leave status part end */
+
+/* Leave management end */
+
+
+
+/* Admin dashboard part start */
+.status-select {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* communication part start */
+
+
+#communication-dashboard{
+    min-height: calc(100vh - 60px);
+    padding: 35px 0;
+}
+
+.communication-form{
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e8ec;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.035);
+}
+
+
+/* Header */
+
+.communication-form-header h4{
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.communication-form-header p{
+    margin: 5px 0 0;
+
+    font-size: 10px;
+    color: #7b838e;
+}
+
+.communication-form hr{
+    margin: 15px 0 20px;
+    border-color: #edf0f3;
+}
+
+
+/* Labels */
+
+.communication-form .form-label{
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    color: #293747;
+}
+
+
+
+
+.communication-type-options{
+    display: flex;
+    gap: 10px;
+}
+
+.communication-type-option{
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    border: 1px solid #e2e6eb;
+    border-radius: 8px;
+
+    background: #fafbfc;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.communication-type-option:hover{
+    border-color: #cbd3dc;
+}
+
+.communication-type-option.active{
+    border-color: var(--blue-color);
+    background: #f5f8fb;
+}
+
+.communication-type-option input{
+    width: 15px;
+    height: 15px;
+
+    accent-color: var(--blue-color);
+}
+
+.communication-type-option strong{
+    display: block;
+
+    font-size: 11px;
+    color: #293747;
+}
+
+.communication-type-option small{
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 8px;
+    color: #858d97;
+}
+
+
+
+.communication-form .form-control{
+    min-height: 42px;
+
+    padding: 9px 11px;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 7px;
+
+    font-size: 11px;
+}
+
+.communication-form .form-control::placeholder{
+    font-size: 10px;
+    color: #a1a8b0;
+}
+
+.communication-form .form-control:focus{
+    border-color: var(--blue-color);
+
+    box-shadow:
+        0 0 0 3px rgba(10, 41, 71, .07);
+}
+
+
+/* Message */
+
+.communication-textarea{
+    min-height: 120px !important;
+    resize: vertical;
+}
+
+
+/* Character hint */
+
+.field-hint{
+    margin-top: 4px;
+
+    text-align: right;
+
+    font-size: 8px;
+    color: #9aa1a9;
+}
+
+
+/* Optional */
+
+.optional-text{
+    margin-left: 5px;
+
+    font-size: 8px;
+    font-weight: 400;
+
+    color: #999;
+}
+
+
+
+
+.poll-options-section{
+    margin-bottom: 18px;
+}
+
+.poll-input-row{
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 8px;
+}
+
+.poll-input-row .form-control{
+    flex: 1;
+}
+
+
+/* Remove */
+
+.remove-option-btn{
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    border: none;
+    border-radius: 6px;
+
+    background: #ffe8e8;
+    color: #d9363e;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+.remove-option-btn:hover{
+    background: #ffdada;
+}
+
+
+/* Add */
+
+.add-option-btn{
+    margin-top: 2px;
+
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    color: var(--blue-color);
+
+    font-size: 10px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.add-option-btn:hover{
+    text-decoration: underline;
+}
+
+
+.communication-submit{
+    margin-top: 25px;
+
+    text-align: right;
+}
+
+.communication-submit-btn{
+    padding: 9px 20px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: var(--blue-color);
+    color: #fff;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.communication-submit-btn:hover{
+    background: #123c65;
+    color: #fff;
+}
+
+
+.poll-result{
+    padding: 20px;
+
+    background: #fff;
+
+    border: 1px solid #e5e8ec;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .035);
+}
+
+.poll-result-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.poll-result-header h4{
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.poll-result-header p{
+    margin: 4px 0 0;
+
+    font-size: 9px;
+    color: #7b838e;
+}
+
+.poll-status{
+    padding: 4px 9px;
+
+    border-radius: 5px;
+
+    background: #e5f7ec;
+    color: #18944d;
+
+    font-size: 8px;
+    font-weight: 600;
+}
+
+.poll-result hr{
+    margin: 12px 0;
+
+    border-color: #edf0f3;
+}
+
+.poll-question{
+    display: flex;
+    gap: 7px;
+
+    margin-bottom: 15px;
+}
+
+.poll-question span{
+    font-size: 9px;
+    color: #858d97;
+}
+
+.poll-question strong{
+    font-size: 11px;
+    color: #293747;
+}
+
+.poll-option{
+    margin-bottom: 13px;
+}
+
+.poll-option-info{
+    display: flex;
+    justify-content: space-between;
+
+    margin-bottom: 5px;
+}
+
+.poll-option-info span,
+.poll-option-info strong{
+    font-size: 10px;
+}
+
+.poll-option-info span{
+    color: #5f6874;
+}
+
+.poll-option-info strong{
+    color: #293747;
+}
+
+.poll-progress{
+    width: 100%;
+    height: 7px;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #edf0f3;
+}
+
+.poll-progress-bar{
+    height: 100%;
+
+    border-radius: 10px;
+
+    background: var(--blue-color);
+}
+
+
+/* communication part end */
+
+
+
+/* Admin salary start */
+/* =========================================
+   SALARY MANAGEMENT
+========================================= */
+
+#salary-generate,
+#salary-manage{
+    padding: 25px 0 5px;
+}
+
+#salary-manage{
+    padding-bottom: 35px;
+}
+
+
+/* =========================================
+   MAIN CARD
+========================================= */
+
+.salary-card{
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #e4e8ed;
+
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .035);
+}
+
+
+/* =========================================
+   CARD HEADER
+========================================= */
+
+.salary-card-header{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+}
+
+.salary-card-header h4{
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.salary-card-header p{
+    margin: 5px 0 0;
+
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+.salary-header-icon{
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    background: #f1f5f9;
+
+    color: var(--blue-color);
+
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.salary-card hr{
+    margin: 15px 0 20px;
+
+    border-color: #edf0f3;
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.salary-card .form-label{
+    margin-bottom: 6px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    color: #344150;
+}
+
+.salary-card .form-control,
+.salary-card .form-select{
+    min-height: 40px;
+
+    border: 1px solid #dfe4e9;
+
+    border-radius: 7px;
+
+    font-size: 10px;
+
+    color: #374151;
+
+    background-color: #fff;
+}
+
+.salary-card .form-control:focus,
+.salary-card .form-select:focus{
+    border-color: var(--blue-color);
+
+    box-shadow: 0 0 0 3px rgba(10, 41, 71, .07);
+}
+
+
+/* =========================================
+   SALARY INPUT
+========================================= */
+
+.salary-input{
+    position: relative;
+}
+
+.salary-input > span{
+    position: absolute;
+
+    left: 11px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    z-index: 2;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    color: #7b838e;
+}
+
+.salary-input .form-control{
+    padding-left: 28px;
+}
+
+
+/* =========================================
+   ATTENDANCE SUMMARY
+========================================= */
+
+.attendance-summary{
+    margin-top: 22px;
+
+    padding: 16px;
+
+    border: 1px solid #e3e8ed;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+}
+
+.summary-header{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 13px;
+}
+
+.summary-header h5{
+    margin: 0;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.summary-header p{
+    margin: 3px 0 0;
+
+    font-size: 8px;
+
+    color: #8b949e;
+}
+
+.summary-loading{
+    font-size: 9px;
+
+    color: #7b838e;
+}
+
+.summary-loading-box{
+    padding: 12px;
+
+    text-align: center;
+
+    font-size: 9px;
+
+    color: #858d97;
+
+    background: #fff;
+
+    border: 1px solid #e7eaee;
+
+    border-radius: 7px;
+}
+
+.summary-item{
+    min-height: 70px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding: 11px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e9ed;
+
+    border-radius: 7px;
+}
+
+.summary-item span{
+    font-size: 8px;
+
+    color: #858d97;
+}
+
+.summary-item strong{
+    margin-top: 5px;
+
+    font-size: 15px;
+
+    color: #293747;
+}
+
+.summary-item.net-pay{
+    border-color: #d8eadf;
+
+    background: #f5fbf7;
+}
+
+.summary-item.net-pay strong{
+    color: #21834a;
+}
+
+.summary-empty{
+    padding: 12px;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7eaee;
+
+    text-align: center;
+
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+
+/* =========================================
+   GENERATE BUTTON
+========================================= */
+
+.salary-form-footer{
+    margin-top: 20px;
+
+    display: flex;
+
+    justify-content: flex-end;
+}
+
+.generate-salary-btn{
+    padding: 10px 20px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: var(--blue-color);
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    transition: .2s ease;
+}
+
+.generate-salary-btn:hover{
+    background: #123b61;
+}
+
+.generate-salary-btn:disabled{
+    opacity: .6;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   SLIP COUNT
+========================================= */
+
+.slip-count{
+    min-width: 20px;
+    height: 20px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-left: 3px;
+
+    padding: 0 6px;
+
+    border-radius: 10px;
+
+    background: #edf2f7;
+
+    color: #66717e;
+
+    font-size: 8px;
+}
+
+
+/* =========================================
+   FILTER
+========================================= */
+
+.salary-filter{
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.salary-filter label{
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+.salary-filter .form-select{
+    width: 140px;
+
+    min-height: 34px;
+
+    padding: 5px 9px;
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.salary-table{
+    margin: 0;
+
+    font-size: 10px;
+}
+
+.salary-table thead th{
+    padding: 10px 8px;
+
+    border-bottom: 1px solid #e4e8ec;
+
+    background: #fafbfc;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .3px;
+
+    color: #7b838e;
+
+    white-space: nowrap;
+}
+
+.salary-table tbody td{
+    padding: 12px 8px;
+
+    border-bottom: 1px solid #eef0f2;
+
+    color: #4c5662;
+}
+
+.salary-table tbody tr:last-child td{
+    border-bottom: none;
+}
+
+.salary-table tbody tr:hover{
+    background: #fafbfd;
+}
+
+.table-number{
+    width: 35px;
+
+    color: #9aa1a9 !important;
+}
+
+
+/* =========================================
+   EMPLOYEE CELL
+========================================= */
+
+.employee-cell{
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.employee-avatar{
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #edf2f7;
+
+    color: var(--blue-color);
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.employee-cell strong{
+    display: block;
+
+    font-size: 10px;
+
+    color: #293747;
+}
+
+.employee-cell small{
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 8px;
+
+    color: #8b949e;
+}
+
+
+/* =========================================
+   PERIOD
+========================================= */
+
+.period-badge{
+    display: inline-block;
+
+    padding: 5px 8px;
+
+    border-radius: 5px;
+
+    background: #f1f4f7;
+
+    color: #596572;
+
+    font-size: 9px;
+}
+
+
+/* =========================================
+   NET PAY
+========================================= */
+
+.net-pay-value{
+    font-size: 10px;
+
+    color: #21834a;
+}
+
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
+.salary-status{
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 8px;
+
+    font-weight: 600;
+}
+
+.salary-status.pending{
+    background: #fff4d6;
+
+    color: #a66a00;
+}
+
+.salary-status.processing{
+    background: #e5f1ff;
+
+    color: #2867a5;
+}
+
+.salary-status.paid{
+    background: #def5e7;
+
+    color: #237746;
+}
+
+
+/* =========================================
+   STATUS SELECT
+========================================= */
+
+.status-select{
+    width: 115px;
+
+    min-height: 32px !important;
+
+    padding: 5px 8px !important;
+
+    font-size: 9px !important;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.salary-empty{
+    height: 180px;
+
+    text-align: center;
+
+    vertical-align: middle;
+}
+
+.salary-empty .empty-icon{
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 8px;
+
+    border-radius: 8px;
+
+    background: #f1f4f7;
+
+    color: #8b949e;
+
+    font-size: 15px;
+}
+
+.salary-empty strong{
+    display: block;
+
+    font-size: 10px;
+
+    color: #596572;
+}
+
+.salary-empty span{
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 8px;
+
+    color: #9aa1a9;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 767px){
+
+    .salary-card{
+        padding: 16px;
+    }
+
+    .salary-card-header{
+        align-items: flex-start;
+    }
+
+    .salary-filter{
+        flex-direction: column;
+
+        align-items: flex-end;
+    }
+
+    .salary-filter label{
+        display: none;
+    }
+
+    .salary-filter .form-select{
+        width: 120px;
+    }
+
+    .communication-type-options{
+        flex-direction: column;
+    }
+
+    .summary-item{
+        min-height: 60px;
+    }
+
+}
+/* Admin salary end */
+
+
+
+/* Admin dashboard part end */
+
+
+
+
+
+/* Employee dashboard part start */
+
+#employee-dashboard{
+    min-height: calc(100vh - 60px);
+
+    padding: 30px 0 40px;
+
+}
+
+
+
+
+.employee-welcome{
+    margin-bottom: 25px;
+}
+
+.employee-welcome h3{
+    margin: 0;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.employee-welcome p{
+    margin: 5px 0 0;
+
+    font-size: 10px;
+
+    color: #7b838e;
+}
+
+
+
+.employee-section{
+    padding: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e8ec;
+
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.035);
+}
+
+
+
+
+.employee-section-header{
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+.employee-section-header h4{
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.employee-section-header p{
+    margin: 3px 0 0;
+
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+
+
+
+.section-icon{
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+}
+
+.announcement-icon{
+    background: #e8f0ff;
+}
+
+.poll-icon{
+    background: #e7f7ee;
+}
+
+
+.announcement-card{
+    height: 100%;
+
+    padding: 15px;
+
+    border: 1px solid #e8ebef;
+
+    border-radius: 9px;
+
+    background: #fafbfc;
+
+    transition: .2s ease;
+}
+
+.announcement-card:hover{
+    border-color: #d5dbe2;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .04);
+}
+
+.announcement-card h5{
+    margin: 0 0 8px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #293747;
+}
+
+.announcement-card p{
+    margin: 0 0 15px;
+
+    font-size: 10px;
+
+    line-height: 1.6;
+
+    color: #626c77;
+}
+
+
+/* Date */
+
+.announcement-date{
+    padding-top: 9px;
+
+    border-top: 1px solid #e9edf1;
+
+    font-size: 8px;
+
+    color: #9299a2;
+}
+
+
+
+.poll-card{
+    padding: 16px;
+
+    border: 1px solid #e8ebef;
+
+    border-radius: 9px;
+
+    background: #fafbfc;
+}
+
+.poll-card h5{
+    margin: 0 0 6px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #293747;
+}
+
+.poll-message{
+    margin: 0 0 14px;
+
+    font-size: 10px;
+
+    color: #626c77;
+}
+
+
+.poll-options{
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.poll-option{
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 9px 10px;
+
+    border: 1px solid #e2e6eb;
+
+    border-radius: 7px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.poll-option:hover{
+    border-color: #cbd3dc;
+
+    background: #f8fafc;
+}
+
+.poll-option.selected{
+    border-color: var(--blue-color);
+
+    background: #f4f7fa;
+}
+
+
+/* Radio */
+
+.poll-option input{
+    width: 14px;
+    height: 14px;
+
+    margin: 0;
+
+    accent-color: var(--blue-color);
+}
+
+.poll-option span{
+    font-size: 10px;
+
+    color: #4f5965;
+}
+
+
+
+.poll-vote{
+    margin-top: 15px;
+
+    text-align: right;
+}
+
+.poll-vote button{
+    padding: 8px 20px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: var(--blue-color);
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+.poll-vote button:hover{
+    background: #123c65;
+}
+
+
+
+
+/* Employee salary part start */
+/* =========================================
+   EMPLOYEE SALARY
+========================================= */
+
+#employee-salary{
+    padding: 10px 0 40px;
+}
+
+
+/* =========================================
+   SALARY HISTORY CARD
+========================================= */
+
+.salary-history-card{
+    padding: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid #e4e8ec;
+
+    border-radius: 12px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .025);
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.salary-history-header{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.salary-history-header h4{
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.salary-history-header p{
+    margin: 4px 0 0;
+
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+.salary-count{
+    min-width: 27px;
+    height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #f1f4f7;
+
+    color: var(--blue-color);
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.salary-history-card hr{
+    margin: 15px 0;
+
+    border-color: #edf0f3;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.salary-history-table{
+    margin: 0;
+}
+
+.salary-history-table thead th{
+    padding: 9px 10px;
+
+    border-bottom: 1px solid #e7eaed;
+
+    background: #fafbfc;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .3px;
+
+    color: #858d97;
+}
+
+.salary-history-table tbody td{
+    padding: 12px 10px;
+
+    border-bottom: 1px solid #f0f1f3;
+
+    font-size: 10px;
+}
+
+.salary-history-table tbody tr:last-child td{
+    border-bottom: none;
+}
+
+.salary-history-table tbody tr:hover{
+    background: #fcfcfd;
+}
+
+
+/* =========================================
+   SALARY PERIOD
+========================================= */
+
+.salary-period{
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.period-icon{
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #f2f5f8;
+
+    color: var(--blue-color);
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.salary-period strong{
+    display: block;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    color: #344150;
+}
+
+.salary-period small{
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 8px;
+
+    color: #9299a2;
+}
+
+
+/* =========================================
+   NET PAY
+========================================= */
+
+.salary-net-pay{
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #263746;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.salary-payment-status{
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    font-size: 8px;
+
+    font-weight: 600;
+}
+
+.status-dot{
+    width: 5px;
+    height: 5px;
+
+    display: inline-block;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+/* Pending */
+
+.salary-payment-status.pending{
+    background: #fff5dc;
+
+    color: #a66b00;
+}
+
+
+/* Processing */
+
+.salary-payment-status.processing{
+    background: #edf4fb;
+
+    color: #38698f;
+}
+
+
+/* Paid */
+
+.salary-payment-status.paid{
+    background: #e8f5ed;
+
+    color: #287447;
+}
+
+
+/* =========================================
+   VIEW BUTTON
+========================================= */
+
+.salary-view-btn{
+    padding: 6px 12px;
+
+    border: 1px solid #dce2e7;
+
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    color: var(--blue-color);
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    transition: .2s ease;
+}
+
+.salary-view-btn:hover{
+    border-color: var(--blue-color);
+
+    background: var(--blue-color);
+
+    color: #ffffff;
+}
+
+
+/* =========================================
+   LOADING / EMPTY
+========================================= */
+
+.salary-message{
+    min-height: 150px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+.salary-loader{
+    width: 12px;
+    height: 12px;
+
+    border: 2px solid #e2e6ea;
+
+    border-top-color: var(--blue-color);
+
+    border-radius: 50%;
+
+    animation: salary-spin .7s linear infinite;
+}
+
+@keyframes salary-spin{
+
+    to{
+        transform: rotate(360deg);
+    }
+
+}
+
+.salary-message.empty{
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.empty-salary-icon{
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 5px;
+
+    border-radius: 8px;
+
+    background: #f1f4f7;
+
+    color: #7c8792;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.salary-message.empty strong{
+    font-size: 10px;
+
+    color: #596572;
+}
+
+.salary-message.empty span{
+    font-size: 8px;
+
+    color: #9aa1a9;
+}
+
+
+/* =========================================
+   SALARY MODAL OVERLAY
+========================================= */
+
+.salary-modal-overlay{
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1050;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(10, 41, 71, .35);
+
+    backdrop-filter: blur(2px);
+}
+
+
+/* =========================================
+   SALARY SLIP
+========================================= */
+
+.salary-slip-modal{
+    width: 100%;
+
+    max-width: 510px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    border: 1px solid #e1e5e9;
+
+    box-shadow: 0 15px 45px rgba(10, 41, 71, .16);
+}
+
+
+/* =========================================
+   SLIP HEADER
+========================================= */
+
+.salary-slip-header{
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #e8ebee;
+}
+
+.salary-slip-header h4{
+    margin: 0;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.salary-slip-header p{
+    margin: 4px 0 0;
+
+    font-size: 9px;
+
+    color: #858d97;
+}
+
+.salary-close-btn{
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #f2f4f6;
+
+    color: #68737e;
+
+    font-size: 17px;
+
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.salary-close-btn:hover{
+    background: #e8ebee;
+
+    color: #293747;
+}
+
+
+/* =========================================
+   SLIP INFORMATION
+========================================= */
+
+.slip-information{
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #edf0f2;
+}
+
+.slip-information span:first-child{
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 8px;
+
+    color: #9299a2;
+}
+
+.slip-information strong{
+    font-size: 10px;
+
+    color: #3d4853;
+}
+
+
+/* =========================================
+   SLIP SECTIONS
+========================================= */
+
+.slip-section{
+    padding: 14px 0;
+
+    border-bottom: 1px solid #edf0f2;
+}
+
+.slip-section-title{
+    margin-bottom: 9px;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    color: var(--blue-color);
+
+    text-transform: uppercase;
+
+    letter-spacing: .4px;
+}
+
+.slip-row{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 6px 0;
+}
+
+.slip-row span{
+    font-size: 9px;
+
+    color: #707b86;
+}
+
+.slip-row strong{
+    font-size: 9px;
+
+    color: #3c4752;
+}
+
+.slip-row .deduction-value{
+    color: #b45b5b;
+}
+
+
+/* =========================================
+   GROSS PAY
+========================================= */
+
+.slip-total-row{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid #e7eaed;
+}
+
+.slip-total-row span{
+    font-size: 10px;
+
+    font-weight: 600;
+
+    color: #596572;
+}
+
+.slip-total-row strong{
+    font-size: 11px;
+
+    color: #344150;
+}
+
+
+/* =========================================
+   NET PAY
+========================================= */
+
+.slip-net-pay{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 12px;
+
+    padding: 15px;
+
+    border-radius: 8px;
+
+    background: #f4f7f9;
+}
+
+.slip-net-pay span{
+    display: block;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: var(--blue-color);
+}
+
+.slip-net-pay small{
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 8px;
+
+    color: #858d97;
+}
+
+.slip-net-pay strong{
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #287447;
+}
+
+
+/* =========================================
+   SLIP FOOTER
+========================================= */
+
+.slip-footer{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-top: 17px;
+}
+
+.slip-footer span{
+    font-size: 7px;
+
+    color: #9aa1a9;
+}
+
+.slip-footer button{
+    padding: 7px 14px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: var(--blue-color);
+
+    color: #ffffff;
+
+    font-size: 8px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.slip-footer button:hover{
+    background: #123c60;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 575px){
+
+    #employee-salary{
+        padding: 20px 0 30px;
+    }
+
+    .salary-history-card{
+        padding: 15px;
+    }
+
+    .salary-slip-modal{
+        padding: 18px;
+    }
+
+    .salary-slip-header h4{
+        font-size: 15px;
+    }
+
+    .salary-table th:nth-child(2),
+    .salary-table td:nth-child(2){
+        display: none;
+    }
+
+    .slip-net-pay strong{
+        font-size: 14px;
+    }
+
+}
+/* Employee salary end */
+
+/* Employee dashboard part end */
+
+
+
+
+
+/* Registration part start */
+/* Registration Section */
+
+#registration-section{
+    min-height: calc(100vh - 60px);
+    padding: 50px 0;
+    background: #f8f9fb;
+}
+
+
+/* Form Container */
+
+.registration-wrapper{
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 35px;
+    background: #ffffff;
+    border: 1px solid #e6e9ed;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Header */
+
+.registration-header{
+    margin-bottom: 28px;
+}
+
+.registration-header h3{
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--blue-color);
+    margin-bottom: 6px;
+}
+
+.registration-header p{
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}
+
+
+/* Labels */
+
+#registration-section .form-label{
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #27364a;
+}
+
+
+/* Inputs */
+
+#registration-section .form-control,
+#registration-section .form-select{
+    height: 44px;
+    padding: 8px 12px;
+    border: 1px solid #dfe3e8;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #333;
+    background-color: #fff;
+}
+
+
+/* Placeholder */
+
+#registration-section .form-control::placeholder{
+    color: #a5aab1;
+    font-size: 13px;
+}
+
+
+/* Focus */
+
+#registration-section .form-control:focus,
+#registration-section .form-select:focus{
+    border-color: var(--blue-color);
+    box-shadow: 0 0 0 3px rgba(10, 41, 71, 0.08);
+}
+
+
+/* Submit */
+
+.registration-submit{
+    margin-top: 30px;
+    text-align: center;
+}
+
+.registration-btn{
+    min-width: 180px;
+    padding: 10px 25px;
+    border-radius: 8px;
+    border: none;
+    background: var(--blue-color);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.registration-btn:hover{
+    background: #123c65;
+    color: #fff;
+}
+/* Registration part end */
+
+
+/* Login part start */
+/* Login Section */
+.registration-logo{
+    text-align: left!important;
+
+}
+
+.login-logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-logo a {
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--blue-color);
+    letter-spacing: -0.5px;
+}
+
+.login-logo a:hover {
+    color: #0b5ed7;
+}
+
+#login-section{
+    min-height: calc(100vh - 60px);
+    padding: 70px 0;
+    background: #f8f9fb;
+
+    display: flex;
+    align-items: center;
+}
+
+
+/* Login Card */
+
+.login-wrapper{
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 35px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6e9ed;
+    border-radius: 16px;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+
+/* Header */
+
+.login-header{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header h3{
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--blue-color);
+    margin-bottom: 7px;
+}
+
+
+.login-logo p{
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}
+
+
+/* Label */
+
+#login-section .form-label{
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #27364a;
+}
+
+
+/* Input */
+
+#login-section .form-control{
+    height: 44px;
+    padding: 8px 12px;
+
+    border: 1px solid #dfe3e8;
+    border-radius: 8px;
+
+    font-size: 13px;
+}
+
+#login-section .form-control::placeholder{
+    color: #a5aab1;
+    font-size: 13px;
+}
+
+
+/* Input Focus */
+
+#login-section .form-control:focus{
+    border-color: var(--blue-color);
+
+    box-shadow: 0 0 0 3px rgba(10, 41, 71, 0.08);
+}
+
+
+/* Forgot Password */
+
+.forgot-password{
+    text-align: right;
+    margin-top: 5px;
+}
+
+.forgot-password a{
+    font-size: 12px;
+    color: var(--blue-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.forgot-password a:hover{
+    text-decoration: underline;
+}
+
+
+/* Login Button */
+
+.login-submit{
+    margin-top: 25px;
+}
+
+.login-btn{
+    width: 100%;
+    padding: 10px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: var(--blue-color);
+    color: #fff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.login-btn:hover{
+    background: #123c65;
+    color: #fff;
+}
+
+
+/* Signup */
+
+.signup-link{
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+
+    border-top: 1px solid #eeeeee;
+
+    font-size: 13px;
+    color: #777;
+}
+
+.signup-link a{
+    color: var(--blue-color);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signup-link a:hover{
+    text-decoration: underline;
+}
+/* Login part end */
+
+
+
+/* Attendance part start */
+
+.attendance-section{
+    padding: 30px 0;
+    background: #f8f9fb;
+    min-height: calc(100vh - 60px);
+}
+
+
+.attendance-summary{
+    margin-bottom: 5px;
+}
+
+.attendance-card{
+    height: 82px;
+    padding: 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    background: #fff;
+
+    border: 1px solid #e8ebef;
+    border-radius: 8px;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.035);
+}
+
+.attendance-icon{
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.attendance-icon.blue{
+    background: #1769e0;
+}
+
+.attendance-icon.green{
+    background: #18a957;
+}
+
+.attendance-icon.orange{
+    background: #ff8500;
+}
+
+.attendance-icon.purple{
+    background: #7651c8;
+}
+
+.attendance-card-info p{
+    margin: 0 0 2px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    color: #6d7480;
+}
+
+.attendance-card-info h5{
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    color: #263445;
+}
+
+.attendance-card-info small{
+    font-size: 9px;
+    color: #8a919b;
+}
+
+
+
+.attendance-main-card{
+    padding: 16px;
+
+    background: #fff;
+
+    border: 1px solid #e6e9ed;
+    border-radius: 10px;
+
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.035);
+}
+
+.attendance-section-title h5,
+.live-location-header h5{
+    margin: 0;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    color: #263445;
+}
+
+.attendance-main-card hr{
+    margin: 10px 0 15px;
+
+    border-color: #edf0f3;
+}
+
+
+.attendance-clock{
+    display: flex;
+    justify-content: center;
+
+    margin: 10px 0 14px;
+}
+
+.clock-circle{
+    width: 150px;
+    height: 150px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    border: 6px solid #0a284714;
+    border-top-color: var(--blue-color);
+    border-right-color: var(--blue-color);
+
+    background: #fff;
+}
+
+.clock-content{
+    text-align: center;
+}
+
+.clock-content small{
+    display: block;
+
+    font-size: 8px;
+    color: #8a919b;
+
+    margin-bottom: 3px;
+}
+
+.clock-content h2{
+    margin: 0 0 7px;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    color: #263445;
+}
+
+.present-badge{
+    display: inline-block;
+
+    padding: 4px 8px;
+
+    border-radius: 4px;
+
+    background: #e5f7ec;
+    color: #199451;
+
+    font-size: 8px;
+    font-weight: 600;
+}
+
+
+.location-verified{
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.location-verified strong{
+    display: block;
+
+    font-size: 10px;
+    color: #18934d;
+}
+
+.location-verified p{
+    margin: 4px 0;
+
+    font-size: 9px;
+    color: #69717c;
+}
+
+.location-verified small{
+    font-size: 8px;
+    color: #858c95;
+}
+
+
+.attendance-buttons{
+    display: flex;
+    gap: 8px;
+
+    margin-bottom: 15px;
+}
+
+.attendance-buttons .btn{
+    flex: 1;
+
+    padding: 7px;
+
+    border-radius: 5px;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.check-in-btn{
+    background: #18a957;
+    color: #fff;
+}
+
+.check-in-btn:hover{
+    background: #138d47;
+    color: #fff;
+}
+
+.check-out-btn{
+    background: #ffe7e9;
+    color: #e34b57;
+}
+
+.check-out-btn:hover{
+    background: #ffdadd;
+    color: #d83c48;
+}
+
+
+
+.office-location{
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+
+    padding: 10px;
+
+    background: #f8fafb;
+
+    border: 1px solid #edf0f2;
+    border-radius: 6px;
+}
+
+.location-pin{
+    font-size: 15px;
+}
+
+.office-location strong{
+    display: block;
+
+    font-size: 9px;
+    color: #263445;
+
+    margin-bottom: 3px;
+}
+
+.office-location span{
+    display: block;
+
+    font-size: 8px;
+    color: #747c87;
+
+    line-height: 1.5;
+}
+
+.location-range{
+    margin-left: auto;
+    text-align: right;
+}
+
+.location-range span{
+    display: inline-block;
+
+    padding: 3px 5px;
+
+    background: #e4f7ec;
+    color: #1a9550;
+
+    border-radius: 3px;
+
+    font-size: 7px;
+}
+
+.location-range small{
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 7px;
+    color: #7e8791;
+}
+
+
+
+.live-location-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.refresh-btn{
+    border: none;
+    background: transparent;
+
+    color: #1769e0;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+.map-container{
+    height: 210px;
+
+    position: relative;
+    overflow: hidden;
+
+    border-radius: 6px;
+
+    background:
+        linear-gradient(35deg, transparent 45%, #dfe6eb 46%, #dfe6eb 48%, transparent 49%),
+        linear-gradient(120deg, transparent 45%, #e1e7ec 46%, #e1e7ec 48%, transparent 49%),
+        #f0f3f5;
+
+    background-size: 100px 80px, 130px 100px, auto;
+
+    border: 1px solid #e1e6ea;
+}
+
+
+.map-grid{
+    position: absolute;
+    inset: 0;
+
+    background:
+        repeating-linear-gradient(
+            25deg,
+            transparent 0,
+            transparent 35px,
+            rgba(255,255,255,.75) 36px,
+            rgba(255,255,255,.75) 39px
+        ),
+        repeating-linear-gradient(
+            115deg,
+            transparent 0,
+            transparent 45px,
+            rgba(255,255,255,.75) 46px,
+            rgba(255,255,255,.75) 49px
+        );
+}
+
+
+/* Map labels */
+
+.map-label{
+    position: absolute;
+
+    font-size: 8px;
+    font-weight: 600;
+
+    color: #68727d;
+}
+
+.label-one{
+    top: 30px;
+    left: 55px;
+}
+
+.label-two{
+    top: 60px;
+    left: 25px;
+}
+
+.label-three{
+    top: 48px;
+    right: 35px;
+}
+
+.label-four{
+    bottom: 40px;
+    right: 75px;
+}
+
+
+.location-radius{
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 125px;
+    height: 125px;
+
+    transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background: rgba(24, 169, 87, 0.10);
+
+    border: 1px solid rgba(24, 169, 87, 0.45);
+}
+
+
+.map-marker{
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-size: 24px;
+
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.2));
+}
+
+
+
+.map-controls{
+    position: absolute;
+
+    right: 8px;
+    bottom: 8px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.map-controls button{
+    width: 26px;
+    height: 26px;
+
+    border: 1px solid #ddd;
+    background: #fff;
+
+    font-size: 16px;
+    color: #555;
+}
+
+.map-controls button:first-child{
+    border-radius: 4px 4px 0 0;
+}
+
+.map-controls button:last-child{
+    border-radius: 0 0 4px 4px;
+    border-top: none;
+}
+
+
+.verification-message{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 10px;
+    padding: 9px;
+
+    border: 1px solid #dcefe3;
+    background: #f3fbf6;
+
+    border-radius: 6px;
+}
+
+.verification-icon{
+    width: 18px;
+    height: 18px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #18a957;
+    color: #fff;
+
+    font-size: 10px;
+}
+
+.verification-message strong{
+    display: block;
+
+    font-size: 9px;
+    color: #188c4a;
+}
+
+.verification-message p{
+    margin: 2px 0 0;
+
+    font-size: 8px;
+    color: #68727b;
+}
+
+
+
+.location-details{
+    margin-top: 12px;
+}
+
+.detail-row{
+    display: grid;
+    grid-template-columns: 125px 1fr auto;
+
+    gap: 10px;
+
+    padding: 5px 0;
+
+    font-size: 8px;
+
+    border-bottom: 1px solid #f0f1f2;
+}
+
+.detail-row:last-child{
+    border-bottom: none;
+}
+
+.detail-row strong{
+    color: #263445;
+}
+
+.detail-row span{
+    color: #69727c;
+}
+
+.detail-row a{
+    color: #1769e0;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.detail-row a:hover{
+    text-decoration: underline;
+}
+
+
+/* Attendance part end */
+
+
+/* Footer part start */
+#footer{
+    text-align: center;
+    color: var(--beige-color);
+    background-color: var(--blue-color);
+    padding: 10px 0;
+}
+/* Footer part end */
+

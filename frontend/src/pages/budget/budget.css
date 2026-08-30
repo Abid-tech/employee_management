@@ -1,0 +1,470 @@
+/* ---------------------------------------------------------------------------
+   Project Budget Tracker. Every rule scoped under .bud, alongside .m3, .perf
+   and .fb — four modules, four stylesheets, none of them able to reach into
+   Bootstrap or into each other.
+   --------------------------------------------------------------------------- */
+
+.bud {
+    --b-navy: #0A2947;
+    --b-cream: #F3E4C9;
+    --b-sage: #D3D4C0;
+    --b-clay: #8B5E3C;
+
+    --b-void: #061A2E;
+    --b-canvas: #FFFFFF;
+    --b-surface: #FFFFFF;
+    --b-raise: rgba(10, 41, 71, 0.035);
+    --b-raise-2: rgba(10, 41, 71, 0.075);
+    --b-line: rgba(10, 41, 71, 0.11);
+    --b-line-2: rgba(10, 41, 71, 0.18);
+
+    --b-green: #2E7D6F;
+    --b-gold: #B87333;
+    --b-rose: #B3402F;
+    --b-blue: #2C6E9B;
+
+    --b-text: #0A2947;
+    --b-soft: #40566B;
+    --b-muted: #6B7C8C;
+    --b-on-dark: #F3E4C9;
+
+    --b-r: 6px;
+    --b-r-sm: 4px;
+    --b-pad-cap: 12px 20px;
+    --b-pad: 20px;
+    --b-font: var(--font-family, "Montserrat", sans-serif);
+    --b-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+
+    min-height: 100%;
+    padding: 20px;
+    font-family: var(--b-font);
+    font-size: 14px;
+    color: var(--b-soft);
+    line-height: 1.5;
+    background: var(--b-canvas);
+}
+
+.bud *, .bud *::before, .bud *::after { box-sizing: border-box; }
+.bud .bd-mono { font-family: var(--b-mono); font-variant-numeric: tabular-nums; }
+body:has(.bud) #footer { display: none; }
+
+/* --- Shell ---------------------------------------------------------------- */
+
+.bud .bd-wrap { max-width: 1320px; margin: 0 auto; }
+.bud .bd-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.bud .bd-brand { display: flex; align-items: center; gap: 13px; }
+
+.bud .bd-logo {
+    width: 42px; height: 42px; border-radius: var(--b-r); display: grid; place-items: center; flex: none;
+    color: var(--b-on-dark); background: var(--b-navy);
+}
+.bud .bd-logo svg { display: block; }
+.bud .bd-brand h1 { margin: 0; font-size: 20px; font-weight: 700; color: var(--b-text); letter-spacing: 0; }
+.bud .bd-brand > div > span { display: block; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--b-muted); margin-top: 2px; }
+
+.bud .bd-tabs { display: inline-flex; gap: 3px; padding: 3px; background: var(--b-surface); border: 1px solid var(--b-line); border-radius: var(--b-r); flex-wrap: wrap; }
+.bud .bd-tabs a { font-size: 13px; font-weight: 500; color: var(--b-muted); padding: 6px 14px; border-radius: var(--b-r-sm); text-decoration: none; white-space: nowrap; }
+.bud .bd-tabs a:hover { color: var(--b-text); background: var(--b-raise); }
+.bud .bd-tabs a.on { background: var(--b-navy); color: var(--b-on-dark); font-weight: 600; }
+
+.bud .bd-ctx { font-size: 12.5px; color: var(--b-muted); margin-bottom: 14px; }
+
+/* --- Grid + card ---------------------------------------------------------- */
+
+.bud .bd-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
+.bud .s4 { grid-column: span 4; } .bud .s5 { grid-column: span 5; }
+.bud .s6 { grid-column: span 6; } .bud .s7 { grid-column: span 7; }
+.bud .s8 { grid-column: span 8; } .bud .s12 { grid-column: span 12; }
+
+.bud .bd-card {
+    background: var(--b-surface);
+    border: 1px solid var(--b-line); border-radius: var(--b-r); padding: var(--b-pad);
+    box-shadow: none;
+    position: relative; overflow: hidden; min-width: 0;
+}
+
+.bud .bd-lbl { font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--b-text); font-weight: 600; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.bud .bd-sub { font-size: 13px; color: var(--b-muted); margin: 6px 0 0; line-height: 1.5; }
+
+.bud .bd-pill { font-size: 12px; font-weight: 500; padding: 5px 9px; border-radius: var(--b-r-sm); line-height: 1; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.bud .bd-pill.navy { background: rgba(10, 41, 71, .1); color: var(--b-navy); }
+.bud .bd-pill.green { background: rgba(46, 125, 111, .13); color: var(--b-green); }
+.bud .bd-pill.gold { background: rgba(139, 94, 60, .14); color: var(--b-clay); }
+.bud .bd-pill.rose { background: rgba(179, 64, 47, .13); color: var(--b-rose); }
+.bud .bd-pill.plain { background: var(--b-raise-2); color: var(--b-soft); }
+
+/* --- The forecast hero ---------------------------------------------------- */
+
+/* The headline is the prediction, not the percentage. Dark field, because it is
+   the one number the page exists to deliver. */
+.bud .bd-hero {
+    grid-column: span 12;
+    border-radius: var(--b-r);
+    padding: 22px 24px 20px;
+    color: var(--b-on-dark);
+    background: var(--b-navy);
+    box-shadow: none;
+    position: relative; overflow: hidden;
+}
+.bud .bd-hero.over { background: #5C2418; }
+
+.bud .bd-hero .h-eyebrow { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(243, 228, 201, .62); font-weight: 600; }
+.bud .bd-hero .h-main { display: flex; align-items: flex-end; gap: 30px; flex-wrap: wrap; margin-top: 12px; }
+
+.bud .bd-hero .h-num {
+    font-size: clamp(40px, 6.5vw, 60px); font-weight: 700; letter-spacing: -.035em;
+    line-height: .9; color: var(--b-cream); font-variant-numeric: tabular-nums;
+}
+.bud .bd-hero .h-range { font-size: 13px; color: rgba(243, 228, 201, .7); margin-top: 8px; font-family: var(--b-mono); }
+.bud .bd-hero .h-verdict {
+    font-size: 12px; letter-spacing: 0; text-transform: none; font-weight: 600;
+    padding: 5px 10px; border-radius: var(--b-r-sm); align-self: center; line-height: 1;
+    background: var(--b-cream); color: var(--b-void);
+}
+.bud .bd-hero .h-verdict.over { background: var(--b-rose); color: #fff; }
+.bud .bd-hero .h-verdict.watch { background: var(--b-clay); color: var(--b-cream); }
+
+.bud .bd-hero .h-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)); gap: 10px 24px; flex: 1; min-width: 240px; }
+.bud .bd-hero .h-stat { border-left: 1px solid rgba(243, 228, 201, .18); padding-left: 12px; }
+.bud .bd-hero .h-stat .s-n { display: block; font-size: 20px; font-weight: 700; letter-spacing: -.03em; color: var(--b-cream); font-variant-numeric: tabular-nums; }
+.bud .bd-hero .h-stat .s-l { display: block; font-size: 10px; color: rgba(243, 228, 201, .58); margin-top: 2px; line-height: 1.4; }
+
+.bud .bd-hero .h-foot { margin-top: 16px; padding-top: 13px; border-top: 1px solid rgba(243, 228, 201, .14); font-size: 11.5px; color: rgba(243, 228, 201, .72); line-height: 1.55; }
+.bud .bd-hero .h-foot b { color: var(--b-cream); }
+
+/* --- The forecast bar ----------------------------------------------------- */
+
+.bud .bd-fbar { margin-top: 14px; }
+.bud .bd-fbar .fb-track { position: relative; height: 26px; border-radius: var(--b-r); background: var(--b-sage); overflow: visible; }
+
+.bud .bd-fbar .fb-range { position: absolute; top: 0; bottom: 0; background: rgba(139, 94, 60, .28); border-radius: 4px; }
+.bud .bd-fbar .fb-spent { position: absolute; top: 0; bottom: 0; left: 0; border-radius: 6px 3px 3px 6px; background: var(--b-navy); }
+.bud .bd-fbar .fb-spent.over { background: var(--b-rose); }
+
+.bud .bd-fbar .fb-proj { position: absolute; top: -6px; bottom: -6px; width: 0; }
+.bud .bd-fbar .fb-proj i { position: absolute; inset: 0; width: 3px; margin-left: -1.5px; border-radius: 100px; background: var(--b-clay); }
+.bud .bd-fbar .fb-proj.over i { background: var(--b-rose); }
+
+.bud .bd-fbar .fb-cap { position: absolute; top: -9px; bottom: -9px; width: 0; }
+.bud .bd-fbar .fb-cap i { position: absolute; inset: 0; width: 2px; margin-left: -1px; background: repeating-linear-gradient(180deg, var(--b-rose) 0 4px, transparent 4px 8px); }
+
+.bud .bd-fbar .fb-key { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; font-size: 11px; color: var(--b-muted); }
+.bud .bd-fbar .fb-key .k { display: inline-flex; align-items: center; gap: 6px; }
+.bud .bd-fbar .fb-key .sw { width: 11px; height: 11px; border-radius: 3px; display: block; }
+.bud .bd-fbar .fb-key .sw.spent { background: var(--b-navy); }
+.bud .bd-fbar .fb-key .sw.range { background: rgba(139, 94, 60, .4); }
+.bud .bd-fbar .fb-key .sw.proj { background: var(--b-clay); }
+.bud .bd-fbar .fb-key .sw.proj.over { background: var(--b-rose); }
+.bud .bd-fbar .fb-key .sw.cap { background: repeating-linear-gradient(180deg, var(--b-rose) 0 3px, transparent 3px 6px); }
+
+/* --- Burn chart ----------------------------------------------------------- */
+
+.bud .bd-burn { width: 100%; height: auto; display: block; margin-top: 8px; }
+.bud .bd-axis { font-size: 9.5px; fill: var(--b-muted); font-family: var(--b-mono); }
+
+/* --- Narration ------------------------------------------------------------ */
+
+.bud .bd-note {
+    border: 1px solid var(--b-line); border-left: 3px solid var(--b-muted);
+    border-radius: var(--b-r); padding: 11px 13px; margin-top: 9px; background: var(--b-raise);
+}
+.bud .bd-note.bad { border-left-color: var(--b-rose); background: rgba(179, 64, 47, .05); }
+.bud .bd-note.warn { border-left-color: var(--b-clay); }
+.bud .bd-note.good { border-left-color: var(--b-green); }
+.bud .bd-note.info { border-left-color: var(--b-blue); }
+.bud .bd-note .n-h { display: block; font-size: 12.5px; font-weight: 650; color: var(--b-text); }
+.bud .bd-note .n-d { display: block; font-size: 11.5px; color: var(--b-soft); margin-top: 4px; line-height: 1.55; }
+
+/* --- Rows, avatars, tables ------------------------------------------------ */
+
+.bud .bd-av { border-radius: 50%; display: grid; place-items: center; flex: none; font-weight: 700; color: #fff; text-transform: uppercase; border: 1px solid var(--b-line-2); }
+.bud .bd-av.sm { width: 26px; height: 26px; font-size: 9px; }
+.bud .bd-av.md { width: 34px; height: 34px; font-size: 11px; }
+
+.bud .bd-row { display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-bottom: 1px solid var(--b-line); text-decoration: none; color: inherit; border-radius: var(--b-r); }
+.bud .bd-row:last-child { border-bottom: 0; }
+.bud .bd-row:hover { background: var(--b-raise-2); }
+.bud .bd-row .r-b { min-width: 0; flex: 1; }
+.bud .bd-row .r-t { font-size: 13px; font-weight: 500; color: var(--b-text); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.bud .bd-row .r-s { font-size: 12px; color: var(--b-muted); margin-top: 2px; }
+.bud .bd-row .r-r { margin-left: auto; text-align: right; white-space: nowrap; font-family: var(--b-mono); }
+
+.bud .bd-tablewrap { overflow-x: auto; margin-top: 12px; border: 1px solid var(--b-line); border-radius: var(--b-r); }
+.bud table.bd-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
+.bud .bd-table th { text-align: left; font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--b-text); font-weight: 600; padding: 12px 16px; background: var(--b-surface); border-bottom: 1px solid var(--b-line); white-space: nowrap; }
+.bud .bd-table td { padding: 12px 16px; border-bottom: 1px solid var(--b-line); color: var(--b-soft); }
+.bud .bd-table tbody tr:last-child td { border-bottom: 0; }
+.bud .bd-table tbody tr:hover td { background: var(--b-raise); color: var(--b-text); }
+.bud .bd-table td.num { font-family: var(--b-mono); text-align: right; }
+.bud .bd-table td.now { color: var(--b-navy); font-weight: 600; }
+
+/* --- Forms + buttons ------------------------------------------------------ */
+
+.bud .bd-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 12px; }
+.bud .bd-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.bud .bd-field label { font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--b-muted); font-weight: 500; }
+.bud .bd-field input, .bud .bd-field select, .bud .bd-field textarea {
+    font: inherit; font-size: 13px; color: var(--b-text); background: var(--b-surface);
+    border: 1px solid var(--b-line); border-radius: var(--b-r-sm); padding: 8px 11px; width: 100%; min-width: 0;
+}
+.bud .bd-field input:focus, .bud .bd-field select:focus { outline: none; border-color: var(--b-navy); box-shadow: 0 0 0 2px rgba(10, 41, 71, .08); }
+.bud .bd-hint { font-size: 12px; color: var(--b-muted); }
+
+.bud .bd-btn {
+    font: inherit; font-size: 13px; font-weight: 600; border: 1px solid var(--b-navy);
+    border-radius: var(--b-r-sm); line-height: 1.5;
+    padding: 7px 14px; cursor: pointer; color: var(--b-on-dark);
+    background: var(--b-navy);
+    text-decoration: none; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+    transition: background .14s ease, border-color .14s ease, color .14s ease;
+}
+.bud .bd-btn:hover { background: var(--b-clay); border-color: var(--b-clay); color: #fff; }
+.bud .bd-btn:disabled { opacity: .45; cursor: not-allowed; }
+.bud .bd-btn.ghost { background: var(--b-surface); color: var(--b-text); border-color: var(--b-line); }
+.bud .bd-btn.ghost:hover { background: var(--b-raise); border-color: var(--b-line-2); color: var(--b-text); }
+.bud .bd-btn.go { background: var(--b-green); border-color: var(--b-green); }
+.bud .bd-btn.stop { background: var(--b-rose); border-color: var(--b-rose); }
+.bud .bd-btn.sm { font-size: 12px; padding: 4px 10px; }
+
+/* --- Live shift ----------------------------------------------------------- */
+
+.bud .bd-live {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding: 15px 17px; border-radius: var(--b-r); margin-top: 12px;
+    background: var(--b-navy); color: var(--b-on-dark);
+}
+.bud .bd-live .l-dot { width: 10px; height: 10px; border-radius: 50%; background: #4ADE80; box-shadow: 0 0 0 0 rgba(74, 222, 128, .7); animation: bd-pulse 2s infinite; }
+@keyframes bd-pulse { 70% { box-shadow: 0 0 0 9px rgba(74, 222, 128, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); } }
+.bud .bd-live .l-time { font-family: var(--b-mono); font-size: 26px; font-weight: 700; letter-spacing: -.02em; }
+.bud .bd-live .l-what { font-size: 12px; color: rgba(243, 228, 201, .75); }
+
+/* --- Advisor: metric-led suggestion cards --------------------------------- */
+
+/* A suggestion is read in a second or not at all. The figure carries it; the
+   sentence explains it; the reasoning only appears if asked for. Four
+   paragraphs of prose in a row is a document, not an interface. */
+.bud .bd-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 12px; margin-top: 12px; }
+
+.bud .bd-sug {
+    border: 1px solid var(--b-line);
+    border-radius: var(--b-r);
+    padding: 15px 16px 13px;
+    background: var(--b-surface);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: border-color .16s ease;
+}
+.bud .bd-sug:hover { border-color: var(--b-line-2); }
+
+.bud .bd-sug::before {
+    content: ""; position: absolute; inset: 0 0 auto 0; height: 3px;
+    background: var(--b-navy);
+}
+.bud .bd-sug.high::before { background: var(--b-rose); }
+.bud .bd-sug.medium::before { background: var(--b-clay); }
+.bud .bd-sug.low::before { background: var(--b-blue); }
+.bud .bd-sug.good::before { background: var(--b-green); }
+
+.bud .bd-sug .s-top { display: flex; align-items: center; gap: 8px; }
+.bud .bd-sug .s-ic {
+    width: 30px; height: 30px; border-radius: var(--b-r); display: grid; place-items: center; flex: none;
+    background: var(--b-raise-2); color: var(--b-navy);
+}
+.bud .bd-sug.high .s-ic { background: rgba(179, 64, 47, .12); color: var(--b-rose); }
+.bud .bd-sug.medium .s-ic { background: rgba(139, 94, 60, .13); color: var(--b-clay); }
+.bud .bd-sug.low .s-ic { background: rgba(44, 110, 155, .12); color: var(--b-blue); }
+
+.bud .bd-sug .s-when {
+    margin-left: auto; font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+    font-weight: 700; color: var(--b-muted);
+}
+
+/* The figure. Big enough to be the thing you see first. */
+.bud .bd-sug .s-metric {
+    font-size: 30px; font-weight: 700; letter-spacing: -.03em; line-height: 1.05;
+    color: var(--b-text); font-variant-numeric: tabular-nums; margin-top: 6px;
+}
+.bud .bd-sug.high .s-metric { color: var(--b-rose); }
+.bud .bd-sug .s-metric small { font-size: 15px; font-weight: 600; letter-spacing: 0; }
+.bud .bd-sug .s-unit { font-size: 10.5px; color: var(--b-muted); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
+
+.bud .bd-sug .s-head { font-size: 14px; font-weight: 600; color: var(--b-text); margin-top: 8px; line-height: 1.35; }
+
+.bud .bd-sug .s-why {
+    font: inherit; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--b-navy); background: none; border: 0; padding: 8px 0 0; cursor: pointer; text-align: left;
+}
+.bud .bd-sug .s-detail {
+    font-size: 11.5px; color: var(--b-soft); line-height: 1.55;
+    margin-top: 6px; padding-top: 9px; border-top: 1px solid var(--b-line);
+}
+
+/* --- Advisor: estimate calibration chart ---------------------------------- */
+
+/* A divergent bar around 1.0×. Everything to the right of the centre line is a
+   department whose budgets start short; everything to the left is padding.
+   The table underneath still has the numbers — this is for reading the shape. */
+.bud .bd-cal { margin-top: 14px; }
+.bud .bd-cal .c-row { display: grid; grid-template-columns: 118px 1fr 58px; gap: 10px; align-items: center; padding: 7px 0; }
+.bud .bd-cal .c-name { font-size: 12px; color: var(--b-text); }
+.bud .bd-cal .c-name small { display: block; font-size: 9.5px; color: var(--b-muted); }
+
+.bud .bd-cal .c-track { position: relative; height: 22px; background: var(--b-raise); border-radius: 6px; overflow: hidden; }
+.bud .bd-cal .c-mid { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: var(--b-line-2); z-index: 2; }
+.bud .bd-cal .c-fill { position: absolute; top: 4px; bottom: 4px; border-radius: 4px; }
+.bud .bd-cal .c-fill.under { background: var(--b-clay); }
+.bud .bd-cal .c-fill.over { background: var(--b-blue); }
+.bud .bd-cal .c-fill.close { background: var(--b-green); }
+.bud .bd-cal .c-tail { position: absolute; top: 8px; bottom: 8px; background: repeating-linear-gradient(90deg, rgba(179,64,47,.5) 0 3px, transparent 3px 6px); border-radius: 2px; }
+
+.bud .bd-cal .c-val { text-align: right; font-family: var(--b-mono); font-size: 12.5px; font-weight: 700; color: var(--b-text); }
+.bud .bd-cal .c-val small { display: block; font-size: 9.5px; font-weight: 400; color: var(--b-muted); }
+.bud .bd-cal .c-scale { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--b-muted); margin-top: 4px; padding-left: 128px; }
+
+/* --- Advisor: the budget ladder ------------------------------------------- */
+
+.bud .bd-ladder { margin-top: 14px; display: grid; gap: 9px; }
+.bud .bd-ladder .l-row { display: grid; grid-template-columns: 104px 1fr 88px; gap: 10px; align-items: center; }
+.bud .bd-ladder .l-name { font-size: 11px; color: var(--b-muted); text-transform: uppercase; letter-spacing: .07em; font-weight: 700; }
+.bud .bd-ladder .l-track { height: 20px; background: var(--b-raise); border-radius: 6px; overflow: hidden; }
+.bud .bd-ladder .l-fill { display: block; height: 100%; border-radius: 6px; }
+.bud .bd-ladder .l-fill.raw { background: var(--b-line-2); }
+.bud .bd-ladder .l-fill.expected { background: var(--b-navy); }
+.bud .bd-ladder .l-fill.recommended { background: var(--b-green); }
+.bud .bd-ladder .l-fill.worst { background: repeating-linear-gradient(90deg, rgba(179,64,47,.55) 0 5px, rgba(179,64,47,.2) 5px 10px); }
+.bud .bd-ladder .l-val { text-align: right; font-family: var(--b-mono); font-size: 12.5px; font-weight: 700; color: var(--b-text); }
+.bud .bd-ladder .l-row.pick .l-name, .bud .bd-ladder .l-row.pick .l-val { color: var(--b-green); }
+
+/* --- States --------------------------------------------------------------- */
+
+.bud .bd-state { text-align: center; padding: 34px 20px; color: var(--b-muted); font-size: 13px; }
+.bud .bd-err { background: rgba(179, 64, 47, .1); border: 1px solid rgba(179, 64, 47, .32); color: #8C3323; border-radius: var(--b-r); padding: 12px 15px; font-size: 12.5px; margin-bottom: 14px; }
+.bud .bd-ok { background: rgba(46, 125, 111, .1); border: 1px solid rgba(46, 125, 111, .3); color: #1F5A50; border-radius: var(--b-r); padding: 12px 15px; font-size: 12.5px; margin-bottom: 14px; }
+.bud .bd-skel { background: linear-gradient(90deg, var(--b-raise) 25%, var(--b-raise-2) 50%, var(--b-raise) 75%); background-size: 200% 100%; border-radius: var(--b-r); animation: bd-shim 1.4s ease-in-out infinite; }
+@keyframes bd-shim { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.bud .bd-back { font-size: 12px; background: var(--b-raise-2); border: 1px solid var(--b-line-2); color: var(--b-soft); border-radius: var(--b-r); padding: 8px 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+
+/* --- Drill-downs ----------------------------------------------------------
+   Every headline figure on this module is a sum, and every table row is a
+   summary. A number a reader cannot take apart is a number they have to take on
+   trust — so the stats, the cards, the bars and the rows all open. These rules
+   are what makes "this is openable" visible before the click rather than after.
+   --------------------------------------------------------------------------- */
+
+/* The four hero stats, as buttons. */
+.bud .bd-hero .h-stat {
+    font: inherit; color: inherit; text-align: left; width: 100%;
+    background: none; border: 0; border-left: 1px solid rgba(243, 228, 201, .18);
+    padding: 2px 6px 2px 12px; margin: -2px 0; border-radius: 0 var(--b-r) var(--b-r) 0;
+    cursor: pointer; display: block;
+    transition: background .14s ease;
+}
+.bud .bd-hero .h-stat:hover, .bud .bd-hero .h-stat.on { background: rgba(243, 228, 201, .1); }
+.bud .bd-hero .h-stat:focus-visible { outline: 2px solid var(--b-cream); outline-offset: 2px; }
+.bud .bd-hero .h-stat .s-more {
+    display: block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+    font-weight: 700; color: rgba(243, 228, 201, .45); margin-top: 4px;
+}
+.bud .bd-hero .h-stat:hover .s-more, .bud .bd-hero .h-stat.on .s-more { color: var(--b-cream); }
+
+/* The panel they open. Deliberately a light surface inside the dark hero: the
+   contents are rows, labels and prose that the rest of the module already
+   styles for a light background, and re-colouring all of it for the dark field
+   would be four times the CSS for a worse read. */
+.bud .bd-hero .h-drill {
+    margin-top: 16px; padding: 14px 16px 12px; border-radius: var(--b-r);
+    background: var(--b-surface); color: var(--b-text);
+    box-shadow: none;
+}
+.bud .h-drill .d-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.bud .h-drill .d-title { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--b-muted); font-weight: 700; }
+.bud .h-drill .d-close {
+    font: inherit; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    background: var(--b-raise-2); border: 1px solid var(--b-line); border-radius: var(--b-r);
+    color: var(--b-soft); padding: 5px 11px; cursor: pointer;
+}
+.bud .h-drill .d-close:hover { color: var(--b-text); }
+.bud .h-drill .d-note { font-size: 11.5px; color: var(--b-muted); line-height: 1.55; margin: 8px 0 0; }
+.bud .h-drill .d-empty { font-size: 12.5px; color: var(--b-muted); padding: 18px 0 8px; }
+
+.bud .h-drill .d-rows { margin-top: 10px; }
+.bud .h-drill .d-row {
+    display: grid; grid-template-columns: minmax(0, 1fr) 120px 118px; gap: 12px; align-items: center;
+    padding: 9px 8px; border-bottom: 1px solid var(--b-line); border-radius: var(--b-r);
+    text-decoration: none; color: inherit;
+}
+.bud .h-drill .d-row:last-child { border-bottom: 0; }
+.bud .h-drill .d-row:hover { background: var(--b-raise-2); }
+.bud .h-drill .d-name { font-size: 12.5px; color: var(--b-text); min-width: 0; }
+.bud .h-drill .d-name small { display: block; font-size: 10.5px; color: var(--b-muted); margin-top: 2px; }
+.bud .h-drill .d-bar { height: 8px; border-radius: 5px; background: var(--b-raise-2); overflow: hidden; }
+.bud .h-drill .d-bar i { display: block; height: 100%; border-radius: 5px; background: var(--b-navy); }
+.bud .h-drill .d-bar i.neg { background: var(--b-rose); }
+.bud .h-drill .d-val { text-align: right; font-family: var(--b-mono); font-size: 12.5px; font-weight: 700; color: var(--b-text); }
+
+/* A project card is the target, not just the link inside it. */
+.bud .bd-card.clickable { cursor: pointer; transition: border-color .16s ease, background .16s ease; }
+.bud .bd-card.clickable:hover { border-color: var(--b-line-2); background: #FCFCFB; }
+.bud .bd-card.clickable:focus-visible { outline: 2px solid var(--b-navy); outline-offset: 2px; }
+
+/* Rows and table rows that open. */
+.bud .bd-row.expandable { cursor: pointer; }
+.bud .bd-row.expandable:focus-visible { outline: 2px solid var(--b-navy); outline-offset: -2px; }
+.bud .bd-row .r-chev { color: var(--b-muted); display: flex; transition: transform .16s ease; }
+.bud .bd-row.expandable.on { background: var(--b-raise-2); border-bottom-color: transparent; }
+.bud .bd-row.expandable.on .r-chev { transform: rotate(90deg); color: var(--b-navy); }
+
+.bud .bd-table tr.expandable { cursor: pointer; }
+.bud .bd-table tr.expandable.on td { background: var(--b-raise-2); color: var(--b-text); }
+.bud .bd-table tr.expandable:focus-visible { outline: 2px solid var(--b-navy); outline-offset: -2px; }
+.bud .bd-table tr.bd-subrow:hover td { background: var(--b-raise); }
+.bud .bd-table tr.bd-subrow > td { padding: 14px 16px 16px; background: var(--b-raise); border-bottom: 1px solid var(--b-line); }
+
+/* The drawer that opens under a row or a bar. */
+.bud .bd-drawer {
+    border: 1px solid var(--b-line); border-left: 3px solid var(--b-navy);
+    border-radius: var(--b-r); padding: 13px 15px; margin: 0 0 10px; background: var(--b-raise);
+}
+
+.bud .dr-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 12px 18px; margin-top: 12px; }
+.bud .dr-fact .f-n { display: block; font-size: 17px; font-weight: 700; letter-spacing: -.025em; color: var(--b-text); font-variant-numeric: tabular-nums; }
+.bud .dr-fact .f-l { display: block; font-size: 10px; color: var(--b-muted); margin-top: 2px; line-height: 1.45; }
+
+.bud .dr-entry { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px 26px; }
+
+/* Spend by quarter of a project's life. Four bars, because the shape is the
+   finding — a number for the last quarter alone cannot show a plan collapsing. */
+.bud .dr-quarters { display: flex; gap: 10px; align-items: flex-end; margin-top: 10px; height: 96px; }
+.bud .dr-quarters .q { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; }
+.bud .dr-quarters .q-track { flex: 1; width: 100%; display: flex; align-items: flex-end; background: var(--b-raise-2); border-radius: 6px; overflow: hidden; }
+.bud .dr-quarters .q-track i { display: block; width: 100%; background: var(--b-navy); border-radius: 6px 6px 0 0; }
+.bud .dr-quarters .q-track i.hot { background: var(--b-rose); }
+.bud .dr-quarters .q-v { font-family: var(--b-mono); font-size: 11px; font-weight: 700; color: var(--b-text); }
+.bud .dr-quarters .q-l { font-size: 9.5px; color: var(--b-muted); text-transform: uppercase; letter-spacing: .08em; }
+
+/* The calibration bars, as buttons. */
+.bud .bd-cal button.c-row {
+    font: inherit; color: inherit; text-align: left; width: 100%;
+    background: none; border: 0; cursor: pointer; border-radius: var(--b-r);
+    padding: 7px 8px; transition: background .14s ease;
+}
+.bud .bd-cal button.c-row:hover, .bud .bd-cal button.c-row.on { background: var(--b-raise-2); }
+.bud .bd-cal button.c-row:focus-visible { outline: 2px solid var(--b-navy); outline-offset: -2px; }
+
+/* --- Responsive ----------------------------------------------------------- */
+
+@media (max-width: 1080px) { .bud .s4, .bud .s5 { grid-column: span 6; } .bud .s7, .bud .s8 { grid-column: span 12; } }
+@media (max-width: 780px) {
+    .bud .s4, .bud .s5, .bud .s6, .bud .s7, .bud .s8 { grid-column: span 12; }
+    .bud .bd-hero .h-main { gap: 18px; }
+    .bud .bd-hero .h-stats { grid-template-columns: repeat(2, 1fr); }
+    .bud .bd-fbar .fb-key { gap: 10px; font-size: 10.5px; }
+    /* The bar in the middle is the first thing worth dropping — the name and
+       the figure both still have to fit. */
+    .bud .h-drill .d-row { grid-template-columns: minmax(0, 1fr) 108px; }
+    .bud .h-drill .d-bar { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .bud *, .bud *::before, .bud *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
