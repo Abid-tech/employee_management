@@ -4,12 +4,12 @@ Sample documents for showing the **Add work → From a document** feature.
 
 | File | Use it for |
 | --- | --- |
-| `courier_brief.md` / `.docx` | A courier tracking platform. Twelve bullets, twelve tasks, all four departments. The cleanest one to demonstrate. |
-| `clinic_brief.md` / `.docx` | A clinic appointment system. Twelve tasks across all four departments. |
-| `project_brief.md` / `.docx` | A supplier portal. Ten tasks. The original sample. |
+| `courier_brief.md` / `.pdf` / `.docx` | A courier tracking platform. Twelve bullets, twelve tasks, all four departments. The cleanest one to demonstrate. |
+| `clinic_brief.md` / `.pdf` / `.docx` | A clinic appointment system. Twelve tasks across all four departments. |
+| `project_brief.md` / `.pdf` / `.docx` | A supplier portal. Ten tasks. The original sample. |
 
-The `.md` file is the source in each case. Rebuild the Word version after
-editing it, or add a PDF if you want one:
+The `.md` file is the source in each case. Regenerate the PDF and Word versions
+after editing it:
 
 ```bash
 node demo/make_demo_files.js clinic_brief
@@ -17,7 +17,7 @@ node demo/make_demo_files.js clinic_brief
 
 Leave the argument off and it rebuilds `project_brief` instead.
 
-## What `courier_brief` should produce
+## What `courier_brief.pdf` should produce
 
 Twelve tasks — **96h estimated, 8 with an owner**:
 
@@ -40,7 +40,7 @@ Note the source has exactly twelve bullets. That is deliberate: the planner caps
 a plan at twelve tasks, so a longer brief would have its tail dropped rather
 than silently producing a list nobody can work through.
 
-## What `clinic_brief` should produce
+## What `clinic_brief.pdf` should produce
 
 Twelve tasks, routed across every department:
 
