@@ -2,9 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { API_BASE } from '../../lib/api_base'
 import './calendar.css'
 
-// The five shared sources plus the private one. Colours are set in the
-// stylesheet against these keys, so a new source needs one entry here and one
-// rule there rather than a change in the grid code.
+// Event sources. Colours for these keys live in the stylesheet.
 const SOURCES = {
     holiday: 'Holiday',
     leave: 'On leave',
@@ -69,10 +67,7 @@ function Calendar() {
     const [saving, setSaving] = useState(false)
     const [copied, setCopied] = useState(false)
 
-    // The grid always shows whole weeks, so it reaches back into the previous
-    // month and forward into the next. Events are fetched for the range on
-    // screen rather than the calendar month, or those edge days would be blank
-    // while still being visible.
+    // Whole weeks, so the grid spills into the neighbouring months.
     const grid = useMemo(() => {
         const first = new Date(year, month, 1)
         const start = new Date(first)
@@ -179,8 +174,7 @@ function Calendar() {
         }
     }
 
-    // An absolute URL, because this is pasted into a calendar application that
-    // has no idea what origin the page was served from.
+    // Absolute, because it is pasted into another calendar application.
     const feedUrl = `${window.location.origin}/api/calendar/holidays.ics`
 
     const copyFeed = async () => {

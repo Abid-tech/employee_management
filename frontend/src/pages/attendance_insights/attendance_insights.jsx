@@ -2,16 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { API_BASE } from '../../lib/api_base'
 import './attendance_insights.css'
 
-// Both charts are drawn from the same clock-in records the attendance page
-// writes, so nothing here has to be kept in step with anything.
+// Both charts read the same clock-in records as the attendance page.
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
-// Five buckets, because more than that stops being readable at 11px squares.
-// Thresholds are hours, chosen around a normal working day rather than by
-// splitting the range evenly — an even split makes every ordinary day the same
-// shade the moment one long day stretches the top of the scale.
+// Five buckets, thresholds set around a normal working day.
 const level = (hours, present) => {
     if (!present) return 0
     if (hours < 2) return 1
@@ -53,9 +49,7 @@ function AttendanceInsights() {
         return () => { cancelled = true }
     }, [])
 
-    // The heatmap is laid out in columns of one week each, so the first column
-    // is padded to put the first day under the right weekday row. Without the
-    // padding every row is a different weekday and the pattern is meaningless.
+    // One column per week; pad the first so weekdays line up.
     const weeks = useMemo(() => {
         if (!data) return []
 
@@ -99,8 +93,7 @@ function AttendanceInsights() {
     const trendMax = useMemo(() => {
         if (!data) return 8
         const highest = Math.max(...(data.trend || []).map((d) => d.hours), 0)
-        // Never scale below a working day, or a single quiet week draws a
-        // two-hour day as a full-height bar and reads as a good week.
+        // Never scale below an eight-hour day.
         return Math.max(highest, 8)
     }, [data])
 

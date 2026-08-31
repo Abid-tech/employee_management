@@ -217,7 +217,7 @@ function App() {
                             }
                         />
 
-                        {/* --- Meetings, resources and assets ------------------------- */}
+                        {/* Meetings, resources and assets */}
                         <Route
                             path='/meeting/create'
                             element={
@@ -275,11 +275,7 @@ function App() {
                             }
                         />
 
-                        {/* --- Calendar and holidays ---------------------------------
-                            Both read data belonging to other people, so both sit behind
-                            a sign-in. The holidays page lets anyone signed in look, and
-                            the API refuses edits from anyone who is not an administrator
-                            or director. */}
+                        {/* Calendar and holidays - both require a sign-in. */}
                         <Route
                             path='/calendar'
                             element={

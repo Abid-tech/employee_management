@@ -14,8 +14,7 @@ const listEvents = async (req, res, next) => {
             })
         }
 
-        // A wide range multiplies five queries by the days in it, so the window
-        // is capped. A month view asks for about 42 days; a year asks for 366.
+        // Cap the window; a wide range multiplies five queries by its length.
         if (calendarService.datesBetween(from, to).length > 400) {
             return res.status(400).json({
                 success: false,
@@ -77,10 +76,7 @@ const createReminder = async (req, res, next) => {
     }
 }
 
-// DELETE /api/calendar/reminders/:id
-//
-// Scoped to the signed-in user in the query itself, so one person cannot delete
-// another's reminder by guessing an id.
+// DELETE /api/calendar/reminders/:id  - scoped to the signed-in user.
 const deleteReminder = async (req, res, next) => {
     try {
         const reminder = await Reminder.findOneAndDelete({
@@ -98,17 +94,12 @@ const deleteReminder = async (req, res, next) => {
     }
 }
 
-// GET /api/calendar/holidays.ics
-//
-// Unauthenticated on purpose: a calendar application fetches a subscription URL
-// with no session, so this can only ever carry what is already common knowledge
-// inside the company. It serves holidays and nothing else.
+// GET /api/calendar/holidays.ics  - public, so it carries holidays only.
 const holidayFeed = async (req, res, next) => {
     try {
         const base = new Date().getFullYear()
 
-        // Last year for context, this year, and two ahead so a subscriber sees
-        // the calendar filling in rather than running out in December.
+        // Last year through two ahead, so the feed does not run out.
         const years = [base - 1, base, base + 1, base + 2]
 
         const ics = await calendarService.holidaysAsIcs({ years })
@@ -116,8 +107,7 @@ const holidayFeed = async (req, res, next) => {
         res.set("Content-Type", "text/calendar; charset=utf-8")
         res.set("Content-Disposition", 'inline; filename="company-holidays.ics"')
 
-        // Calendar clients poll this; an hour keeps them roughly current without
-        // hitting the database on every refresh.
+        // Calendar clients poll this, so cache for an hour.
         res.set("Cache-Control", "public, max-age=3600")
 
         res.send(ics)

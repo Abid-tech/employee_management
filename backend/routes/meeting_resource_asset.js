@@ -1,18 +1,8 @@
 // Meetings, resources and asset management.
 //
-// This is Prohor_Part's module, moved here whole from the server.js it was
-// written in. Two things changed and nothing else:
-//
-//   * its eight `import` lines became `require`, because every other file in
-//     this backend is CommonJS and `"type": "module"` in package.json would
-//     break the other twenty;
-//   * the app setup, the Mongoose connection and the listen call at either end
-//     were dropped, since server.js already does all three. What is left is
-//     wrapped in mount(app, io) and handed the app and the Socket.IO server it
-//     used to create for itself.
-//
-// The routes, the schemas, the signalling and the handlers inside are untouched,
-// so this file still reads as its author wrote it.
+// Moved here from server.js. The imports became require (this backend is
+// CommonJS) and the app setup, DB connection and listen call were dropped,
+// since server.js does all three. Mounted with mount(app, io).
 
 const mongoose = require('mongoose')
 const multer = require('multer')

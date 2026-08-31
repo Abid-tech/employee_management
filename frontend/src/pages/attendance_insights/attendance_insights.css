@@ -1,5 +1,4 @@
-/* Attendance insights — the heatmap and seven-day trend the dashboard
- * requirement asks for. Scoped under .ains, like every other module here. */
+/* Attendance heatmap and seven-day trend. Scoped under .ains. */
 
 .ains {
     --navy: #0A2947;

@@ -4,9 +4,7 @@ const router = express.Router()
 const authMiddleware = require("../middleware/authMiddleware")
 const controller = require("../controller/calendar_controller")
 
-// The subscription feed is mounted before the auth middleware on purpose: a
-// calendar application fetches it with no session. It serves company holidays
-// only — see the controller for why nothing else may go in it.
+// The feed is public: calendar apps fetch it with no session.
 router.get("/holidays.ics", controller.holidayFeed)
 
 router.get("/events", authMiddleware, controller.listEvents)

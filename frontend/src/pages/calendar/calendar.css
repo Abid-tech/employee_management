@@ -1,12 +1,5 @@
-/* Company calendar.
- *
- * Everything is scoped under .cal for the same reason Modules 3 to 6 scope
- * theirs: the app already loads Bootstrap alongside four module stylesheets,
- * and all of them define .card and .btn. Nothing in here may leak.
- *
- * Palette is the team's four brand colours — navy, cream, sage, clay — with the
- * per-source hues chosen to stay distinguishable as 8px dots, which is the
- * smallest they are ever drawn. */
+/* Company calendar. Scoped under .cal so nothing collides with Bootstrap
+ * or the other module stylesheets. */
 
 .cal {
     --navy: #0A2947;

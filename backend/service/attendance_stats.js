@@ -1,17 +1,11 @@
-// Attendance shaped for the two charts the dashboard requirement names: a
-// year-long heatmap and a seven-day trend.
-//
-// Both read the same records the clock-in screen writes, so nothing here has to
-// be kept in step with anything — the charts are a view of the ledger.
+// Attendance shaped for the heatmap and the seven-day trend.
 
 const Attendance = require("../model/attendance")
 
 const pad = (n) => String(n).padStart(2, "0")
 const key = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 
-// Hours between the two stamps. A day clocked in but never clocked out returns
-// null rather than zero, so an open day is drawn as "still in" instead of being
-// averaged in as a day of no work.
+// Hours worked. null means clocked in but not out.
 const hoursWorked = (record) => {
     const start = record.checkIn && record.checkIn.time
     const end = record.checkOut && record.checkOut.time
@@ -23,11 +17,7 @@ const hoursWorked = (record) => {
     return hours > 0 ? Math.round(hours * 100) / 100 : 0
 }
 
-/**
- * One entry per day for the last `days` days, oldest first, including days with
- * no record — a heatmap with gaps knocked out of it is unreadable, and absence
- * is exactly what the chart is meant to show.
- */
+// One entry per day, oldest first, including days with no record.
 const daily = async (userId, days) => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
@@ -64,10 +54,7 @@ const daily = async (userId, days) => {
     return out
 }
 
-/**
- * Everything the dashboard needs in one call: 365 days for the heatmap, the
- * last 7 for the trend, and the headline numbers underneath them.
- */
+// 365 days for the heatmap, the last 7 for the trend, plus totals.
 const summary = async (userId) => {
     const year = await daily(userId, 365)
     const week = year.slice(-7)
@@ -75,9 +62,7 @@ const summary = async (userId) => {
     const presentDays = year.filter((d) => d.present).length
     const totalHours = year.reduce((sum, d) => sum + d.hours, 0)
 
-    // Averaged over days actually attended, not over the whole year — dividing
-    // by 365 would report about two hours a day for a full-time employee and
-    // read as a bug.
+    // Averaged over days attended, not over the whole year.
     const averageHours = presentDays ? totalHours / presentDays : 0
 
     const weekHours = week.reduce((sum, d) => sum + d.hours, 0)

@@ -1,6 +1,4 @@
-/* Company holidays. Scoped under .hol for the same reason the other modules
- * scope theirs — Bootstrap and four module stylesheets all define .card,
- * .btn and .list. */
+/* Company holidays. Scoped under .hol to avoid collisions. */
 
 .hol {
     --navy: #0A2947;

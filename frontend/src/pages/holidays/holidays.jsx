@@ -52,8 +52,7 @@ function Holidays() {
     const [description, setDescription] = useState('')
     const [saving, setSaving] = useState(false)
 
-    // Conflicts for the date currently in the form, looked up as it is typed so
-    // the warning arrives before the save rather than after it.
+    // Conflicts for the date in the form, checked as it is typed.
     const [conflicts, setConflicts] = useState([])
     const [checking, setChecking] = useState(false)
     const [readOnly, setReadOnly] = useState(false)
@@ -96,9 +95,7 @@ function Holidays() {
                     setReadOnly(false)
                 }
             } catch (err) {
-                // A 403 here means this account may read the calendar but not
-                // change it. Say so once, in place, rather than letting the
-                // form look broken.
+                // 403 means this account may read but not write.
                 if (!cancelled && err.message.includes('administrator')) {
                     setReadOnly(true)
                 }
@@ -164,9 +161,7 @@ function Holidays() {
         }
     }
 
-    // The file is read in the browser and its text posted as JSON, so the
-    // endpoint needs no upload handling and the same request works from a
-    // script.
+    // Read in the browser and posted as JSON, so no upload middleware.
     const importCsv = async (event) => {
         const file = event.target.files && event.target.files[0]
         if (!file) return

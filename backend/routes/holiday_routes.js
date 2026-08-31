@@ -4,8 +4,7 @@ const router = express.Router()
 const authMiddleware = require("../middleware/authMiddleware")
 const controller = require("../controller/holiday_controller")
 
-// Everyone signed in can read the holiday list; the controller decides who may
-// change it, so an employee sees the calendar but cannot edit it.
+// Anyone signed in may read; the controller decides who may write.
 router.get("/", authMiddleware, controller.listHolidays)
 router.get("/conflicts", authMiddleware, controller.previewConflicts)
 

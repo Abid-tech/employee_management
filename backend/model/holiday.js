@@ -1,13 +1,6 @@
 const mongoose = require("mongoose")
 
-// Dates are held as 'YYYY-MM-DD' strings rather than Date objects.
-//
-// A company holiday is a calendar day, not an instant. Storing it as a Date
-// means it carries a time and a zone, and a holiday saved in Dhaka reads as the
-// previous day to anyone whose server is behind UTC — the classic off-by-one
-// that makes a holiday land on the wrong date. Room bookings and attendance in
-// this app already key on 'YYYY-MM-DD' for the same reason, so this matches them
-// and the three can be compared without converting anything.
+// Dates are 'YYYY-MM-DD' strings, matching Booking and Attendance.
 const holidaySchema = new mongoose.Schema(
     {
         name: {
@@ -29,9 +22,7 @@ const holidaySchema = new mongoose.Schema(
             default: "Company"
         },
 
-        // Repeats on the same month and day every year. The stored date is the
-        // first occurrence; later years are projected when a year is listed, so
-        // one record covers all of them and editing it corrects every year.
+        // Repeats on the same month and day every year
         recurringAnnually: {
             type: Boolean,
             default: false
@@ -51,8 +42,7 @@ const holidaySchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-// A recurring holiday may share a month and day with a one-off in another year,
-// so the guard is on the exact stored date rather than on the name.
+// One holiday per date.
 holidaySchema.index({ date: 1 }, { unique: true })
 
 module.exports = mongoose.model("Holiday", holidaySchema)

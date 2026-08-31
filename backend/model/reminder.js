@@ -1,10 +1,6 @@
 const mongoose = require("mongoose")
 
-// A personal note pinned to a day on the company calendar.
-//
-// Deliberately private: every query filters by the signed-in user, and reminders
-// never appear in the shared event feed or the subscription feed. The calendar
-// shows company events everyone shares plus whatever this one person added.
+// A personal note pinned to a day on the company calendar
 const reminderSchema = new mongoose.Schema(
     {
         user: {
@@ -21,8 +17,7 @@ const reminderSchema = new mongoose.Schema(
             maxlength: 120
         },
 
-        // Same 'YYYY-MM-DD' convention as Holiday, so a reminder and a holiday
-        // on the same day compare as equal strings.
+        // Same date format as Holiday.
         date: {
             type: String,
             required: true,

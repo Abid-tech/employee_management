@@ -1,28 +1,18 @@
-// Company holidays: listing, recurrence, conflict detection and CSV import.
-//
-// The interesting part is conflict detection. Declaring a day a holiday after
-// people have already planned around it is how a room booking, an approved
-// leave request and a task deadline quietly end up on a day nobody is working.
-// So every save is preceded by a look across the three modules that own those
-// things, and the answer names the affected people rather than just counting.
+// Company holidays: listing, recurrence, conflict detection and CSV import
 
 const Holiday = require("../model/holiday")
 const LeaveManagement = require("../model/leave_management")
 const Booking = require("../model/Booking")
 const Task = require("../model/task")
 
-// Required for its side effect: populating a task's assignee needs the Employee
-// schema registered on mongoose, and depending on some other module having
-// loaded it first makes this service fail or not according to mount order.
+// Registers the Employee schema for populate().
 require("../model/employee")
 
 const DATE = /^\d{4}-\d{2}-\d{2}$/
 
 const isDate = (value) => typeof value === "string" && DATE.test(value)
 
-// Start and end instants of a 'YYYY-MM-DD' day, for the models that store real
-// Dates. Built from the numeric parts rather than by parsing the string, since
-// `new Date('2026-08-29')` is midnight UTC and would shift the window.
+// Start and end of a day, for models storing real Dates.
 const dayWindow = (date) => {
     const [y, m, d] = date.split("-").map(Number)
     return {
@@ -34,14 +24,7 @@ const dayWindow = (date) => {
 const pad = (n) => String(n).padStart(2, "0")
 const toDate = (y, m, d) => `${y}-${pad(m)}-${pad(d)}`
 
-/**
- * Every holiday that falls in `year`, with recurring ones projected onto it.
- *
- * A recurring holiday stored as 2026-12-25 answers for 2027 and 2028 too. The
- * projection carries `occursOn` (the date in the requested year) alongside the
- * stored `date`, so the caller can render the right day while edits and deletes
- * still address the original record.
- */
+// Holidays in `year`, with recurring ones projected onto it.
 const listForYear = async (year) => {
     const holidays = await Holiday.find({}).sort({ date: 1 }).lean()
 
@@ -55,13 +38,9 @@ const listForYear = async (year) => {
             continue
         }
 
-        // Only recurring holidays reach into other years, and only forward —
-        // projecting a 2027 holiday back onto 2026 would invent a day that had
-        // not been declared yet.
+        // Recurring holidays project forward only.
         if (holiday.recurringAnnually && year > y) {
-            // 29 February does not exist in a common year. Falling back to the
-            // 28th keeps the holiday in the same week rather than silently
-            // dropping it, and `adjusted` says so on screen.
+            // 29 Feb falls back to the 28th in a common year.
             const isLeap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0
             const adjusted = m === 2 && d === 29 && !isLeap
 
@@ -77,12 +56,7 @@ const listForYear = async (year) => {
     return out.sort((a, b) => a.occursOn.localeCompare(b.occursOn))
 }
 
-/**
- * What already exists on `date` that declaring a holiday would disrupt.
- *
- * Returns one entry per affected thing, each naming who is affected so the
- * warning can be acted on. An empty list means the day is clear.
- */
+// Bookings, approved leave and task deadlines already on `date`.
 const findConflicts = async (date) => {
     if (!isDate(date)) {
         throw new Error("Date must be written as YYYY-MM-DD.")
@@ -94,8 +68,7 @@ const findConflicts = async (date) => {
         // Room bookings key on the same string, so this is a direct match.
         Booking.find({ date }).lean(),
 
-        // Approved leave only. A pending request is not yet a commitment, and
-        // warning about it would cry wolf on every draft.
+        // Approved leave only; pending is not a commitment.
         LeaveManagement.find({
             status: "Accepted",
             StartDate: { $lte: end },
@@ -134,9 +107,7 @@ const findConflicts = async (date) => {
         })
     }
 
-    // assignee is a reference, so an unassigned task reads as null rather than
-    // as an empty name — it still reports, since a deadline nobody owns landing
-    // on a holiday is exactly the thing worth catching.
+    // assignee is a ref, so an unassigned task reads as null.
     for (const task of tasks) {
         conflicts.push({
             kind: "Task deadline",
@@ -149,11 +120,7 @@ const findConflicts = async (date) => {
     return conflicts
 }
 
-/**
- * The people a conflict list touches, de-duplicated, so the caller can tell
- * them. Names only — this reads from what the conflicting records already
- * carry rather than going back to the user collection for contact details.
- */
+// De-duplicated names from a conflict list.
 const affectedPeople = (conflicts) => {
     const seen = new Set()
 
@@ -166,18 +133,7 @@ const affectedPeople = (conflicts) => {
     return [...seen].sort()
 }
 
-/**
- * Parse a holidays CSV into rows ready to save.
- *
- * Written by hand rather than pulled from a package: the format is four known
- * columns, and the failure that matters is a bad row in the middle of a good
- * file. Every row is reported with its line number and either an error or a
- * value, so the importer can save the good ones and show exactly which lines
- * were rejected instead of failing the whole upload.
- *
- * Accepts an optional header row, quoted fields, and either comma or semicolon
- * separators, because that is what a spreadsheet export actually produces.
- */
+// Parse a holidays CSV. Bad rows are reported, not fatal.
 const parseCsv = (text) => {
     const lines = String(text)
         .replace(/^﻿/, "")            // Excel writes a byte-order mark

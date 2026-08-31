@@ -1,19 +1,11 @@
-// The company calendar: one feed of everything that happens on a date, and an
-// iCalendar file other calendar applications can subscribe to.
-//
-// Nothing here owns any data. Holidays, leave, room bookings, meetings and task
-// deadlines each belong to their own module; this reads all five and returns
-// them in one shape so a single view can draw them. That means the calendar
-// never drifts out of step with the modules — there is nothing to keep in sync.
+// Merged event feed and the iCalendar subscription file.
 
 const LeaveManagement = require("../model/leave_management")
 const Booking = require("../model/Booking")
 const Task = require("../model/task")
 const Reminder = require("../model/reminder")
 
-// Required for their side effect: leave populates a User and task deadlines
-// populate an Employee, so both schemas have to be registered on mongoose no
-// matter which modules happen to have loaded by the time this runs.
+// Registers the User and Employee schemas for populate().
 require("../model/employee")
 require("../model/user")
 const mongoose = require("mongoose")
@@ -51,12 +43,7 @@ const datesBetween = (from, to) => {
     return out
 }
 
-/**
- * Everything happening between two dates, as a flat list of events.
- *
- * `userId` scopes the two personal sources: a person sees their own reminders
- * and nobody else's. The shared sources are the same for everyone.
- */
+// All events between two dates, flattened.
 const eventsBetween = async ({ from, to, userId = null }) => {
     if (!holidayService.isDate(from) || !holidayService.isDate(to)) {
         throw new Error("Both dates must be written as YYYY-MM-DD.")
@@ -70,10 +57,7 @@ const eventsBetween = async ({ from, to, userId = null }) => {
     const years = [...new Set(span.map((d) => Number(d.slice(0, 4))))]
     const holidayLists = await Promise.all(years.map((y) => holidayService.listForYear(y)))
 
-    // The Meeting model lives inside the meeting module, which registers it on
-    // mongoose at mount time. Reading it from the registry rather than requiring
-    // that file keeps this service from depending on it — if meetings are ever
-    // unmounted the calendar loses a source instead of failing to load.
+    // Meeting is registered by its own module; read it from the registry.
     const Meeting = mongoose.models.Meeting || null
 
     const [leaves, bookings, tasks, reminders, meetings] = await Promise.all([
@@ -120,9 +104,7 @@ const eventsBetween = async ({ from, to, userId = null }) => {
         }
     }
 
-    // Leave spans days, so one request becomes an event on each day it covers
-    // that falls inside the window — otherwise a fortnight off shows only on the
-    // day it started.
+    // Leave spans days, so it appears on each day it covers.
     for (const leave of leaves) {
         const person = leave.user
             ? `${leave.user.firstName || ""} ${leave.user.lastName || ""}`.trim()
@@ -184,8 +166,7 @@ const eventsBetween = async ({ from, to, userId = null }) => {
     return events.sort((a, b) => a.date.localeCompare(b.date) || a.source.localeCompare(b.source))
 }
 
-// iCalendar escaping: commas, semicolons and backslashes are separators in the
-// format itself, and a literal newline would end the property.
+// Escape the characters iCalendar treats as separators.
 const escapeText = (value) =>
     String(value)
         .replace(/\\/g, "\\\\")
@@ -193,8 +174,7 @@ const escapeText = (value) =>
         .replace(/,/g, "\\,")
         .replace(/\r?\n/g, "\\n")
 
-// RFC 5545 caps a line at 75 octets and continues it with a leading space.
-// Google rejects feeds that ignore this once a holiday name gets long.
+// RFC 5545 folds lines at 75 octets.
 const fold = (line) => {
     if (line.length <= 75) return line
 
@@ -210,23 +190,11 @@ const fold = (line) => {
     return parts.join("\r\n")
 }
 
-/**
- * Company holidays as an iCalendar feed, for subscribing from Google Calendar,
- * Outlook or Apple Calendar.
- *
- * Holidays only, deliberately: a subscription URL is unauthenticated by
- * necessity — the calendar application fetches it with no session — so it must
- * not carry anything that is not already common knowledge inside the company.
- * Leave, bookings and deadlines stay behind the signed-in API.
- *
- * Recurring holidays are emitted as a single event with an RRULE rather than
- * one copy per year, so a subscriber sees them stretch into the future.
- */
+// Holidays as an iCalendar feed. Holidays only - the URL is public.
 const holidaysAsIcs = async ({ years }) => {
     const lists = await Promise.all(years.map((y) => holidayService.listForYear(y)))
 
-    // A recurring holiday appears once per requested year after projection;
-    // the RRULE covers the repeats, so only its stored occurrence is emitted.
+    // Emit a recurring holiday once, with an RRULE.
     const seen = new Set()
     const rows = []
 
@@ -259,8 +227,7 @@ const holidaysAsIcs = async ({ years }) => {
     for (const holiday of rows) {
         const day = holiday.emitOn.replace(/-/g, "")
 
-        // An all-day event ends on the following day: DTEND is exclusive, and
-        // without the +1 the holiday renders as a zero-length blip.
+        // DTEND is exclusive, so an all-day event ends the next day.
         const [y, m, d] = holiday.emitOn.split("-").map(Number)
         const next = new Date(y, m - 1, d + 1)
         const end = `${next.getFullYear()}${pad(next.getMonth() + 1)}${pad(next.getDate())}`

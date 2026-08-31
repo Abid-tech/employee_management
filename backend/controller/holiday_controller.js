@@ -1,8 +1,7 @@
 const Holiday = require("../model/holiday")
 const holidayService = require("../service/holiday_service")
 
-// Who may change the company calendar. Employees read it; Directors and Admins
-// set it. The role travels in the JWT, so this needs no extra lookup.
+// Roles allowed to change the calendar.
 const MAY_EDIT = ["Admin", "Director"]
 
 const canEdit = (req) => MAY_EDIT.includes(req.user && req.user.role)
@@ -35,10 +34,7 @@ const listHolidays = async (req, res, next) => {
     }
 }
 
-// GET /api/holidays/conflicts?date=2026-12-25
-//
-// Called as the form is filled in, so a conflict is visible before anything is
-// saved rather than reported afterwards.
+// GET /api/holidays/conflicts?date=  - checked as the form is filled in.
 const previewConflicts = async (req, res, next) => {
     try {
         if (!canEdit(req)) return forbidden(res)
@@ -59,11 +55,7 @@ const previewConflicts = async (req, res, next) => {
     }
 }
 
-// POST /api/holidays
-//
-// Saving is never blocked by a conflict — a public holiday is a fact, and the
-// bookings around it are what has to move. The conflicts come back with the
-// created holiday so the administrator can tell the people affected.
+// POST /api/holidays. A conflict warns but never blocks the save. — a public
 const createHoliday = async (req, res, next) => {
     try {
         if (!canEdit(req)) return forbidden(res)
@@ -184,14 +176,7 @@ const deleteHoliday = async (req, res, next) => {
     }
 }
 
-// POST /api/holidays/import   { csv: "name,date,type,recurring\n..." }
-//
-// Takes the file's text rather than a multipart upload: the browser reads the
-// chosen file and posts its contents, which keeps this endpoint free of upload
-// middleware and makes it testable with a plain request.
-//
-// Good rows are saved even when other rows are bad. A spreadsheet with one
-// malformed line should not cost the other forty.
+// POST /api/holidays/import { csv: "name,date,type,recurring\n..." }
 const importHolidays = async (req, res, next) => {
     try {
         if (!canEdit(req)) return forbidden(res)
@@ -226,8 +211,7 @@ const importHolidays = async (req, res, next) => {
             created.push(holiday)
         }
 
-        // Conflicts are reported for the dates that actually saved, so the
-        // import ends with the same warning a single save would have given.
+        // Report conflicts for the dates that saved.
         const conflicts = []
 
         for (const holiday of created) {

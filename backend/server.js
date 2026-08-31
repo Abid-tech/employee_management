@@ -13,10 +13,7 @@ const connectDB = require('./config/db')
 const app = express()
 const PORT = process.env.PORT || 9505
 
-// The meeting module signals over WebSockets, which Express alone cannot carry,
-// so the HTTP server is created here and Socket.IO shares it. On a serverless
-// host this module is imported rather than run, nothing listens, and the socket
-// server simply sits idle — the REST half of every module still works.
+// Socket.IO needs the raw HTTP server; the meeting module signals over it.
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
@@ -99,10 +96,8 @@ app.get('/api/health', async (req, res) => {
 })
 
 // --- Routes ----------------------------------------------------------------
-// Meetings, resources and asset management. Mounted before the rest because the
-// module registers its own upload error handler at the end of its stack, and an
-// error handler only ever sees the routes registered above it — so keeping it
-// here stops it answering for anybody else's uploads.
+// Meetings, resources and assets. Mounted first so its own upload error
+// handler does not catch other modules' uploads.
 require('./routes/meeting_resource_asset')(app, io)
 
 // Room booking
@@ -122,10 +117,7 @@ app.use('/api/tasks', require('./routes/task_routes'))
 app.use('/api/objectives', require('./routes/objective_routes'))
 app.use('/api/ai', require('./routes/ai_routes'))
 
-// Company holidays and the shared calendar. The calendar reads from every
-// other module rather than owning events of its own, so it is mounted after
-// them — the router itself does not care, but the ordering says what depends
-// on what.
+// Company holidays and the shared calendar.
 app.use('/api/holidays', require('./routes/holiday_routes'))
 app.use('/api/calendar', require('./routes/calendar_routes'))
 
