@@ -12,8 +12,7 @@ const ORBITS = [
 const SIZE = 620
 const MAX_RADIUS = SIZE / 2 - 46
 
-// Planet size follows effort, but clamped: one 40-hour task should read as
-// bigger than a 2-hour one without swallowing its neighbours.
+// Planet size follows effort.
 const planetRadius = (hours) => Math.max(14, Math.min(28, 13 + Math.sqrt(Math.max(0, hours)) * 3))
 
 const shortLabel = (title) => {
@@ -36,8 +35,7 @@ export default function SolarSystem({ tasks = [], centreLabel = 'Department', pa
         for (const orbit of ORBITS) {
             const all = open
                 .filter(task => task.priority === orbit.priority)
-                // Soonest deadline first, so anything trimmed by the cap is the
-                // least pressing rather than whichever happened to be last.
+                // Soonest deadline first.
                 .sort((a, b) => (a.daysLeft ?? 999) - (b.daysLeft ?? 999))
 
             const visible = all.slice(0, orbit.cap)
@@ -78,8 +76,7 @@ export default function SolarSystem({ tasks = [], centreLabel = 'Department', pa
     return (
         <div className="solar">
             <div className="solar-stage" style={{ '--size': `${SIZE}px` }}>
-                {/* The rings are HTML rather than SVG so each one can be spun with
-                    a CSS animation, and each planet counter-spun to stay upright. */}
+                {/* The rings are HTML rather than SVG so each one can be spun with a CSS animation. */}
                 {rings.map(ring => (
                     <div
                         key={ring.priority}

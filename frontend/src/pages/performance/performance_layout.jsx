@@ -2,18 +2,7 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import './performance.css'
 import { Icon } from './performance_ui'
 
-// Module 4 renders inside this wrapper, and performance.css is scoped to the
-// .perf class it puts on the page.
-//
-// Same reasoning as Module 3's layout: this app carries more than one design
-// system. Bootstrap and the team's index.css style most pages, Module 3 brings
-// its own tokens under .m3, and this module brings a third set. All three define
-// .card and .btn. Without a wrapper, whichever stylesheet the bundler emitted
-// last would win, and adding performance management would quietly restyle the
-// leave form and the dashboards.
-//
-// Importing the stylesheet here rather than in main.jsx keeps that contained
-// too: nothing loads until a performance route is actually rendered.
+// Module 4 renders inside this wrapper.
 export default function PerformanceLayout() {
     const { pathname } = useLocation()
 
@@ -42,8 +31,7 @@ export default function PerformanceLayout() {
                     </nav>
                 </header>
 
-                {/* A profile is reached from the leaderboard, so it gets no tab of
-                    its own — but the context line should still say where you are. */}
+                {/* A profile is reached from the leaderboard, so it gets no tab of its own. */}
                 <p className="p-ctx">
                     {pathname.includes('/performance/employee')
                         ? <>Individual record</>

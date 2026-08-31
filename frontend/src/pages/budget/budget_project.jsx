@@ -4,13 +4,7 @@ import { budgetApi } from '../../lib/budget_api'
 import { formatDate, money, shortDate } from './budget_format'
 import { Avatar, BurnChart, ForecastBar, Icon, Note } from './budget_ui'
 
-// One project's money, in the order a manager reads it: where it is heading,
-// what changed, then the evidence.
-//
-// The two evidence panels — who the money went on, and the ledger itself — both
-// open. A name and a total answer "who cost the most"; they cannot answer "doing
-// what, at what rate, and how much of it was billable", which is the question
-// that follows every single time.
+// One project's money.
 
 const RATE_SOURCE = {
     entry: 'A rate was agreed on this entry itself, so it overrides both the project rate and the person\'s own.',
@@ -93,8 +87,7 @@ function PersonRow({ person, currency }) {
     )
 }
 
-// One line of the ledger. The table row carries the figures; the drawer carries
-// what the money was actually spent doing and why it was priced the way it was.
+// One line of the ledger.
 function EntryRow({ entry, currency, columns }) {
     const [open, setOpen] = useState(false)
     const margin = Math.round((entry.billed - entry.cost) * 100) / 100
@@ -225,7 +218,7 @@ export default function BudgetProject() {
                 <Link className="bd-back" to="/budget"><Icon name="left" size={13} /> All projects</Link>
             </div>
 
-            {/* ---- Forecast hero ---- */}
+            {/* Forecast hero. */}
             <section className={`bd-hero ${verdict === 'over' ? 'over' : ''}`}>
                 <span className="h-eyebrow">
                     {objective.title}{objective.client ? ` · ${objective.client}` : ''} · forecast from the last {f.windowDays} days
@@ -272,7 +265,7 @@ export default function BudgetProject() {
                 </div>
             </section>
 
-            {/* ---- What changed — pushed, not waiting to be asked ---- */}
+            {/* What changed. */}
             <section className="bd-card s7">
                 <div className="bd-lbl">
                     <span>What changed</span>
@@ -284,7 +277,7 @@ export default function BudgetProject() {
                 {narration.map((note, i) => <Note note={note} key={i} />)}
             </section>
 
-            {/* ---- Budget config ---- */}
+            {/* Budget config. */}
             <section className="bd-card s5">
                 <div className="bd-lbl">
                     <span>Budget</span>
@@ -357,7 +350,7 @@ export default function BudgetProject() {
                 )}
             </section>
 
-            {/* ---- Burn ---- */}
+            {/* Burn. */}
             <section className="bd-card s7">
                 <div className="bd-lbl"><span>Cumulative spend</span><span className="bd-pill plain">{series.length} days with work</span></div>
                 <p className="bd-sub">The slope is the burn rate. A curve that steepens is a project changing pace.</p>
@@ -365,7 +358,7 @@ export default function BudgetProject() {
                 <ForecastBar spent={f.spent} projected={f.projected} low={f.low} high={f.high} total={f.total} currency={cur} />
             </section>
 
-            {/* ---- Who ---- */}
+            {/* Who. */}
             <section className="bd-card s5">
                 <div className="bd-lbl"><span>Where the money went</span><Icon name="users" size={14} /></div>
                 <p className="bd-sub">Open a name for their rate here, what was billable, and what the hours went on.</p>
@@ -376,7 +369,7 @@ export default function BudgetProject() {
                 </div>
             </section>
 
-            {/* ---- Entries ---- */}
+            {/* Entries. */}
             <section className="bd-card s12">
                 <div className="bd-lbl"><span>Recent time entries</span><span className="bd-pill plain">{data.entryCount} total</span></div>
                 <p className="bd-sub">Open a row for the task it was logged against, the note, and the arithmetic that priced it.</p>

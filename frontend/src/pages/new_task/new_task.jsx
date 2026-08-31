@@ -6,10 +6,6 @@ import DocumentImport from './document_import'
 import './new_task.css'
 
 // Page 3 — add a task.
-//
-// The preview on the right is the point: as the priority changes, the planet
-// moves between rings, so somebody setting "critical" can see they are putting
-// the task in the innermost orbit before they save it.
 
 const RING_INFO = {
     critical: { radius: 0.30, label: 'Innermost ring', note: 'Right beside the centre — seen first, every time.' },
@@ -18,10 +14,7 @@ const RING_INFO = {
     low: { radius: 0.92, label: 'Outer ring', note: 'Out at the edge until it becomes more urgent.' }
 }
 
-// department is filled in once the real list arrives. Naming a department here
-// would be a guess about data this file does not own — rename or remove that
-// department and the select would sit on a value with no matching option,
-// showing the first one while the form believes something else.
+// department is filled in once the real list arrives.
 const BLANK = {
     title: '',
     description: '',
@@ -41,23 +34,14 @@ export default function NewTask() {
     const [options, setOptions] = useState({ departments: [], employees: [], objectives: [] })
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState('')
-    // Two ways onto the same page: type one task, or hand over a document and
-    // let the system draft several. A separate page for each would be two
-    // places to look for "add work".
+    // Two ways onto the same page: type one task.
     const [mode, setMode] = useState('single')
 
     useEffect(() => {
         api.options().then(loaded => {
             setOptions(loaded)
 
-            // Settle the department on a real one as soon as the list is known,
-            // so what the select shows and what the form holds are the same
-            // thing from the first render onwards.
-            //
-            // The busiest team is the opening guess, for the same reason the
-            // document import uses it: the list arrives sorted by name, so
-            // taking the first would make the default an alphabetical accident.
-            // It is only a starting point — the select is free either way.
+            // Settle the department on a real one as soon as the list is known.
             const busiest = [...loaded.departments]
                 .sort((a, b) => (b.people || 0) - (a.people || 0))[0]
 
@@ -149,9 +133,7 @@ export default function NewTask() {
                 <DocumentImport
                     departments={options.departments}
                     employees={options.employees}
-                    // Straight to the project when there is one, so the result of
-                    // the import is visible as a whole rather than as a dozen new
-                    // rows scattered across the orbit.
+                    // Straight to the project when there is one.
                     onCreated={(result) => navigate(result?.objectiveId ? `/projects/${result.objectiveId}` : '/tasks')}
                 />
             )}
@@ -207,10 +189,7 @@ export default function NewTask() {
                                 <label htmlFor="assignee">Assign to</label>
                                 <select id="assignee" className="select" value={form.assigneeId} onChange={set('assigneeId')}>
                                     <option value="">Nobody yet</option>
-                                    {/* _id, not id: the options endpoint returns lean
-                                        documents, which carry no virtual id. With an
-                                        undefined value the browser falls back to the
-                                        option's own text and the save fails on a cast. */}
+                                    {/* _id, not id: the options endpoint returns lean documents, which carry no virtual id. */}
                                     {teamForDepartment.map(person => (
                                         <option key={person._id} value={person._id}>{person.name} — {person.jobTitle}</option>
                                     ))}
@@ -313,11 +292,7 @@ export default function NewTask() {
                                 {form.department.split(' ')[0].slice(0, 3)}
                             </span>
 
-                            {/* The planet slides between rings as the priority changes.
-                                Size and offset are set directly rather than through CSS
-                                custom properties: a transition cannot follow a var() the
-                                browser has not been told how to interpolate, so the
-                                planet would keep its first position for ever. */}
+                            {/* The planet slides between rings as the priority changes. */}
                             <span
                                 className={`preview-planet preview-planet-${form.priority}`}
                                 style={{

@@ -1,4 +1,4 @@
-/* --- Mode switch ---------------------------------------------------------- */
+/* Mode switch. */
 
 .mode-switch {
     display: inline-flex;
@@ -58,10 +58,9 @@
 
 /* .form-error now lives in styles/theme.css — three pages show it. */
 
-/* --- Priority picker ------------------------------------------------------ */
+/* Priority picker. */
 
-/* Buttons rather than a dropdown: the choice decides which orbit the task lands
-   in, so all four options stay visible with their colours. */
+/* Buttons rather than a dropdown: the choice decides which orbit the task lands in. */
 .priority-picker { display: flex; gap: 7px; flex-wrap: wrap; }
 
 .priority-option {
@@ -86,7 +85,7 @@
 .priority-medium.priority-on   { background: var(--medium);   border-color: var(--medium);   color: #fff; }
 .priority-low.priority-on      { background: var(--low);      border-color: var(--low);      color: #fff; }
 
-/* --- Preview -------------------------------------------------------------- */
+/* Preview. */
 
 .preview { position: sticky; top: 78px; }
 
@@ -129,8 +128,7 @@
     font-weight: 700;
 }
 
-/* Sliding between rings is the whole point of the preview, so this transition
-   is slower than the rest of the interface — it should be noticed. */
+/* Sliding between rings is the whole point of the preview. */
 .preview-planet {
     position: absolute;
     border-radius: 50%;

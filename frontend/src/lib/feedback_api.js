@@ -1,8 +1,4 @@
 // Employee Feedback & Evaluation talks to the API through here.
-//
-// Its own client rather than an addition to lib/api.js, for the same reason
-// Module 4 has one: this module owns its endpoints end to end, so nothing it
-// changes can break another module's calls.
 
 import { API_BASE } from './api_base'
 const BASE = `${API_BASE}/api/feedback`
@@ -61,8 +57,7 @@ export const feedbackApi = {
 
     calibration: (cycle) => request('/calibration', { params: { cycle } }),
 
-    // Reads the performance module's overview as well as the reviews, so it is
-    // the slowest call in this client by some way.
+    // Reads the performance module's overview as well as the reviews.
     reconciliation: (department) => request('/reconciliation', { params: { department }, timeout: 45000 }),
 
     // The agent reads every submitted review, so this one is allowed longer.

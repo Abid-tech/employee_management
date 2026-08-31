@@ -1,8 +1,4 @@
-/* ---------------------------------------------------------------------------
-   Project Budget Tracker. Every rule scoped under .bud, alongside .m3, .perf
-   and .fb — four modules, four stylesheets, none of them able to reach into
-   Bootstrap or into each other.
-   --------------------------------------------------------------------------- */
+/* Project Budget Tracker. */
 
 .bud {
     --b-navy: #0A2947;
@@ -48,7 +44,7 @@
 .bud .bd-mono { font-family: var(--b-mono); font-variant-numeric: tabular-nums; }
 body:has(.bud) #footer { display: none; }
 
-/* --- Shell ---------------------------------------------------------------- */
+/* Shell. */
 
 .bud .bd-wrap { max-width: 1320px; margin: 0 auto; }
 .bud .bd-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
@@ -69,7 +65,7 @@ body:has(.bud) #footer { display: none; }
 
 .bud .bd-ctx { font-size: 12.5px; color: var(--b-muted); margin-bottom: 14px; }
 
-/* --- Grid + card ---------------------------------------------------------- */
+/* Grid + card. */
 
 .bud .bd-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
 .bud .s4 { grid-column: span 4; } .bud .s5 { grid-column: span 5; }
@@ -93,10 +89,9 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-pill.rose { background: rgba(179, 64, 47, .13); color: var(--b-rose); }
 .bud .bd-pill.plain { background: var(--b-raise-2); color: var(--b-soft); }
 
-/* --- The forecast hero ---------------------------------------------------- */
+/* The forecast hero. */
 
-/* The headline is the prediction, not the percentage. Dark field, because it is
-   the one number the page exists to deliver. */
+/* The headline is the prediction, not the percentage. */
 .bud .bd-hero {
     grid-column: span 12;
     border-radius: var(--b-r);
@@ -132,7 +127,7 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-hero .h-foot { margin-top: 16px; padding-top: 13px; border-top: 1px solid rgba(243, 228, 201, .14); font-size: 11.5px; color: rgba(243, 228, 201, .72); line-height: 1.55; }
 .bud .bd-hero .h-foot b { color: var(--b-cream); }
 
-/* --- The forecast bar ----------------------------------------------------- */
+/* The forecast bar. */
 
 .bud .bd-fbar { margin-top: 14px; }
 .bud .bd-fbar .fb-track { position: relative; height: 26px; border-radius: var(--b-r); background: var(--b-sage); overflow: visible; }
@@ -157,12 +152,12 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-fbar .fb-key .sw.proj.over { background: var(--b-rose); }
 .bud .bd-fbar .fb-key .sw.cap { background: repeating-linear-gradient(180deg, var(--b-rose) 0 3px, transparent 3px 6px); }
 
-/* --- Burn chart ----------------------------------------------------------- */
+/* Burn chart. */
 
 .bud .bd-burn { width: 100%; height: auto; display: block; margin-top: 8px; }
 .bud .bd-axis { font-size: 9.5px; fill: var(--b-muted); font-family: var(--b-mono); }
 
-/* --- Narration ------------------------------------------------------------ */
+/* Narration. */
 
 .bud .bd-note {
     border: 1px solid var(--b-line); border-left: 3px solid var(--b-muted);
@@ -175,7 +170,7 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-note .n-h { display: block; font-size: 12.5px; font-weight: 650; color: var(--b-text); }
 .bud .bd-note .n-d { display: block; font-size: 11.5px; color: var(--b-soft); margin-top: 4px; line-height: 1.55; }
 
-/* --- Rows, avatars, tables ------------------------------------------------ */
+/* Rows. */
 
 .bud .bd-av { border-radius: 50%; display: grid; place-items: center; flex: none; font-weight: 700; color: #fff; text-transform: uppercase; border: 1px solid var(--b-line-2); }
 .bud .bd-av.sm { width: 26px; height: 26px; font-size: 9px; }
@@ -198,7 +193,7 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-table td.num { font-family: var(--b-mono); text-align: right; }
 .bud .bd-table td.now { color: var(--b-navy); font-weight: 600; }
 
-/* --- Forms + buttons ------------------------------------------------------ */
+/* Forms + buttons. */
 
 .bud .bd-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 12px; }
 .bud .bd-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
@@ -226,7 +221,7 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-btn.stop { background: var(--b-rose); border-color: var(--b-rose); }
 .bud .bd-btn.sm { font-size: 12px; padding: 4px 10px; }
 
-/* --- Live shift ----------------------------------------------------------- */
+/* Live shift. */
 
 .bud .bd-live {
     display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
@@ -238,11 +233,9 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-live .l-time { font-family: var(--b-mono); font-size: 26px; font-weight: 700; letter-spacing: -.02em; }
 .bud .bd-live .l-what { font-size: 12px; color: rgba(243, 228, 201, .75); }
 
-/* --- Advisor: metric-led suggestion cards --------------------------------- */
+/* Advisor: metric-led suggestion cards. */
 
-/* A suggestion is read in a second or not at all. The figure carries it; the
-   sentence explains it; the reasoning only appears if asked for. Four
-   paragraphs of prose in a row is a document, not an interface. */
+/* A suggestion is read in a second or not at all. */
 .bud .bd-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr)); gap: 12px; margin-top: 12px; }
 
 .bud .bd-sug {
@@ -282,7 +275,7 @@ body:has(.bud) #footer { display: none; }
     font-weight: 700; color: var(--b-muted);
 }
 
-/* The figure. Big enough to be the thing you see first. */
+/* The figure. */
 .bud .bd-sug .s-metric {
     font-size: 30px; font-weight: 700; letter-spacing: -.03em; line-height: 1.05;
     color: var(--b-text); font-variant-numeric: tabular-nums; margin-top: 6px;
@@ -302,11 +295,9 @@ body:has(.bud) #footer { display: none; }
     margin-top: 6px; padding-top: 9px; border-top: 1px solid var(--b-line);
 }
 
-/* --- Advisor: estimate calibration chart ---------------------------------- */
+/* Advisor: estimate calibration chart. */
 
-/* A divergent bar around 1.0×. Everything to the right of the centre line is a
-   department whose budgets start short; everything to the left is padding.
-   The table underneath still has the numbers — this is for reading the shape. */
+/* A divergent bar around 1.0×. Everything to the right of the centre line is a department. */
 .bud .bd-cal { margin-top: 14px; }
 .bud .bd-cal .c-row { display: grid; grid-template-columns: 118px 1fr 58px; gap: 10px; align-items: center; padding: 7px 0; }
 .bud .bd-cal .c-name { font-size: 12px; color: var(--b-text); }
@@ -324,7 +315,7 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-cal .c-val small { display: block; font-size: 9.5px; font-weight: 400; color: var(--b-muted); }
 .bud .bd-cal .c-scale { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--b-muted); margin-top: 4px; padding-left: 128px; }
 
-/* --- Advisor: the budget ladder ------------------------------------------- */
+/* Advisor: the budget ladder. */
 
 .bud .bd-ladder { margin-top: 14px; display: grid; gap: 9px; }
 .bud .bd-ladder .l-row { display: grid; grid-template-columns: 104px 1fr 88px; gap: 10px; align-items: center; }
@@ -338,7 +329,7 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-ladder .l-val { text-align: right; font-family: var(--b-mono); font-size: 12.5px; font-weight: 700; color: var(--b-text); }
 .bud .bd-ladder .l-row.pick .l-name, .bud .bd-ladder .l-row.pick .l-val { color: var(--b-green); }
 
-/* --- States --------------------------------------------------------------- */
+/* States. */
 
 .bud .bd-state { text-align: center; padding: 34px 20px; color: var(--b-muted); font-size: 13px; }
 .bud .bd-err { background: rgba(179, 64, 47, .1); border: 1px solid rgba(179, 64, 47, .32); color: #8C3323; border-radius: var(--b-r); padding: 12px 15px; font-size: 12.5px; margin-bottom: 14px; }
@@ -347,12 +338,7 @@ body:has(.bud) #footer { display: none; }
 @keyframes bd-shim { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 .bud .bd-back { font-size: 12px; background: var(--b-raise-2); border: 1px solid var(--b-line-2); color: var(--b-soft); border-radius: var(--b-r); padding: 8px 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
 
-/* --- Drill-downs ----------------------------------------------------------
-   Every headline figure on this module is a sum, and every table row is a
-   summary. A number a reader cannot take apart is a number they have to take on
-   trust — so the stats, the cards, the bars and the rows all open. These rules
-   are what makes "this is openable" visible before the click rather than after.
-   --------------------------------------------------------------------------- */
+/* Drill-downs ---------------------------------------------------------- Every headline figure. */
 
 /* The four hero stats, as buttons. */
 .bud .bd-hero .h-stat {
@@ -370,10 +356,7 @@ body:has(.bud) #footer { display: none; }
 }
 .bud .bd-hero .h-stat:hover .s-more, .bud .bd-hero .h-stat.on .s-more { color: var(--b-cream); }
 
-/* The panel they open. Deliberately a light surface inside the dark hero: the
-   contents are rows, labels and prose that the rest of the module already
-   styles for a light background, and re-colouring all of it for the dark field
-   would be four times the CSS for a worse read. */
+/* The panel they open. */
 .bud .bd-hero .h-drill {
     margin-top: 16px; padding: 14px 16px 12px; border-radius: var(--b-r);
     background: var(--b-surface); color: var(--b-text);
@@ -435,8 +418,7 @@ body:has(.bud) #footer { display: none; }
 
 .bud .dr-entry { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px 26px; }
 
-/* Spend by quarter of a project's life. Four bars, because the shape is the
-   finding — a number for the last quarter alone cannot show a plan collapsing. */
+/* Spend by quarter of a project's life. */
 .bud .dr-quarters { display: flex; gap: 10px; align-items: flex-end; margin-top: 10px; height: 96px; }
 .bud .dr-quarters .q { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; }
 .bud .dr-quarters .q-track { flex: 1; width: 100%; display: flex; align-items: flex-end; background: var(--b-raise-2); border-radius: 6px; overflow: hidden; }
@@ -454,7 +436,7 @@ body:has(.bud) #footer { display: none; }
 .bud .bd-cal button.c-row:hover, .bud .bd-cal button.c-row.on { background: var(--b-raise-2); }
 .bud .bd-cal button.c-row:focus-visible { outline: 2px solid var(--b-navy); outline-offset: -2px; }
 
-/* --- Responsive ----------------------------------------------------------- */
+/* Responsive. */
 
 @media (max-width: 1080px) { .bud .s4, .bud .s5 { grid-column: span 6; } .bud .s7, .bud .s8 { grid-column: span 12; } }
 @media (max-width: 780px) {
@@ -462,8 +444,7 @@ body:has(.bud) #footer { display: none; }
     .bud .bd-hero .h-main { gap: 18px; }
     .bud .bd-hero .h-stats { grid-template-columns: repeat(2, 1fr); }
     .bud .bd-fbar .fb-key { gap: 10px; font-size: 10.5px; }
-    /* The bar in the middle is the first thing worth dropping — the name and
-       the figure both still have to fit. */
+    /* The bar in the middle is the first thing worth dropping. */
     .bud .h-drill .d-row { grid-template-columns: minmax(0, 1fr) 108px; }
     .bud .h-drill .d-bar { display: none; }
 }

@@ -11,19 +11,6 @@ const audit = require('./audit_service')
 const { COMPETENCIES } = Review
 
 // The agent that closes the loop.
-//
-// Most feedback tools stop at a summary: "communication came up a few times".
-// The manager then has to remember it, decide what to do, open another module,
-// and type an objective — and usually doesn't. The theme goes nowhere, and the
-// next review cycle raises it again.
-//
-// This reads the reviews, finds themes that keep recurring across *different*
-// reviewers, and drafts the objective or task that would actually address each
-// one — shaped so it can be handed straight to the Task & Objective module.
-//
-// It stops there on purpose. It writes nothing into that module until a named
-// manager approves, because software that steers performance decisions has to
-// keep a human in the loop and be able to show who that human was.
 
 const round = (n, dp = 2) => {
     const f = 10 ** dp
@@ -31,8 +18,7 @@ const round = (n, dp = 2) => {
 }
 const mean = (list) => (list.length ? list.reduce((a, b) => a + b, 0) / list.length : 0)
 
-// A theme has to appear in at least this many separate reviews before it is
-// worth anyone's attention. One reviewer having a bad day is not a pattern.
+// A theme has to appear in at least this many separate reviews before it is worth anyone's.
 const MIN_OCCURRENCES = 3
 
 // Scores at or below this count as a concern on that axis.
@@ -40,8 +26,7 @@ const CONCERN_AT = 3
 
 // --- Theme detection ---------------------------------------------------------
 
-// Keyword sets per competency, used to spot a theme raised in prose even when
-// the reviewer did not mark the matching axis down.
+// Keyword sets per competency.
 const THEME_WORDS = {
     communication: ['communicat', 'unclear', 'update', 'silo', 'inform', 'explain', 'clarity', 'listen', 'writing', 'email', 'standup'],
     collaboration: ['collaborat', 'team', 'help', 'unblock', 'share', 'handover', 'pair', 'support', 'silo'],
@@ -54,8 +39,7 @@ const THEME_WORDS = {
 const textOf = (review) => [review.strengths, review.improvements, review.comment]
     .filter(Boolean).join(' ').toLowerCase()
 
-// Which competencies this one review raises as a concern — either by score, or
-// by what the reviewer wrote in the improvements box.
+// Which competencies this one review raises as a concern.
 const concernsIn = (review) => {
     const found = new Set()
 
@@ -63,9 +47,7 @@ const concernsIn = (review) => {
         if (rating.score <= CONCERN_AT) found.add(rating.competency)
     }
 
-    // Only the improvements text is scanned for keywords. Praise mentioning
-    // "communication" is not a concern about communication, and treating it as
-    // one is how these systems end up flagging the strongest people.
+    // Only the improvements text is scanned for keywords.
     const improvementText = (review.improvements || '').toLowerCase()
     if (improvementText) {
         for (const [competency, words] of Object.entries(THEME_WORDS)) {
@@ -131,10 +113,7 @@ const draftByRules = (competency, employee, occurrences, average) => {
     }
 }
 
-// Gemini writes a better-worded draft when a key is configured, but the *theme*
-// is always detected by the code above. The model is asked to phrase an action,
-// never to decide who has a problem — that judgement stays in rules a person can
-// read and challenge.
+// Gemini writes a better-worded draft when a key is configured.
 const draftByModel = async (competency, employee, evidenceText) => {
     const prompt = [
         `An employee named ${employee.name} (${employee.jobTitle}, ${employee.department}) has had "${labelFor(competency)}" raised as an area to improve across several performance reviews.`,
@@ -181,8 +160,7 @@ const scan = async ({ employee: onlyEmployee } = {}) => {
 
     const reviews = await Review.find(filter).populate('employee', 'name jobTitle department color')
 
-    // Group concerns per employee per competency, counting how many distinct
-    // reviewers raised each one.
+    // Group concerns per employee per competency.
     const buckets = new Map()
 
     for (const review of reviews) {
@@ -202,9 +180,7 @@ const scan = async ({ employee: onlyEmployee } = {}) => {
 
     const existing = await FeedbackSignal.find(onlyEmployee ? { employee: onlyEmployee } : {})
     const seen = new Set(existing.map(s => s.fingerprint))
-    // A theme already approved once should not come straight back as a new
-    // proposal — the manager has acted on it and is waiting to see whether it
-    // worked.
+    // A theme already approved once should not come straight back as a new proposal.
     const settled = new Set(
         existing.filter(s => s.status !== 'proposed').map(s => `${String(s.employee)}::${s.competency}`)
     )
@@ -213,18 +189,10 @@ const scan = async ({ employee: onlyEmployee } = {}) => {
     const usingModel = gemini.isConfigured()
 
     // One person, one objective at a time.
-    //
-    // The first version of this raised every theme that cleared the bar, which
-    // for a struggling employee meant five development objectives landing at
-    // once. That is not a plan, it is a pile — and a manager faced with it acts
-    // on none of them. So the themes are ranked per person and only the
-    // strongest is proposed; once it is approved or dismissed, the next scan is
-    // free to raise the next one.
     const candidates = []
 
     for (const [key, bucket] of buckets) {
-        // Two reviews from the same person is one opinion repeated, so the bar
-        // is distinct reviewers rather than distinct documents.
+        // Two reviews from the same person is one opinion repeated.
         if (bucket.reviewers.size < MIN_OCCURRENCES) continue
         if (settled.has(key)) continue
 
@@ -368,9 +336,7 @@ const listSignals = async ({ status, employee } = {}) => {
     return docs.map(shapeSignal)
 }
 
-// Approving is the only path by which anything the agent produced reaches the
-// rest of the system. The manager may edit the draft first; whatever they
-// approve is what gets created, and both facts are logged.
+// Approving is the only path by which anything the agent produced reaches the rest of the system.
 const approveSignal = async (id, { edits, note } = {}, actor) => {
     const signal = await FeedbackSignal.findById(id).populate('employee', 'name department jobTitle')
     if (!signal) return null

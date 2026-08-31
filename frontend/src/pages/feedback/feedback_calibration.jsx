@@ -3,11 +3,6 @@ import { feedbackApi } from '../../lib/feedback_api'
 import { Avatar, Bar, Icon, Score } from './feedback_ui'
 
 // Calibration, with the reasoning on screen.
-//
-// Every finding shows the number, the comparison that produced it, and what to
-// do about it. A tool that says "this rating looks anomalous" and stops gives a
-// manager nothing to act on and nothing to push back on — and being able to push
-// back is the point, because the tool is sometimes wrong.
 
 const KIND_COPY = {
     lenient: 'Rates high',
@@ -92,7 +87,7 @@ export default function FeedbackCalibration() {
                 </div>
             </section>
 
-            {/* ---- Findings ---- */}
+            {/* Findings. */}
             <section className="fb-card s7">
                 <div className="fb-lbl"><span>What stands out, and why</span><Icon name="scale" size={14} /></div>
 

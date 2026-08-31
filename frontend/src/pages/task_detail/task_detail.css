@@ -1,5 +1,4 @@
-/* .detail-badges, .detail-main and .detail-side now live in styles/theme.css —
-   the project pages are built from the same primitives. */
+/* .detail-badges, .detail-main and .detail-side now live in styles/theme.css. */
 
 .page-title h1 { max-width: 42ch; line-height: 1.3; }
 
@@ -21,7 +20,6 @@
     align-items: start;
 }
 
-
 .detail-description {
     font-size: 13.5px;
     line-height: 1.7;
@@ -29,7 +27,7 @@
     white-space: pre-wrap;
 }
 
-/* --- Checklist ------------------------------------------------------------ */
+/* Checklist. */
 
 .checklist-count { font-size: 12px; font-variant-numeric: tabular-nums; }
 .checklist-hint { margin-bottom: 12px; font-size: 12.5px; }
@@ -53,8 +51,7 @@
 
 .checklist li > label { flex: 1; min-width: 0; }
 
-/* When the item was ticked. Quiet, but it is the difference between a checklist
-   and a record of what happened. */
+/* When the item was ticked. */
 .checklist-when {
     flex-shrink: 0;
     padding-right: 8px;
@@ -86,7 +83,7 @@
 
 .checklist-add { display: flex; gap: 8px; }
 
-/* --- Files ---------------------------------------------------------------- */
+/* Files. */
 
 .file-list {
     display: flex;
@@ -145,7 +142,7 @@
 
 .file-remove:hover { background: var(--critical-soft); color: var(--critical); }
 
-/* --- Discussion ----------------------------------------------------------- */
+/* Discussion. */
 
 .pill-open-q { background: var(--high-soft); color: var(--high); }
 
@@ -213,7 +210,7 @@
     cursor: pointer;
 }
 
-/* --- Progress ------------------------------------------------------------- */
+/* Progress. */
 
 .progress-panel { display: flex; align-items: center; gap: 16px; }
 
@@ -255,7 +252,7 @@
 .progress-text strong { font-size: 14px; color: var(--navy-800); }
 .progress-text span { font-size: 11.5px; line-height: 1.5; }
 
-/* --- Meta ----------------------------------------------------------------- */
+/* Meta. */
 
 .meta-row {
     display: flex;

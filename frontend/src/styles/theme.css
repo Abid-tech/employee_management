@@ -1,13 +1,7 @@
-/* ---------------------------------------------------------------------------
-   Design tokens.
-
-   The four brand colours come from the agreed palette. Everything else is
-   derived from them, so the interface stays in one family: the greys are mixed
-   towards the navy rather than being neutral.
-   --------------------------------------------------------------------------- */
+/* Design tokens. */
 
 :root {
-    /* Brand palette */
+    /* Brand palette. */
     --navy: #0A2947;
     --cream: #F3E4C9;
     --sage: #D3D4C0;
@@ -20,23 +14,21 @@
     --navy-400: #3D6A94;
     --navy-300: #7D96AE;
 
-    /* Surfaces */
+    /* Surfaces. */
     --canvas: #FFFFFF;
     --surface: #FFFFFF;
     --surface-sunken: #F7F7F9;
     --line: #E5E7EB;
     --line-strong: #C9CDD3;
 
-    /* Text */
+    /* Text. */
     --ink: #0A2947;
     --ink-soft: #40566B;
     --ink-muted: #6B7C8C;
     --on-dark: #F3E4C9;
     --on-dark-muted: #9FB3C7;
 
-    /* Priority — the one scale the whole module is built around.
-       These same four colours are the orbit rings, the badges and the legend,
-       so colour always means priority and never anything else. */
+    /* Priority — the one scale the whole module is built around. */
     --critical: #B3402F;
     --critical-soft: #FAE7E3;
     --high: #B87333;
@@ -46,7 +38,7 @@
     --low: #4E8163;
     --low-soft: #E6F0E9;
 
-    /* Status */
+    /* Status. */
     --ok: #2E7D6F;
     --ok-soft: #E4F0ED;
     --neutral-soft: #EFEDE5;
@@ -58,8 +50,7 @@
     --shadow: 0 4px 5px rgba(10, 41, 71, 0.06);
     --shadow-lg: 0 0 45px rgba(10, 41, 71, 0.14);
 
-    /* Card metrics, taken from the reference: a 12/20 cap and a 20 body, so a
-       header and the body beneath it share one left edge. */
+    /* Card metrics. */
     --pad-cap: 12px 20px;
     --pad-body: 20px;
     --font-ui: var(--font-family, "Montserrat", sans-serif);
@@ -68,12 +59,7 @@
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Everything below is scoped to .m3 — the wrapper Module 3's pages render
-   inside. Left unscoped, `body`, `a`, `h1` and especially `.btn` would reach
-   straight into the leave-management and dashboard pages, which load Bootstrap
-   and their own index.css. Bootstrap also defines .btn, so an unscoped copy
-   here would silently restyle every button in the app depending on which
-   stylesheet happened to load last. */
+/* Everything below is scoped to .m3 — the wrapper Module 3's pages render inside. */
 
 .m3 {
     background: var(--canvas);
@@ -109,7 +95,7 @@
     border-radius: 4px;
 }
 
-/* --- Form controls -------------------------------------------------------- */
+/* Form controls. */
 
 .m3 .field { display: flex; flex-direction: column; gap: 6px; }
 
@@ -143,7 +129,7 @@
 
 .m3 .field-hint { font-size: 11.5px; color: var(--ink-muted); line-height: 1.45; }
 
-/* --- Buttons -------------------------------------------------------------- */
+/* Buttons. */
 
 .m3 .btn {
     display: inline-flex;
@@ -179,7 +165,7 @@
 
 .m3 .btn-sm { padding: 4px 10px; font-size: 12px; }
 
-/* --- Panels --------------------------------------------------------------- */
+/* Panels. */
 
 .m3 .panel {
     background: var(--surface);
@@ -202,7 +188,7 @@
 
 .m3 .panel-body { padding: var(--pad-body); }
 
-/* --- Shared pieces -------------------------------------------------------- */
+/* Shared pieces. */
 
 .m3 .muted { color: var(--ink-muted); }
 
@@ -226,10 +212,7 @@
     line-height: 1;
 }
 
-/* --- Shared page primitives ------------------------------------------------
-   These started life inside one page's stylesheet and are now used by several,
-   so they live here rather than in whichever page happened to need them first.
-   A page should never have to import another page's CSS to look right. */
+/* Shared page primitives ------------------------------------------------ These started life. */
 
 .m3 .form-error {
     padding: 11px 14px;
@@ -269,9 +252,7 @@
     min-width: 0;
 }
 
-/* Project health. One badge colour and one bar colour per state, shared by the
-   orbit, the project list and the project page, so a project reading "Late"
-   never looks like three different kinds of late. */
+/* Project health. */
 .m3 .health-ok { background: var(--medium-soft);   color: var(--medium); }
 .m3 .health-bad { background: var(--critical-soft); color: var(--critical); }
 .m3 .health-warn { background: var(--high-soft);     color: var(--high); }
@@ -284,8 +265,7 @@
 .m3 .health-fill-done { background: var(--ok); }
 .m3 .health-fill-muted { background: var(--line-strong); }
 
-/* Segmented filter. Shared by the task list on the orbit and the project list,
-   so the same control never looks like two different things. */
+/* Segmented filter. */
 .m3 .list-filters {
     display: inline-flex;
     padding: 3px;
@@ -337,7 +317,7 @@
 .m3 .pill-done { background: var(--ok-soft);      color: var(--ok); }
 .m3 .pill-overdue { background: var(--critical);     color: #fff; }
 
-/* --- Motion --------------------------------------------------------------- */
+/* Motion. */
 
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
@@ -346,8 +326,7 @@
 .m3 .rise { animation: rise 240ms var(--ease) both; }
 .m3 .fade { animation: fade 200ms var(--ease) both; }
 
-/* Anyone who has asked their system to reduce motion gets none of it —
-   including the orbital rotation on the first page. */
+/* Anyone who has asked their system to reduce motion gets none of it. */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -356,7 +335,7 @@
     }
 }
 
-/* --- Page scaffolding ----------------------------------------------------- */
+/* Page scaffolding. */
 
 .m3 .page {
     max-width: 1320px;

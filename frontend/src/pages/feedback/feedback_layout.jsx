@@ -5,9 +5,7 @@ import { ActorContext } from './feedback_context'
 import { Icon } from './feedback_ui'
 import './feedback.css'
 
-// The module renders inside this wrapper, and feedback.css is scoped to the .fb
-// class it puts on the page — the same containment Module 3 and the performance
-// module use, so four stylesheets can coexist without fighting over .card.
+// The module renders inside this wrapper.
 
 const STORAGE_KEY = 'fb.actorId'
 
@@ -20,8 +18,7 @@ const TABS = [
     { to: '/feedback/trust', label: 'Trust log' }
 ]
 
-// The two pages that actually write. Everywhere else reads, and reading needs
-// no identity.
+// The two pages that actually write.
 const WRITES = ['/feedback/write', '/feedback/agent']
 
 const CONTEXT_LINE = {
@@ -96,11 +93,7 @@ export default function FeedbackLayout() {
 
                     <p className="fb-ctx">{contextLine}</p>
 
-                    {/* Only the pages that write anything are blocked by this, and
-                        it is a notice rather than an error: reading the overview,
-                        the calibration findings or the trust log needs no identity,
-                        and colouring an instruction red on four read-only pages
-                        teaches people to ignore the colour. */}
+                    {/* Only the pages that write anything are blocked by this. */}
                     {!actorId && WRITES.some(path => pathname.startsWith(path)) && (
                         <div className="fb-notice">
                             <span className="n-ic"><Icon name="chat" size={14} /></span>

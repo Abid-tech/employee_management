@@ -4,19 +4,7 @@ const Department = require('../model/department')
 const Objective = require('../model/objective')
 const Comment = require('../model/comment')
 
-// ---------------------------------------------------------------------------
 // Employee Performance Management.
-//
-// Every number here is derived from work that already happened: tasks that were
-// completed, deadlines that were met or missed, questions that were answered.
-// Nothing is typed in by a manager and nothing is stored, for the same reason
-// task progress is not stored — a saved rating and the work underneath it start
-// disagreeing the moment either one changes.
-//
-// The scoring is deliberately explainable. Every figure the interface shows can
-// be traced back to a rule in this file, because a performance score nobody can
-// argue with is a performance score nobody trusts.
-// ---------------------------------------------------------------------------
 
 const PILLARS = [
     {
@@ -57,22 +45,16 @@ const PILLARS = [
     }
 ]
 
-// Stated once so the interface never has to assert it independently: the four
-// weights are a partition of 1, so the weighted sum is always 0–100 and the
-// pillars can be read as "points contributed out of 40 / 30 / 20 / 10".
+// Stated once so the interface never has to assert it independently: the four weights.
 const SCORE_MAX = 100
 
-// Nothing on this page is entered by a manager. Every number is derived from
-// records Module 3 already keeps, which is what makes the score arguable rather
-// than personal — you can disagree with it by pointing at a task.
+// Nothing on this page is entered by a manager.
 const SCORE_SOURCE = 'automatic'
 
-// A critical task is not the same unit of work as a low one, so hours alone
-// would undercount the people carrying the hard things.
+// A critical task is not the same unit of work as a low one.
 const PRIORITY_WEIGHT = { critical: 2.0, high: 1.5, medium: 1.0, low: 0.7 }
 
-// Points are awarded for facts, never for rank. Two people who did identical
-// work earn identical points even if only one of them can be first.
+// Points are awarded for facts, never for rank.
 const POINTS = {
     perWeightedHour: 10,
     onTimeBonus: 25,
@@ -112,9 +94,7 @@ const idOf = (value) => {
     return String(value)
 }
 
-// A task counts towards a period by when it was finished, not when it was
-// created. Work started last quarter and landed this one belongs to the quarter
-// it landed in — that is the quarter the person was judged on.
+// A task counts towards a period by when it was finished, not when it was created.
 const inPeriod = (date, from, to) => {
     if (!date) return false
     const t = new Date(date).getTime()
@@ -123,20 +103,14 @@ const inPeriod = (date, from, to) => {
 
 // --- The four pillars -------------------------------------------------------
 
-// Delivery — of the work put in front of this person, how much did they land?
-//
-// A ratio rather than a raw count, so somebody handed thirty tasks is not
-// automatically ahead of somebody handed six. Weighted by priority and size, so
-// finishing six one-hour chores does not read the same as finishing one
-// forty-hour critical build.
+// Delivery.
 const scoreDelivery = (assigned, done) => {
     if (assigned.length === 0) return { value: 0, evidence: { assigned: 0, done: 0 } }
 
     const assignedWeight = assigned.reduce((sum, t) => sum + weightOf(t), 0)
     const doneWeight = done.reduce((sum, t) => sum + weightOf(t), 0)
 
-    // With no estimates recorded anywhere, fall back to counting tasks. Better
-    // than dividing by zero and calling everyone a zero.
+    // With no estimates recorded anywhere, fall back to counting tasks.
     const value = assignedWeight > 0
         ? pct(doneWeight, assignedWeight)
         : pct(done.length, assigned.length)
@@ -153,13 +127,6 @@ const scoreDelivery = (assigned, done) => {
 }
 
 // Quality — three things that are all knowable without anyone rating anyone.
-//
-//   on time      did it land by the date it was promised for
-//   honesty      did the estimate resemble the time actually spent
-//   thoroughness were the checklists actually finished, or abandoned at 60%
-//
-// Each is skipped rather than scored zero when the data is not there. Penalising
-// a team for not logging hours measures their admin, not their work.
 const scoreQuality = (done) => {
     if (done.length === 0) return { value: 0, evidence: { onTimeRate: null, estimateAccuracy: null, thoroughness: null } }
 
@@ -197,18 +164,13 @@ const scoreQuality = (done) => {
 }
 
 // Collaboration — the pillar most performance tools cannot see at all.
-//
-// It is built only from work done on *other people's* tasks: answering their
-// questions, replying in their threads. Commenting on your own task is talking
-// to yourself, and does not count here.
 const scoreCollaboration = (comments, myTaskIds, teamSize) => {
     const onOthers = comments.filter(c => !myTaskIds.has(idOf(c.task)))
     const answers = onOthers.filter(c => c.replyTo)
     const resolved = onOthers.filter(c => c.resolved)
     const reach = new Set(onOthers.map(c => idOf(c.task))).size
 
-    // Scaled against the size of the team rather than an absolute target, so the
-    // bar does not get impossible as the company grows.
+    // Scaled against the size of the team rather than an absolute target.
     const expected = Math.max(3, Math.round(teamSize * 0.8))
     const helpVolume = pct(onOthers.length, expected)
     const helpDepth = pct(answers.length + resolved.length, Math.max(2, expected / 2))
@@ -227,9 +189,7 @@ const scoreCollaboration = (comments, myTaskIds, teamSize) => {
     }
 }
 
-// Consistency — a steady contributor beats a heroic one who vanishes for a
-// month. Measured as how many of the recent weeks had any completion at all,
-// tempered by how evenly the work was spread across them.
+// Consistency — a steady contributor beats a heroic one who vanishes for a month.
 const scoreConsistency = (weekly) => {
     const active = weekly.filter(w => w.done > 0).length
     if (active === 0) return { value: 0, evidence: { activeWeeks: 0, totalWeeks: weekly.length } }
@@ -250,8 +210,7 @@ const scoreConsistency = (weekly) => {
 
 // --- Weekly history ---------------------------------------------------------
 
-// Twelve buckets ending at `to`, oldest first. Used for the trend line, for
-// consistency, and for momentum.
+// Twelve buckets ending at `to`, oldest first.
 const weeklyHistory = (done, to, weeks = 12) => {
     const end = to.getTime()
     return Array.from({ length: weeks }, (_, i) => {
@@ -270,8 +229,7 @@ const weeklyHistory = (done, to, weeks = 12) => {
     })
 }
 
-// Momentum — the direction of travel, which a single score cannot show. Someone
-// on 72 and climbing is a different conversation from someone on 72 and falling.
+// Momentum — the direction of travel, which a single score cannot show.
 const momentumOf = (weekly) => {
     const half = Math.floor(weekly.length / 2)
     const older = weekly.slice(0, half).reduce((s, w) => s + w.weightedHours, 0)
@@ -284,10 +242,7 @@ const momentumOf = (weekly) => {
     const direction = change > 12 ? 'up' : change < -12 ? 'down' : 'flat'
     const label = { up: 'Rising', down: 'Slipping', flat: 'Steady' }[direction]
 
-    // Someone who did almost nothing in the first half produces percentages in
-    // the hundreds or thousands, which reads as a broken number rather than as
-    // strong recovery. The direction is what matters past a point, so the figure
-    // is capped and flagged — the arrow and the sparkline still tell the truth.
+    // Someone who did almost nothing in the first half produces percentages in the hundreds.
     const capped = Math.min(change, 200)
 
     return { direction, changePercent: round(capped), cappedAt: change > 200 ? 200 : null, label }
@@ -295,8 +250,7 @@ const momentumOf = (weekly) => {
 
 // --- Reward points ----------------------------------------------------------
 
-// A ledger rather than a running total, so the number is always auditable: every
-// point on screen can be traced to the task that earned it.
+// A ledger rather than a running total.
 const buildLedger = (done) => {
     const entries = []
 
@@ -360,11 +314,6 @@ const streakOf = (weekly) => {
 // --- Sustainability ---------------------------------------------------------
 
 // The thing leaderboards are usually blind to: what the ranking cost the person.
-//
-// A leaderboard that rewards output without watching load quietly teaches people
-// to burn themselves down for a rank. This flags overload from facts already in
-// the data — open critical work, hours still owed, and how much finishing landed
-// on a weekend.
 const sustainabilityOf = (openTasks, done) => {
     const openHours = openTasks.reduce((sum, t) => sum + (t.estimateHours || 0) * (1 - (t.progress ?? 0) / 100), 0)
     const openCritical = openTasks.filter(t => t.priority === 'critical').length
@@ -376,8 +325,7 @@ const sustainabilityOf = (openTasks, done) => {
     }).length
     const weekendRate = pct(weekendFinishes, Math.max(1, done.length))
 
-    // 40h of open work is a full week already committed; beyond that a person is
-    // carrying more than one week of backlog at once.
+    // 40h of open work is a full week already committed.
     const loadIndex = clamp((openHours / 40) * 100, 0, 200)
 
     let status = 'healthy'
@@ -403,9 +351,7 @@ const sustainabilityOf = (openTasks, done) => {
 
 // --- The coach --------------------------------------------------------------
 
-// Inverting the formula: given the pillar weights, which single move raises the
-// score most from here? A score that only describes is a report card. A score
-// that tells you the next move is a tool.
+// Inverting the formula: given the pillar weights.
 const coachFor = (profile) => {
     const gap = PILLARS
         .map(p => ({
@@ -468,8 +414,7 @@ const buildProfile = (employee, allTasks, allComments, ctx) => {
     const points = ledger.reduce((sum, e) => sum + e.points, 0)
     const streak = streakOf(weekly)
 
-    // Difficulty of the work this person was handed, used for the fair ranking
-    // further down. Log-scaled so one enormous task does not dominate.
+    // Difficulty of the work this person was handed, used for the fair ranking further down.
     const difficulty = assigned.length
         ? mean(assigned.map(t => (PRIORITY_WEIGHT[t.priority] ?? 1) * Math.log1p(t.estimateHours || 0)))
         : 0
@@ -486,12 +431,7 @@ const buildProfile = (employee, allTasks, allComments, ctx) => {
         score: round(score, 1),
         grade: gradeFor(score),
 
-        // Each pillar carries both readings it is asked for on screen:
-        //   value        0–100, how well this pillar itself is going
-        //   contributed  the points that pillar puts into the final score
-        //   max          the most it could put in — its weight × 100
-        // The four `max` values add to 100, so `contributed` columns sum to the
-        // score exactly and the arithmetic is checkable by eye.
+        // Each pillar carries both readings it is asked for on screen: value 0–100.
         pillars: Object.fromEntries(PILLARS.map(p => {
             const v = pillars[p.key]
             return [p.key, {
@@ -531,20 +471,13 @@ const buildProfile = (employee, allTasks, allComments, ctx) => {
 
 // --- The roster -------------------------------------------------------------
 
-// Fair rank. The delivery pillar is a ratio of the work someone was given, but
-// hard work takes longer, so a quarter of critical builds finishes a smaller
-// share than a quarter of small chores. Two people can work identically hard and
-// rank differently purely because of what landed on their desk.
-//
-// This does not replace the real score — it sits beside it. Where the two ranks
-// disagree, that gap is itself the finding worth showing a manager.
+// Fair rank.
 const applyFairRank = (roster) => {
     const avgDifficulty = mean(roster.map(p => p.difficulty).filter(d => d > 0)) || 1
 
     const withFair = roster.map(p => {
         const factor = p.difficulty > 0 ? p.difficulty / avgDifficulty : 1
-        // Deliberately gentle: a 12% swing at most, so difficulty nudges the
-        // ordering rather than rewriting it.
+        // Deliberately gentle: a 12% swing at most.
         const fairScore = clamp(p.score * (1 + 0.12 * (factor - 1)))
         return { ...p, fairScore: round(fairScore, 1), difficultyFactor: round(factor, 2) }
     })
@@ -559,13 +492,7 @@ const applyFairRank = (roster) => {
     }).sort((a, b) => a.rank - b.rank)
 }
 
-// Silent heroes. The people holding a team together without a leaderboard
-// position to show for it: heavy on unblocking others and on critical work, but
-// sitting outside the visible top of the table.
-//
-// This is the void every leaderboard leaves. Volume is easy to see and easy to
-// game; the person who answers everyone's questions all quarter shows up
-// nowhere. Naming them is the difference between a ranking and a fair ranking.
+// Silent heroes.
 const findSilentHeroes = (roster) => {
     if (roster.length < 3) return []
 
@@ -623,8 +550,7 @@ const buildDepartments = (roster, departments, tasks, ctx) => {
             atRisk: people.filter(p => p.sustainability.status === 'at_risk').length,
             top: people.slice().sort((a, b) => b.score - a.score)[0] || null,
 
-            // Enough to open a department in place rather than sending the
-            // reader to another page to find out who is in it.
+            // Enough to open a department in place rather than sending the reader to another page to find.
             openTasks: deptTasks.filter(t => t.status !== 'done').length,
             openCritical: deptTasks.filter(t => t.status !== 'done' && t.priority === 'critical').length,
             unassigned: deptTasks.filter(t => t.status !== 'done' && !t.assigneeId).length,
@@ -650,21 +576,13 @@ const buildDepartments = (roster, departments, tasks, ctx) => {
 // --- Recommended actions ----------------------------------------------------
 
 // The panel that earns its place on a manager's screen.
-//
-// A dashboard that only describes leaves the reader to work out what to do about
-// it, which in practice means nobody does anything. Every item here names a
-// person or a department, states the fact that triggered it, and says what the
-// decision is. All of it is derived — nothing waits on someone filling a form in.
-//
-// Ordered by severity so the top of the list is the thing to do first.
 const SEVERITY = { urgent: 0, soon: 1, opportunity: 2 }
 
 const buildActions = (roster, departments, tasks, ctx) => {
     const actions = []
     const person = (p) => ({ id: p.id, name: p.name, initials: p.initials, color: p.color, department: p.department })
 
-    // 1. People at risk of burning out. This outranks everything else: it is the
-    //    only item on the page where waiting has a human cost.
+    // 1.
     for (const p of roster.filter(p => p.sustainability.status === 'at_risk')) {
         actions.push({
             kind: 'protect',
@@ -677,8 +595,7 @@ const buildActions = (roster, departments, tasks, ctx) => {
         })
     }
 
-    // 2. Critical work nobody owns. A task at the top priority with no assignee
-    //    is the most expensive kind of silence in the dataset.
+    // 2.
     const unowned = tasks.filter(t => t.status !== 'done' && t.priority === 'critical' && !t.assigneeId)
     if (unowned.length) {
         actions.push({
@@ -692,8 +609,7 @@ const buildActions = (roster, departments, tasks, ctx) => {
         })
     }
 
-    // 3. Key-person risk. One person holding most of a department's output is a
-    //    delivery risk the leaderboard actively hides — it reads as excellence.
+    // 3.
     for (const dept of departments.filter(d => d.headcount >= 2)) {
         const deptDone = tasks.filter(t =>
             t.department === dept.name && t.status === 'done' && inPeriod(t.completedAt, ctx.from, ctx.to))
@@ -717,8 +633,7 @@ const buildActions = (roster, departments, tasks, ctx) => {
         }
     }
 
-    // 4. Load imbalance inside a department — someone drowning next to someone
-    //    with room. This is the cheapest fix available to a manager.
+    // 4.
     for (const dept of departments.filter(d => d.headcount >= 2)) {
         const sorted = [...dept.people].sort((a, b) => b.tasksOpen - a.tasksOpen)
         const heavy = sorted[0]
@@ -736,8 +651,7 @@ const buildActions = (roster, departments, tasks, ctx) => {
         }
     }
 
-    // 5. Slipping before it becomes a problem. Momentum down but still healthy is
-    //    a conversation; left alone it becomes item 1 next quarter.
+    // 5.
     for (const p of roster.filter(p => p.momentum.direction === 'down' && p.sustainability.status !== 'at_risk')) {
         actions.push({
             kind: 'check_in',
@@ -750,9 +664,7 @@ const buildActions = (roster, departments, tasks, ctx) => {
         })
     }
 
-    // 6. Quiet contributors. The people a ranking structurally cannot see:
-    //    heavy on unblocking others, or carrying critical work, while sitting
-    //    outside the top of the table. Recognition is the action.
+    // 6.
     for (const hero of findSilentHeroes(roster)) {
         actions.push({
             kind: 'recognise',
@@ -765,8 +677,7 @@ const buildActions = (roster, departments, tasks, ctx) => {
         })
     }
 
-    // 7. Sustained excellence — worth acting on while it is true, not at review
-    //    time six months later.
+    // 7.
     for (const p of roster.filter(p => p.score >= 80 && p.sustainability.status === 'healthy' && p.momentum.direction !== 'down').slice(0, 2)) {
         actions.push({
             kind: 'reward',
@@ -786,14 +697,7 @@ const buildActions = (roster, departments, tasks, ctx) => {
 
 // --- Contribution to company goals ------------------------------------------
 
-// Rank tells you the order people finished in. This tells you how much of the
-// company's actual goal each person moved — a different question, and usually
-// the one leadership is really asking.
-// "The company goal" is not one thing. It is every live objective added together,
-// and this returns the parts as well as the total so the interface can say so.
-//
-// Progress here is cumulative rather than period-scoped: "how far is this goal"
-// means all the work ever finished on it, not only what landed this quarter.
+// Rank tells you the order people finished in.
 const buildContribution = (objectives, tasks, roster, ctx) => {
     const live = objectives.filter(o => o.status === 'active' || o.status === 'planning')
     const liveIds = new Set(live.map(o => String(o._id)))
@@ -823,14 +727,12 @@ const buildContribution = (objectives, tasks, roster, ctx) => {
             remainingHours: round(mine
                 .filter(t => t.status !== 'done')
                 .reduce((sum, t) => sum + (t.estimateHours || 0) * (1 - (t.progress ?? 0) / 100), 0)),
-            // Share of the whole company goal this one objective represents, so
-            // the reader can tell a big project from a small one.
+            // Share of the whole company goal this one objective represents.
             weightShare: round(pct(weight, totalWeight))
         }
     }).sort((a, b) => a.progress - b.progress)
 
-    // Who did the finished work. These are shares of `doneWeight`, so they add
-    // to 100% of the filled part of the bar and no further.
+    // Who did the finished work.
     const shares = roster
         .map(p => {
             const mine = doneTasks.filter(t => t.assigneeId === p.id)
@@ -850,8 +752,7 @@ const buildContribution = (objectives, tasks, roster, ctx) => {
         .filter(s => s.share > 0)
         .sort((a, b) => b.share - a.share)
 
-    // The same completed work grouped by department, so the bar answers "which
-    // team moved this" as well as "which person".
+    // The same completed work grouped by department.
     const byDepartment = [...new Set(shares.map(s => s.department))]
         .map(name => {
             const people = shares.filter(s => s.department === name)
@@ -883,8 +784,7 @@ const periodFrom = ({ from, to } = {}) => {
     return { from: start, to: end }
 }
 
-// Everything in four queries rather than one per person, so adding staff does
-// not add round trips.
+// Everything in four queries rather than one per person, so adding staff does not add round trips.
 const loadAll = async () => {
     const [employees, taskDocs, comments, departments, objectives] = await Promise.all([
         Employee.find({ isActive: { $ne: false } }).sort({ name: 1 }),
@@ -957,12 +857,6 @@ const overview = async (options = {}) => {
             stats: p.stats,
 
             // Weighted hours per week, not task counts.
-            //
-            // The row draws this as a sparkline and colours it by `momentum`,
-            // and momentum is computed from weighted hours. Sending counts made
-            // the two disagree: somebody finishing more but smaller tasks got a
-            // line that visibly rose while being painted red for falling output.
-            // One glyph must not carry two different measurements.
             weekly: p.weekly.map(w => w.weightedHours)
         })),
 
@@ -1008,8 +902,7 @@ const employeeDetail = async (id, options = {}) => {
 
 // --- Customisable reports ---------------------------------------------------
 
-// Every column the report builder can offer. Kept here rather than in the page
-// so the two can never drift apart, and so a column can be added in one place.
+// Every column the report builder can offer.
 const REPORT_COLUMNS = [
     { key: 'rank', label: 'Rank', type: 'number' },
     { key: 'name', label: 'Employee', type: 'text' },
@@ -1081,15 +974,13 @@ const report = async (options = {}) => {
     const numeric = REPORT_COLUMNS.find(c => c.key === sortBy)?.type === 'number'
 
     rows.sort((a, b) => {
-        // Rank reads backwards from every other column: #1 is the best row, so
-        // ascending rank is what a reader means by "best first".
+        // Rank reads backwards from every other column: #1 is the best row.
         const flip = sortBy === 'rank' || sortBy === 'fairRank' ? -1 : 1
         if (numeric) return (Number(a[sortBy]) - Number(b[sortBy])) * dir * flip
         return String(a[sortBy]).localeCompare(String(b[sortBy])) * dir * flip
     })
 
-    // Kept before the limit is applied, so the page can say "5 of 12" and make
-    // clear that a short table is a choice rather than the whole company.
+    // Kept before the limit is applied.
     const matched = rows.length
     const limit = Number(options.limit)
     if (Number.isFinite(limit) && limit > 0) rows = rows.slice(0, limit)

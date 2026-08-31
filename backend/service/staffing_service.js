@@ -4,25 +4,6 @@ const performance = require('./performance_service')
 const budget = require('./budget_service')
 
 // Who should take this work, and what happens to everybody if they do.
-//
-// Every performance dashboard in existence can tell a manager that somebody is
-// overloaded. None of them can tell them what to do about it, because the answer
-// needs four things at once and no single product holds all four:
-//
-//   the load        who is carrying how many hours, from the task board
-//   the throughput  how fast each person actually clears work, from the record
-//   the money       what an hour of each person costs, from the rate table
-//   the calendar    which deadlines a move would put at risk
-//
-// A resourcing tool has the first. A performance tool has the second. A time and
-// billing tool has the third. A project tool has the fourth. This app is the
-// only place all four sit in one database, so it is the only place the sentence
-// "move these two tasks to Sadia — it costs $41 more, takes six days off Rahim's
-// finish date, and puts no deadline at risk" can be produced at all.
-//
-// Nothing here reassigns anything. It produces a costed proposal and stops,
-// because the person who knows whether Sadia is about to go on leave is the
-// manager, not the model.
 
 const DAY = 24 * 60 * 60 * 1000
 
@@ -33,9 +14,6 @@ const round = (n, dp = 1) => {
 const money = (n) => Math.round((Number(n) || 0) * 100) / 100
 
 // A task is movable if handing it to somebody else does not throw work away.
-// Anything already underway carries context in somebody's head that does not
-// transfer, and moving a critical item to save load is trading one risk for a
-// worse one.
 const MOVABLE = {
     maxProgress: 0,
     excludedPriorities: ['critical'],
@@ -43,15 +21,7 @@ const MOVABLE = {
     minDaysOfRunway: 7
 }
 
-// How much queue a receiving person is allowed to end up with, in weeks of their
-// own demonstrated pace.
-//
-// Without a ceiling this tool does the exact thing it exists to prevent. The
-// company has one engineer with slack, so the first version cheerfully proposed
-// moving fifty-six hours onto her across three separate plans and left her with
-// a deeper queue than two of the people being relieved. Refusing the move and
-// saying the department is out of capacity is the honest answer, and it is the
-// one that leads to a real decision — move a deadline, or hire.
+// How much queue a receiving person is allowed to end up with.
 const MAX_RECIPIENT_WEEKS = 3
 
 const isMovable = (task, now) => {
@@ -85,32 +55,20 @@ const whyNotMovable = (task, now) => {
 // --- Capacity ----------------------------------------------------------------
 
 // How fast somebody actually clears work, and how much they have queued.
-//
-// Throughput is measured from what they finished, not from a nominal 8-hour day:
-// a person who has been clearing 12 hours of estimated work a week has a real
-// capacity of 12, whatever their contract says. Using the record rather than an
-// assumption is the whole reason this can be trusted enough to act on.
 const capacityOf = (person, weeks, committedHours = 0) => {
     const throughput = weeks > 0 ? person.stats.weightedHoursDone / weeks : 0
 
-    // Hours this run has already proposed handing them counts as queue. Without
-    // it every plan is computed against the same starting picture, so the one
-    // person with slack gets offered work by three different plans and a manager
-    // who applies all of them creates the overload they were trying to fix.
+    // Hours this run has already proposed handing them counts as queue.
     const openHours = (person.sustainability.openHours || 0) + committedHours
 
-    // Rounded once, then every derived figure is computed from the rounded
-    // values. The first version divided by the raw throughput here and by the
-    // rounded one when reporting the "after" position, so a plan that moved
-    // nothing still showed the queue shrinking from 28.7 weeks to 28.4.
+    // Rounded once, then every derived figure is computed from the rounded values.
     const perWeek = round(throughput, 1)
     const queued = round(openHours, 1)
 
     return {
         throughputPerWeek: perWeek,
         openHours: queued,
-        // Weeks of queue at their own demonstrated pace. This is the figure that
-        // makes two people comparable when one is quick and one is careful.
+        // Weeks of queue at their own demonstrated pace.
         weeksOfWork: perWeek > 0 ? round(queued / perWeek, 1) : null,
         status: person.sustainability.status
     }
@@ -119,19 +77,11 @@ const capacityOf = (person, weeks, committedHours = 0) => {
 // --- Public: who should take a piece of work ---------------------------------
 
 // Ranked candidates for one task, each carrying the arithmetic.
-//
-// The ranking is deliberately not a single opaque number. Four separate readings
-// are reported and the order is decided by their sum, so a manager who disagrees
-// with the weighting can see exactly which reading they are overruling.
 const candidatesFor = async ({
     department, estimateHours = 0, objectiveId, excludeId, exclude = [], now = new Date(), preloaded,
     committed
 } = {}) => {
-    // The overview is the most expensive read in the application, and the
-    // rebalancer needs candidates for every task it considers. Calling this
-    // function in that loop without passing `preloaded` re-ran the entire
-    // company scoring once per task — the first version took three seconds for
-    // fourteen proposals, almost all of it the same query repeated.
+    // The overview is the most expensive read in the application.
     const [overview, context] = preloaded
         ? [preloaded.overview, preloaded.context]
         : await Promise.all([performance.overview(), budget.loadContext()])
@@ -143,15 +93,11 @@ const candidatesFor = async ({
     const weeks = Math.max(1, (new Date(overview.period.to) - new Date(overview.period.from)) / (7 * DAY))
     const barred = new Set([excludeId, ...exclude].filter(Boolean))
 
-    // Who has already worked on this project. Familiarity is worth real hours,
-    // and it is the one thing a pure capacity calculation always misses.
+    // Who has already worked on this project.
     const onProject = new Set(tasks.map(t => String(t.assignee || '')).filter(Boolean))
 
     const rows = overview.leaderboard
-        // Never propose moving work onto somebody who is themselves under
-        // strain. Without this the two-person Design department produced a
-        // straight swap — each of the pair handed the other a task — which is
-        // motion, not relief.
+        // Never propose moving work onto somebody who is themselves under strain.
         .filter(person => !barred.has(person.id))
         .filter(person => !department || person.department === department)
         .map(person => {
@@ -159,8 +105,7 @@ const candidatesFor = async ({
             const rate = budget.rateOn(person.id, now, context.ratesByEmployee)
             const costRate = rate?.costRate || 0
 
-            // Four readings, each 0–25, so the total lands on a familiar 0–100
-            // and no single reading can carry a candidate on its own.
+            // Four readings.
             const headroom = capacity.weeksOfWork === null ? 12
                 : capacity.weeksOfWork <= 1 ? 25
                     : capacity.weeksOfWork <= 2 ? 19
@@ -169,9 +114,6 @@ const candidatesFor = async ({
                                 : 0
 
             // The performance module's own vocabulary: healthy / stretched / at_risk.
-            // Getting this wrong is not a small miss — an unknown status falls to
-            // the middle of the range, so a person already at risk would score the
-            // same as a healthy one and could be handed more work.
             const health = { healthy: 25, stretched: 8, at_risk: 0 }[capacity.status] ?? 0
 
             // Delivery record, rescaled onto the same 0–25 axis as the rest.
@@ -197,16 +139,12 @@ const candidatesFor = async ({
                 onThisProject: onProject.has(person.id),
 
                 costRate,
-                // What handing them this task would cost, at the rate in force
-                // today. Two equally capable people are rarely equally priced,
-                // and no resourcing tool anywhere shows this at the point of
-                // the decision.
+                // What handing them this task would cost, at the rate in force today.
                 costOfTask: money(costRate * estimateHours),
 
                 fit: { headroom, health, record, familiarity, total },
 
-                // Said in words, because a manager should be able to disagree
-                // with a specific claim rather than with a number.
+                // Said in words.
                 readings: [
                     capacity.weeksOfWork === null
                         ? 'No finished work in this period, so their pace is unknown'
@@ -229,12 +167,6 @@ const candidatesFor = async ({
 // --- Public: rebalancing an overloaded person --------------------------------
 
 // The concrete version of "move work off them this week".
-//
-// For each person the performance module has flagged as carrying too much, this
-// picks the specific tasks that can actually move, finds who should take each
-// one, and reports what the move does to both people and to the money. A
-// recommendation a manager cannot check is a recommendation they are right to
-// ignore, so every figure is reported before and after.
 const rebalance = async ({ now = new Date() } = {}) => {
     const [overview, context] = await Promise.all([
         performance.overview(),
@@ -248,11 +180,7 @@ const rebalance = async ({ now = new Date() } = {}) => {
     )
     const strainedIds = strained.map(person => person.id)
 
-    // Order matters, because the first plan worked out gets first claim on
-    // whatever slack the company has. Leaving that to leaderboard order means
-    // the person in the worst trouble is relieved only if their name happens to
-    // sort early, so the queue is worked worst-first: at risk before stretched,
-    // and within each, the deepest queue first.
+    // Order matters.
     const severity = { at_risk: 0, stretched: 1 }
     strained.sort((a, b) => {
         const bySeverity = (severity[a.sustainability.status] ?? 2) - (severity[b.sustainability.status] ?? 2)
@@ -279,9 +207,7 @@ const rebalance = async ({ now = new Date() } = {}) => {
 
     const plans = []
 
-    // Hours this run has already proposed moving onto each person, so the plans
-    // are worked out against one another rather than each against a fresh
-    // picture of the company.
+    // Hours this run has already proposed moving onto each person.
     const committed = new Map()
 
     for (const person of strained) {
@@ -293,13 +219,10 @@ const rebalance = async ({ now = new Date() } = {}) => {
             .filter(task => !isMovable(task, now))
             .map(task => ({ id: String(task._id), title: task.title, reason: whyNotMovable(task, now) }))
 
-        // Heaviest first: moving one 12-hour task helps more than moving four
-        // one-hour ones, and costs one handover instead of four.
+        // Heaviest first: moving one 12-hour task helps more than moving four one-hour ones.
         movable.sort((a, b) => (b.estimateHours || 0) - (a.estimateHours || 0))
 
-        // Move only as much as it takes to bring them back inside two weeks of
-        // queue. Emptying somebody's plate is not the goal and would just move
-        // the problem to whoever received it.
+        // Move only as much as it takes to bring them back inside two weeks of queue.
         const targetHours = capacity.throughputPerWeek > 0
             ? Math.max(0, capacity.openHours - capacity.throughputPerWeek * 2)
             : 0
@@ -325,11 +248,7 @@ const rebalance = async ({ now = new Date() } = {}) => {
                 committed
             })
 
-            // No candidate is a result, not a failure to report. A two-person
-            // department where both are stretched has no internal answer, and
-            // saying so is more useful than proposing a swap that moves the
-            // problem sideways.
-            // A candidate who would end up over the ceiling is not a candidate.
+            // No candidate is a result, not a failure to report.
             const taker = candidates.find(candidate => {
                 const perWeek = candidate.capacity.throughputPerWeek
                 if (!(perWeek > 0)) return false
@@ -370,8 +289,7 @@ const rebalance = async ({ now = new Date() } = {}) => {
                     jobTitle: taker.jobTitle, costRate: taker.costRate,
                     weeksOfWork: taker.capacity.weeksOfWork, status: taker.capacity.status,
                     onThisProject: taker.onThisProject,
-                    // What is already heading their way from earlier plans on
-                    // this same page.
+                    // What is already heading their way from earlier plans on this same page.
                     alreadyPromised: taker.alreadyPromised
                 },
                 hours,
@@ -402,9 +320,7 @@ const rebalance = async ({ now = new Date() } = {}) => {
             throughputPerWeek: capacity.throughputPerWeek,
             targetHours: round(targetHours, 1),
             movedHours: round(movedHours, 1),
-            // Negative is a saving: the people with capacity are often cheaper
-            // than the person who is drowning, and saying so plainly stops the
-            // proposal reading as a cost when it is not.
+            // Negative is a saving: the people with capacity are often cheaper than the person who is drowning.
             costDelta: money(costDelta),
             moves,
             immovable: stuck,
@@ -418,9 +334,7 @@ const rebalance = async ({ now = new Date() } = {}) => {
         })
     }
 
-    // Somebody flagged as stretched who is already inside two weeks of queue
-    // needs nothing moved, and a plan proposing zero hours because zero were
-    // required is noise on a page meant to be worked through from the top.
+    // Somebody flagged as stretched who is already inside two weeks of queue needs nothing moved.
     const actionable = plans.filter(plan => plan.targetHours > 0)
 
     actionable.sort((a, b) => (b.before.weeksOfWork || 0) - (a.before.weeksOfWork || 0))

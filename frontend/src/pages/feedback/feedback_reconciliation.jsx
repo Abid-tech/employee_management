@@ -4,18 +4,6 @@ import { feedbackApi } from '../../lib/feedback_api'
 import { Avatar, Icon } from './feedback_ui'
 
 // Where the record and the humans disagree.
-//
-// The app holds two independent opinions of every person: a score derived from
-// finished work, and a rating written by colleagues. Every competitor owns one
-// of those and is structurally unable to see the other, so nobody ships the
-// comparison — which is a shame, because the comparison is the useful part.
-//
-// The page is built around one chart. A slope graph is the correct form here and
-// almost the only correct form: the question is "do these two instruments put
-// the same people in the same order", and a slope graph answers it at a glance —
-// flat lines agree, steep lines do not, and the direction of the slope says
-// which instrument is the generous one. A scatter plot would answer the same
-// question worse, and a table would not answer it at all.
 
 const DIRECTION = {
     rated_above: {
@@ -37,9 +25,7 @@ const DIRECTION = {
 
 // --- The slope graph ---------------------------------------------------------
 
-// Two axes, one line per person, drawn between where each instrument places
-// them. Percentiles rather than raw values, because a score out of 100 and a
-// rating out of 5 share no scale — the only fair comparison is positional.
+// Two axes, one line per person, drawn between where each instrument places them.
 function SlopeGraph({ rows, selected, onSelect }) {
     const height = 460
     const padY = 34
@@ -49,8 +35,7 @@ function SlopeGraph({ rows, selected, onSelect }) {
 
     const y = (percentile) => padY + (100 - percentile) * ((height - padY * 2) / 100)
 
-    // Labels are pushed apart where people land on the same percentile, so two
-    // names never draw on top of each other and become unreadable.
+    // Labels are pushed apart where people land on the same percentile.
     const stack = (side) => {
         const placed = []
         return rows
@@ -95,8 +80,7 @@ function SlopeGraph({ rows, selected, onSelect }) {
                             onKeyDown={e => {
                                 if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect(selected === row.id ? '' : row.id) }
                             }}>
-                            {/* A wide invisible line under the visible one, so a
-                                1.8px stroke is not a 1.8px click target. */}
+                            {/* A wide invisible line under the visible one, so a 1.8px stroke is not a 1.8px click target. */}
                             <line x1={left} y1={y1} x2={right} y2={y2} className="sl-hit" />
                             <line x1={left} y1={y1} x2={right} y2={y2} className="sl-line" />
                             <circle cx={left} cy={y1} r="4" className="sl-dot" />
@@ -138,9 +122,7 @@ function GapCard({ row, scoreMax, open, onToggle }) {
                 <span className={`fb-pill ${meta.tone}`}>{meta.label}</span>
             </div>
 
-            {/* The two readings, side by side, with the percentile underneath —
-                the raw figures are what people recognise, the percentiles are
-                what the comparison is actually made of. */}
+            {/* The two readings, side by side, with the percentile underneath. */}
             <div className="g-pair">
                 <div className="g-side">
                     <span className="g-n">{row.score}<small>/{scoreMax}</small></span>
@@ -231,16 +213,14 @@ export default function FeedbackReconciliation() {
         minReviews, gapThreshold, scoreMax, ratedAbove, ratedBelow, agreed
     } = data
 
-    // Spearman runs −1 to +1; the bar is drawn on that full domain so a negative
-    // correlation would be visibly on the wrong side of the line rather than
-    // just a smaller bar.
+    // Spearman runs −1 to +1.
     const agreementPercent = agreement === null ? 50 : ((agreement + 1) / 2) * 100
 
     return (
         <div className="fb-grid">
             {error && <div className="fb-err s12">{error}</div>}
 
-            {/* ---- The headline finding ---- */}
+            {/* The headline finding. */}
             <section className="fb-hero">
                 <span className="h-eyebrow">
                     The work record against the people who work with them · {covered} people
@@ -284,7 +264,7 @@ export default function FeedbackReconciliation() {
                 <div className="h-foot">{agreementReading}</div>
             </section>
 
-            {/* ---- The chart ---- */}
+            {/* The chart. */}
             <section className="fb-card s7">
                 <div className="fb-lbl">
                     <span>Where each instrument places the same person</span>
@@ -301,7 +281,7 @@ export default function FeedbackReconciliation() {
                 <SlopeGraph rows={rows} selected={selected} onSelect={setSelected} />
             </section>
 
-            {/* ---- Why this is possible here ---- */}
+            {/* Why this is possible here. */}
             <section className="fb-card s5">
                 <div className="fb-lbl"><span>Why no other tool shows you this</span></div>
                 <p className="fb-sub">
@@ -339,7 +319,7 @@ export default function FeedbackReconciliation() {
                 </p>
             </section>
 
-            {/* ---- The disagreements ---- */}
+            {/* The disagreements. */}
             <section className="fb-card s12">
                 <div className="fb-lbl">
                     <span>The people the two instruments cannot agree about</span>
@@ -368,7 +348,7 @@ export default function FeedbackReconciliation() {
                     )}
             </section>
 
-            {/* ---- Everyone, as a table ---- */}
+            {/* Everyone. */}
             <section className="fb-card s12">
                 <div className="fb-lbl"><span>Every person covered by both</span></div>
                 <div className="fb-tablewrap">

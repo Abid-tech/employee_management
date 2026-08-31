@@ -5,23 +5,12 @@ import { money } from './budget_format'
 import { Icon } from './budget_ui'
 
 // What went wrong, and what to budget differently next time.
-//
-// The forecast page answers "where is this heading". It cannot answer "why do
-// our budgets keep being wrong", and that is the question that changes the next
-// one. So this page is deliberately split in two: a post-mortem with money
-// attributed to a cause, and guidance expressed as a number a manager can put
-// straight into a budget.
-//
-// The estimator at the bottom is the point of the whole thing. Everything above
-// it is analysis; that is the part you can act on.
 
 const round = (n) => Math.round(n)
 const SEVERITY = { high: 'Do first', medium: 'Worth doing', low: 'Minor' }
 const ICON_FOR = { calibrate: 'trend', rate_mix: 'users', timing: 'clock', overrun: 'alert', leak: 'coin' }
 
-// The figure a card leads with. Kept as a component so a percentage, a sum and
-// a plain count all get the same typographic weight — the eye should not have to
-// work out which of three cards is the important one from the wording.
+// The figure a card leads with.
 function Metric({ metric, currency }) {
     if (!metric) return null
 
@@ -39,8 +28,7 @@ function Metric({ metric, currency }) {
     )
 }
 
-// One suggestion. The reasoning is there but folded away — it is what you read
-// when you have decided to act, not what you skim to decide.
+// One suggestion.
 function Suggestion({ finding, currency, tone }) {
     const [open, setOpen] = useState(false)
 
@@ -63,11 +51,6 @@ function Suggestion({ finding, currency, tone }) {
 }
 
 // What a correction factor is actually made of.
-//
-// "Design estimates land at 1.06×" is a claim about twenty finished tasks. Shown
-// on its own it has to be believed; shown with the tasks, the counts and the
-// hours behind it, it can be checked — and an estimator that can be checked is
-// the only kind that gets used twice.
 function DeptFacts({ row, minSample }) {
     const budgetFor100 = Math.round((row.correction || 1) * 100)
 
@@ -135,18 +118,10 @@ function DeptFacts({ row, minSample }) {
     )
 }
 
-// Estimate accuracy as a shape rather than a column of decimals. Right of the
-// centre line means budgets built from those estimates start short; left means
-// padding. The dashed tail is the worst tenth — the case contingency is for.
-//
-// Each bar opens onto the tasks it was measured from.
+// Estimate accuracy as a shape rather than a column of decimals.
 function Calibration({ rows, minSample }) {
     const [open, setOpen] = useState('')
-    // Scaled to the spread that is actually here, not to a fixed 0.5x-1.5x
-    // domain. Real estimate bias sits between about 0.8x and 1.2x, so a fixed
-    // domain drew every bar two pixels wide and the chart said nothing. The
-    // widest bar takes 42% of its half and the rest are proportional to it, with
-    // the true ratios printed on the right so the scale is never guessed at.
+    // Scaled to the spread that is actually here, not to a fixed 0.5x-1.5x domain.
     const deltas = rows.map(r => Math.abs((r.medianRatio || 1) - 1))
     const widest = Math.max(0.05, ...deltas)
     const half = 42 / widest
@@ -206,8 +181,7 @@ function Calibration({ rows, minSample }) {
     )
 }
 
-// One project's row in the post-mortem table, and everything the six columns
-// had to leave out.
+// One project's row in the post-mortem table, and everything the six columns had to leave out.
 function ProjectRow({ project, currency, columns }) {
     const [open, setOpen] = useState(false)
     const shape = project.shape
@@ -394,7 +368,7 @@ export default function BudgetAdvisor() {
         <div className="bd-grid">
             {error && <div className="bd-err s12">{error}</div>}
 
-            {/* ---- Header ---- */}
+            {/* Header. */}
             <section className="bd-hero">
                 <span className="h-eyebrow">Budget advisor · read from {tasksAnalysed} finished tasks across {projectsReviewed} projects</span>
 
@@ -408,8 +382,7 @@ export default function BudgetAdvisor() {
                         </div>
                     </div>
 
-                    {/* Each of these is a median over a set of finished tasks.
-                        Clicking one shows the set. */}
+                    {/* Each of these is a median over a set of finished tasks. */}
                     <div className="h-stats">
                         {calibration.filter(c => c.enough).slice(0, 4).map(row => (
                             <button type="button" key={row.department}
@@ -441,11 +414,7 @@ export default function BudgetAdvisor() {
                 </div>
             </section>
 
-            {/* ---- The read-back ----------------------------------------------
-                Numbers come from the code; only the wording comes from the
-                model. It is never asked what the overspend was — a model
-                inventing a financial figure is a far worse failure than a
-                plainly worded paragraph. */}
+            {/* The read-back ---------------------------------------------- Numbers come from the code. */}
             {data.narration && (
                 <section className="bd-card s12">
                     <div className="bd-lbl">
@@ -476,7 +445,7 @@ export default function BudgetAdvisor() {
                 </section>
             )}
 
-            {/* ---- What went wrong ---- */}
+            {/* What went wrong. */}
             <section className="bd-card s12">
                 <div className="bd-lbl">
                     <span>What went wrong</span>
@@ -495,7 +464,7 @@ export default function BudgetAdvisor() {
                     )}
             </section>
 
-            {/* ---- What to do next time ---- */}
+            {/* What to do next time. */}
             <section className="bd-card s12">
                 <div className="bd-lbl">
                     <span>What to do next time</span>
@@ -514,7 +483,7 @@ export default function BudgetAdvisor() {
                     )}
             </section>
 
-            {/* ---- Calibration ---- */}
+            {/* Calibration. */}
             <section className="bd-card s6">
                 <div className="bd-lbl"><span>How wrong the estimates are</span></div>
                 <p className="bd-sub">
@@ -525,7 +494,7 @@ export default function BudgetAdvisor() {
                 <Calibration rows={calibration} minSample={minSample} />
             </section>
 
-            {/* ---- The estimator ---- */}
+            {/* The estimator. */}
             <section className="bd-card s6">
                 <div className="bd-lbl"><span>Budget the next project</span><Icon name="coin" size={14} /></div>
                 <p className="bd-sub">
@@ -550,9 +519,7 @@ export default function BudgetAdvisor() {
 
                 {estimate && (
                     <div style={{ marginTop: 18 }}>
-                        {/* The recommendation, then the four figures drawn to the
-                            same scale so the contingency gap is a distance you can
-                            see rather than a subtraction you have to do. */}
+                        {/* The recommendation. */}
                         <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
                             <span style={{ fontSize: 38, fontWeight: 700, letterSpacing: '-.04em', color: 'var(--b-green)' }}>
                                 {money(estimate.recommended, currency)}
@@ -606,7 +573,7 @@ export default function BudgetAdvisor() {
                 )}
             </section>
 
-            {/* ---- Per project ---- */}
+            {/* Per project. */}
             <section className="bd-card s12">
                 <div className="bd-lbl"><span>Where each project's money went astray</span></div>
                 <p className="bd-sub">

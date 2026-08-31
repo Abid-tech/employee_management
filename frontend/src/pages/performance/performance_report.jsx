@@ -3,11 +3,6 @@ import { performanceApi } from '../../lib/performance_api'
 import { Icon } from './performance_ui'
 
 // Module 4, page 3 — the customisable report.
-//
-// The columns, filters and sort all live in the URL the API is called with, so
-// the table on screen and the CSV that downloads are built from exactly the same
-// request. There is no second code path that could quietly disagree with what
-// the reader is looking at.
 
 const STATUSES = [
     { value: '', label: 'Any wellbeing' },
@@ -33,13 +28,11 @@ export default function PerformanceReport() {
     const [columns, setColumns] = useState(null)
     const [filters, setFilters] = useState({
         department: '', minScore: '', maxScore: '',
-        // '' means every employee. The builder defaults to the whole company
-        // because a report that silently truncates is worse than a long one.
+        // '' means every employee.
         status: '', momentum: '', sortBy: 'rank', sortDir: 'desc', limit: ''
     })
 
-    // The department list comes from the overview rather than a second endpoint,
-    // so the filter can only ever offer departments that actually have people.
+    // The department list comes from the overview rather than a second endpoint.
     useEffect(() => {
         performanceApi.overview()
             .then(data => setDepartments(data.departments.map(d => d.name)))
@@ -78,8 +71,7 @@ export default function PerformanceReport() {
                 // Never let the table become no table at all.
                 return list.length === 1 ? list : list.filter(c => c !== key)
             }
-            // Keep the author's chosen order rather than click order, so the
-            // table reads the same way however it was assembled.
+            // Keep the author's chosen order rather than click order.
             const order = report.availableColumns.map(c => c.key)
             return [...list, key].sort((a, b) => order.indexOf(a) - order.indexOf(b))
         })
@@ -112,8 +104,7 @@ export default function PerformanceReport() {
     const labelFor = (key) => report.availableColumns.find(c => c.key === key)?.label || key
     const isNumeric = (key) => report.availableColumns.find(c => c.key === key)?.type === 'number'
 
-    // One chip per filter actually in force, so "what am I looking at" is
-    // answered on the result itself rather than by scrolling back up.
+    // One chip per filter actually in force.
     const appliedChips = [
         filters.department && { key: 'department', label: filters.department },
         filters.minScore && { key: 'minScore', label: `Score ≥ ${filters.minScore}` },
@@ -126,7 +117,7 @@ export default function PerformanceReport() {
     return (
         <div className="p-grid">
 
-            {/* ---- Builder ---- */}
+            {/* Builder. */}
             <section className="p-card s12">
                 <div className="p-lbl">
                     <span>Report builder</span>
@@ -189,9 +180,7 @@ export default function PerformanceReport() {
                         </select>
                     </div>
 
-                    {/* How many rows to keep after sorting. "Top 5" is the common
-                        ask for a recognition list; everyone is the default so the
-                        report is complete unless somebody chooses otherwise. */}
+                    {/* How many rows to keep after sorting. */}
                     <div className="p-field">
                         <label htmlFor="r-limit">Show</label>
                         <select id="r-limit" value={filters.limit} onChange={e => setFilter('limit', e.target.value)}>
@@ -236,7 +225,7 @@ export default function PerformanceReport() {
                 </div>
             </section>
 
-            {/* ---- Result ---- */}
+            {/* Result. */}
             <section className="p-card s12">
                 <div className="p-lbl">
                     <span>Result · {report.count} {report.count === 1 ? 'row' : 'rows'}, {active.length} columns</span>
@@ -245,9 +234,7 @@ export default function PerformanceReport() {
                     </span>
                 </div>
 
-                {/* A visible summary of what is currently applied. Without it a
-                    filter that changes nothing looks identical to one that never
-                    ran, which is exactly how a working builder reads as broken. */}
+                {/* A visible summary of what is currently applied. */}
                 <div className="p-applied">
                     {appliedChips.length === 0
                         ? <span className="ap-none">No filters — showing every employee</span>

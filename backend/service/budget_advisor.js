@@ -7,22 +7,6 @@ const budget = require('./budget_service')
 const gemini = require('./gemini')
 
 // The budget advisor: what went wrong, and what to budget differently next time.
-//
-// A forecast tells you where a project is heading. It cannot tell you *why* your
-// budgets keep being wrong, which is the question that actually changes the next
-// one. So this looks backwards across every project at once and produces two
-// distinct things:
-//
-//   post-mortem    what went wrong, with the money attributed to a cause
-//   guidance       what to do differently, as a number you can put in a budget
-//
-// Every finding is computed from records the system already keeps, and every
-// one carries the arithmetic that produced it. A recommendation a manager cannot
-// check is a recommendation they are right to ignore.
-//
-// Gemini, when a key is configured, is asked only to *phrase* the summary. The
-// findings themselves are always the code's, because a model inventing a
-// financial claim is a far worse failure than a plainly worded one.
 
 const DAY = 24 * 60 * 60 * 1000
 
@@ -44,9 +28,7 @@ const percentile = (list, p) => {
     return sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * p))]
 }
 
-// Below this a pattern is an anecdote. Said out loud rather than buried, because
-// "how much evidence is enough" is exactly what a reader should be allowed to
-// disagree with.
+// Below this a pattern is an anecdote.
 const MIN_SAMPLE = 8
 
 const fmt = (value, currency = 'USD') => {
@@ -58,13 +40,6 @@ const fmt = (value, currency = 'USD') => {
 // --- 1. Estimate calibration -------------------------------------------------
 
 // How wrong this team's estimates are, per department.
-//
-// The single most useful number a budget advisor can produce. If Design
-// consistently finishes at 1.3× its estimate, then every Design budget built
-// from estimates is 30% short before anyone starts — and no amount of watching
-// the burn chart afterwards fixes that. The correction factor is the median
-// rather than the mean, because one catastrophic task should not redefine how a
-// whole department estimates.
 const calibration = (doneTasks) => {
     const byDepartment = new Map()
 
@@ -86,15 +61,12 @@ const calibration = (doneTasks) => {
             enough: list.length >= MIN_SAMPLE,
             medianRatio: round(mid, 2),
             p90Ratio: round(percentile(ratios, 0.9), 2),
-            // What to multiply an estimate by when budgeting. Rounded to whole
-            // percents because a factor of 1.1732 implies a precision nobody has.
+            // What to multiply an estimate by when budgeting.
             correction: round(mid, 2),
             overrunRate: round((ratios.filter(r => r > 1.15).length / ratios.length) * 100, 0),
             direction: mid > 1.1 ? 'under' : mid < 0.9 ? 'over' : 'close',
 
-            // The evidence behind the factor. A median is a claim about a set of
-            // tasks; without the set it has to be taken on trust, and an
-            // estimator nobody trusts does not get used.
+            // The evidence behind the factor.
             ranOver: ratios.filter(r => r > 1.15).length,
             ranUnder: ratios.filter(r => r < 0.85).length,
             onTarget: ratios.filter(r => r >= 0.85 && r <= 1.15).length,
@@ -123,11 +95,6 @@ const calibration = (doneTasks) => {
 // --- 2. Where the money actually leaked --------------------------------------
 
 // The worst-estimated tasks, priced.
-//
-// An overrun is never spread evenly. Naming the handful of items that caused
-// most of it is what turns "we went over" into something a team can learn from,
-// and it usually reveals a category — a kind of work this team always
-// underestimates — rather than a person.
 const worstEstimates = (doneTasks, costByTask, currency) => doneTasks
     .filter(task => task.estimateHours > 0 && task.spentHours > task.estimateHours * 1.25)
     .map(task => {
@@ -151,12 +118,6 @@ const worstEstimates = (doneTasks, costByTask, currency) => doneTasks
 // --- 3. Rate efficiency ------------------------------------------------------
 
 // Expensive people doing work that did not need them.
-//
-// Not a criticism of anyone — it is usually a scheduling accident, and it is
-// invisible in a budget that only tracks a total. The saving is calculated
-// against the *median* rate of people who actually worked on this project, not
-// against the cheapest possible person, because the cheapest person is rarely a
-// realistic alternative.
 const rateEfficiency = (priced, tasksById, currency) => {
     const rates = priced.map(p => p.costRate).filter(r => r > 0)
     if (rates.length < MIN_SAMPLE) return null
@@ -192,11 +153,6 @@ const rateEfficiency = (priced, tasksById, currency) => {
 // --- 4. When the money was spent ---------------------------------------------
 
 // Spend concentrated at the end is the signature of a plan that did not hold.
-//
-// Worth separating from simply spending too much: a project that burns evenly
-// and lands over was mis-budgeted, while one that is calm for six weeks and then
-// doubles was mis-planned. Those need different fixes, and the burn chart alone
-// does not distinguish them.
 const shapeOfSpend = (priced) => {
     if (priced.length < MIN_SAMPLE) return null
 
@@ -217,8 +173,7 @@ const shapeOfSpend = (priced) => {
     return {
         shares,
         lastQuarterShare: shares[3],
-        // A flat project spends 25% in each quarter. Above 40% in the final one
-        // is a crunch, not a rounding difference.
+        // A flat project spends 25% in each quarter.
         backLoaded: shares[3] >= 40,
         frontLoaded: shares[0] >= 40,
         elapsedDays: Math.round(span / DAY)
@@ -248,9 +203,7 @@ const reviewProject = async (objectiveId, context) => {
     const detail = await budget.projectFinancials(objectiveId, { context, full: true })
     if (!detail?.budget) return null
 
-    // projectFinancials already loaded these to work out the outstanding hours;
-    // asking Mongo for them a second time is one round trip per project for a
-    // result we are holding.
+    // projectFinancials already loaded these to work out the outstanding hours.
     const tasks = detail.tasks || await Task.find({ objective: objectiveId })
     const tasksById = new Map(tasks.map(t => [String(t._id), t]))
     const currency = detail.budget.currency
@@ -425,16 +378,6 @@ const buildFindings = (projects, calibrationRows, currency) => {
 // --- The model's part --------------------------------------------------------
 
 // Reading the trends back as plain language.
-//
-// The division of labour is deliberate and worth being strict about: every
-// number, ratio and threshold above is computed in code, and the model is handed
-// those findings and asked only to write them up. It is never asked what the
-// overspend was or which department estimates badly, because a model inventing a
-// financial figure is a far worse failure than a plainly worded paragraph.
-//
-// Called directly rather than through service/gemini.js: that module's helper is
-// shaped to return a task list for the document importer, and bending it to
-// produce a summary is how the wrong schema ends up in the wrong place.
 const MODEL_TIMEOUT = 30000
 
 const askModel = async (evidence) => {
@@ -503,9 +446,7 @@ const askModel = async (evidence) => {
 
         return { ...parsed, engine: gemini.modelName() }
     } catch (error) {
-        // A model that is slow, rate-limited or unreachable must not take the
-        // page down with it. The computed findings are the substance; the
-        // write-up is a convenience, and the fallback says so plainly.
+        // A model that is slow, rate-limited or unreachable must not take the page down with it.
         console.error('[advisor] model narration unavailable:', error.message)
         return null
     } finally {
@@ -513,8 +454,7 @@ const askModel = async (evidence) => {
     }
 }
 
-// What the page says when there is no model, or the model failed. Written from
-// the same computed findings, so the substance is identical either way.
+// What the page says when there is no model, or the model failed.
 const summariseByRules = (reviews, calibrationRows, findings, currency) => {
     const overrunning = reviews.filter(r => r.overrun)
     const worstDept = calibrationRows.find(r => r.enough && r.direction === 'under')
@@ -539,10 +479,6 @@ const summariseByRules = (reviews, calibrationRows, findings, currency) => {
 // --- What the next project should be budgeted at -----------------------------
 
 // Applying the calibration factors to a proposed piece of work.
-//
-// This is the point of the whole page: not "you went over", but "here is the
-// number to write down next time". Estimates are corrected per department and
-// the contingency is taken from the observed tail rather than a flat 10%.
 const budgetFor = (plan, calibrationRows, blendedRates) => {
     const lines = []
     let base = 0
@@ -579,8 +515,7 @@ const budgetFor = (plan, calibrationRows, blendedRates) => {
         raw: money(base),
         expected: money(corrected),
         worstCase: money(tail),
-        // What to actually commit: the corrected figure, plus enough of the tail
-        // to survive a bad run without hoarding budget.
+        // What to actually commit: the corrected figure.
         recommended: money(corrected + (tail - corrected) * 0.4)
     }
 }
@@ -629,8 +564,7 @@ const advise = async ({ plan } = {}) => {
 
     const findings = buildFindings(reviews, calibrationRows, currency)
 
-    // The model sees only what was computed — never the raw ledger — so it has
-    // nothing to draw a new number from even if it were inclined to.
+    // The model sees only what was computed.
     const evidence = {
         currency,
         projects: reviews.map(r => ({
@@ -666,9 +600,7 @@ const advise = async ({ plan } = {}) => {
         minSample: MIN_SAMPLE,
         generatedAt: new Date(),
 
-        // Reported honestly. This used to say the model's name whenever a key
-        // was present, whether or not the model had actually been asked
-        // anything — which is a claim the page had not earned.
+        // Reported honestly.
         engine: narration.engine,
         modelConfigured: gemini.isConfigured(),
         narration,

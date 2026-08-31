@@ -3,17 +3,10 @@ const mail = require('../service/mail_service')
 const objectiveService = require('../service/objective_service')
 const { PRIORITIES, STATUSES } = require('../model/task')
 
-// Saves writing try/catch in every handler; errors land on the error handler
-// in server.js instead.
+// Saves writing try/catch in every handler; errors land on the error handler in server.js instead.
 const asyncRoute = (handler) => (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next)
 
-// Everything the first page needs in one call: the departments with their
-// counts, the tasks for whichever one is being viewed, and the projects those
-// tasks belong to.
-//
-// The projects come back with their whole-company rollup rather than only the
-// part in this department, because the question the list answers is "how is the
-// portal going", and half a project is not an answer to that.
+// Everything the first page needs in one call: the departments with their counts.
 const getBoard = asyncRoute(async (req, res) => {
     const department = req.query.department || null
 
@@ -140,8 +133,7 @@ const downloadAttachment = asyncRoute(async (req, res) => {
     if (!attachment) return res.status(404).json({ error: 'That file is no longer available.' })
 
     res.setHeader('Content-Type', attachment.mimetype)
-    // attachment; disposition so a stored file can never be rendered as a page
-    // inside the app's own origin.
+    // attachment.
     res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(attachment.filename)}"`)
     res.send(attachment.data)
 })
@@ -153,17 +145,13 @@ const deleteAttachment = asyncRoute(async (req, res) => {
     res.json({ ok: true })
 })
 
-
-// --- Assignment notifications -----------------------------------------------
-// Every notice the system produced, and whether a real mail server carried it.
-// Exposed so the feature can be demonstrated, and audited, without credentials.
+// Assignment notifications ----------------------------------------------- Every notice.
 const getMailOutbox = asyncRoute(async (req, res) => {
     res.json({
         mail: mail.status(),
         messages: await mail.listMessages({ limit: req.query.limit, employee: req.query.employee })
     })
 })
-
 
 // Pushing a deadline, deliberately and on the record.
 const extendDeadline = asyncRoute(async (req, res) => {
@@ -178,7 +166,6 @@ const extendDeadline = asyncRoute(async (req, res) => {
 
     res.json({ task: result })
 })
-
 
 // What moving this deadline would cost, before anyone commits to it.
 const extendImpact = asyncRoute(async (req, res) => {

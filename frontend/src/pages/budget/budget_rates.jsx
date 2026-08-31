@@ -5,20 +5,12 @@ import { formatDate, money } from './budget_format'
 import { Avatar, Icon } from './budget_ui'
 
 // Rates, and the dates they applied from.
-//
-// The screen exists to make one behaviour visible: a new rate never edits an old
-// one. Setting a rate adds a row with its own start date, so a raise applies from
-// the day it happened and hours logged before it keep the cost they were
-// calculated at. Tools that store a single number on the employee quietly rewrite
-// last quarter's margin the moment somebody gets promoted.
 
 export default function BudgetRates() {
     const { meta, actorId } = useBudget()
 
     const [people, setPeople] = useState([])
-    // Stamped when the table is read, not while rendering. "In force today" has
-    // to be decided against a fixed instant — reading the clock during render
-    // makes the answer depend on when React happened to re-run the component.
+    // Stamped when the table is read, not while rendering.
     const [readAt, setReadAt] = useState(() => Date.now())
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')

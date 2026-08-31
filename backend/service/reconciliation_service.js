@@ -2,31 +2,6 @@ const Review = require('../model/review')
 const performance = require('./performance_service')
 
 // Where the record and the humans disagree about the same person.
-//
-// This app holds two completely independent opinions of everybody, produced by
-// two different instruments:
-//
-//   the record     Module 4 derives a score from finished tasks, deadlines met,
-//                  hours logged and comments answered. Nobody types it in.
-//   the humans     Module 5 collects manager, peer, self and client ratings.
-//                  Nobody computes it.
-//
-// Every product on the market owns exactly one of those. Workday, Lattice and
-// 15Five hold reviews and have no idea what anyone actually shipped. Jira and
-// Asana hold the work and have never heard of a review cycle. So the comparison
-// between them — which is the single most useful thing either dataset can
-// produce — is a question nobody is in a position to ask.
-//
-// It is worth asking because both instruments are biased in known ways and the
-// biases are different. A derived score cannot see mentoring, judgement, or the
-// person who quietly stops three incidents a month. A human rating cannot see
-// that somebody has missed every deadline this quarter, and drifts towards
-// whoever is most visible. Where the two agree, the reading is probably sound.
-// Where they diverge, one of them is missing something specific — and this names
-// which, rather than declaring a winner.
-//
-// The output is deliberately not a ranking of people. It is a list of places a
-// manager should go and look, each carrying the arithmetic that produced it.
 
 const round = (n, dp = 1) => {
     const f = 10 ** dp
@@ -34,28 +9,15 @@ const round = (n, dp = 1) => {
 }
 const mean = (list) => (list.length ? list.reduce((a, b) => a + b, 0) / list.length : 0)
 
-// Below this a person's rating is one or two opinions, and comparing one
-// opinion against a quarter of delivery data is not a finding.
+// Below this a person's rating is one or two opinions.
 const MIN_REVIEWS = 3
 
-// How far apart the two readings must sit before it is worth a manager's
-// attention. Expressed in percentile points, so 20 means "a fifth of the company
-// separates where these two instruments place the same person".
+// How far apart the two readings must sit before it is worth a manager's attention.
 const GAP_THRESHOLD = 20
 
 // --- Putting two different measurements on one axis --------------------------
 
-// A score out of 100 and a rating out of 5 cannot be compared directly, and
-// rescaling one onto the other is the trap. Ratings cluster: almost nobody is
-// given a 1 or a 5, so a "3.6 average" is not 72% of anything — it is the middle
-// of the range people actually use. Multiplying by 20 would manufacture a
-// disagreement out of nothing but the shape of the two distributions.
-//
-// So both readings are converted to a percentile *within this company*: where
-// does this person sit relative to their own colleagues on each instrument. That
-// is unit-free, it survives a lenient or a harsh review culture, and it makes
-// the comparison one of ranks rather than of numbers that were never on the same
-// scale.
+// A score out of 100 and a rating out of 5 cannot be compared directly.
 const percentileOf = (value, population) => {
     if (population.length < 2) return 50
     const below = population.filter(v => v < value).length
@@ -64,13 +26,6 @@ const percentileOf = (value, population) => {
 }
 
 // Spearman's rank correlation between the two orderings.
-//
-// The right tool for "do these two instruments put people in the same order",
-// and it is chosen over Pearson deliberately: nothing here claims the two scales
-// are linearly related, only that they should rank people similarly if they are
-// measuring anything alike. +1 means the orderings match, 0 means they are
-// unrelated, and a negative figure would mean the company systematically rates
-// its weakest deliverers highest — which is itself worth knowing.
 const spearman = (pairs) => {
     if (pairs.length < 3) return null
 
@@ -78,8 +33,7 @@ const spearman = (pairs) => {
         const sorted = values.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v)
         const ranks = new Array(values.length)
 
-        // Ties share the average of the positions they occupy, otherwise two
-        // identical scores would be given different ranks by list order alone.
+        // Ties share the average of the positions they occupy.
         let i = 0
         while (i < sorted.length) {
             let j = i
@@ -114,21 +68,13 @@ const spearman = (pairs) => {
 // --- What the disagreement is made of ----------------------------------------
 
 // Candidate explanations, each one a check that either holds or does not.
-//
-// This is the part that has to stay honest. The temptation is to write a
-// sentence that sounds insightful; what is actually useful is a short list of
-// specific things that are true about this person, drawn from figures already
-// computed, so a manager can agree or disagree with each one. Nothing here
-// asserts a cause — every line reports a fact and says which instrument is blind
-// to it.
 const explain = ({ direction, person, ratings, competencyGaps }) => {
     const reasons = []
     const stats = person.stats || {}
     const health = person.sustainability || {}
 
     if (direction === 'rated_above') {
-        // People think more of them than the delivery record does. Usually the
-        // record is missing work that is real but not a finished task.
+        // People think more of them than the delivery record does.
         if (stats.helped > 0 || stats.answers > 0) {
             reasons.push({
                 kind: 'invisible_work',
@@ -158,16 +104,11 @@ const explain = ({ direction, person, ratings, competencyGaps }) => {
     }
 
     if (direction === 'rated_below') {
-        // The record is strong and the humans are not. The complaint is usually
-        // real and concentrated in one competency, so name it — the absolute
-        // rating matters less than which axis is dragging the average down.
+        // The record is strong and the humans are not.
         const worst = competencyGaps[0]
         const spread = worst?.best !== undefined ? round(worst.best - worst.score, 2) : 0
 
-        // Whether the complaint is concentrated in one competency or spread
-        // evenly across all six changes what a manager should do about it, so
-        // the sentence is decided by the number rather than assuming the
-        // flattering case. A 0.25 spread is a flat profile, not a weak spot.
+        // Whether the complaint is concentrated in one competency or spread evenly across all six changes.
         if (worst && spread >= 0.5) {
             reasons.push({
                 kind: 'competency',
@@ -216,10 +157,7 @@ const explain = ({ direction, person, ratings, competencyGaps }) => {
         })
     }
 
-    // A gap with nothing in the recorded data to account for it is itself a
-    // result, and saying so is better than padding the card with a plausible
-    // sentence. It sends the manager to ask a person rather than to read a
-    // dashboard, which is the correct next step.
+    // A gap with nothing in the recorded data to account for it is itself a result.
     if (direction !== 'agree' && reasons.length === 0) {
         reasons.push({
             kind: 'unexplained',
@@ -231,8 +169,7 @@ const explain = ({ direction, person, ratings, competencyGaps }) => {
         })
     }
 
-    // Always last: what the ratings themselves are made of, so the reader can
-    // judge how much weight the human half deserves.
+    // Always last: what the ratings themselves are made of.
     reasons.push({
         kind: 'evidence',
         headline: `${ratings.count} reviews from ${ratings.sourceCount} of the 4 sources`,
@@ -249,16 +186,13 @@ const explain = ({ direction, person, ratings, competencyGaps }) => {
 // --- Public ------------------------------------------------------------------
 
 const reconcile = async (options = {}) => {
-    // Both halves are read exactly once. The performance overview is the
-    // expensive one and it already computes every figure needed here, so this
-    // adds a single reviews query to work the whole comparison out.
+    // Both halves are read exactly once.
     const [overview, reviews] = await Promise.all([
         performance.overview(options),
         Review.find({ status: { $ne: 'draft' } }).select('employee ratings source')
     ])
 
-    // Human side: one average per person, plus a per-competency breakdown so a
-    // disagreement can name which competency it is concentrated in.
+    // Human side: one average per person.
     const byPerson = new Map()
     for (const review of reviews) {
         const key = String(review.employee)
@@ -302,8 +236,7 @@ const reconcile = async (options = {}) => {
             : gap > 0 ? 'rated_above'
                 : 'rated_below'
 
-        // Weakest competency first — that is where a "rated below" complaint
-        // usually lives, and naming it turns a gap into something actionable.
+        // Weakest competency first.
         const competencyGaps = [...bucket.byCompetency.entries()]
             .map(([key, scores]) => ({ key, label: LABEL[key] || key, score: round(mean(scores), 2), count: scores.length }))
             .sort((a, b) => a.score - b.score)
@@ -354,8 +287,7 @@ const reconcile = async (options = {}) => {
         }
     })
 
-    // Biggest disagreement first: this page exists to send somebody to look at
-    // the people the two instruments cannot agree about.
+    // Biggest disagreement first: this page exists to send somebody to look at the people the two.
     rows.sort((a, b) => Math.abs(b.gap) - Math.abs(a.gap))
 
     const agreement = spearman(rows.map(r => ({ record: r.score, human: r.rating })))
@@ -371,10 +303,7 @@ const reconcile = async (options = {}) => {
         skipped: overview.leaderboard.length - rows.length,
         scoreMax: overview.scoreMax,
 
-        // How much the two instruments agree overall, and what that means. The
-        // headline finding of the page is this one number: if the record and the
-        // reviewers broadly agree, the exceptions are worth investigating; if
-        // they do not, one of the two is not measuring what it claims to.
+        // How much the two instruments agree overall, and what that means.
         agreement,
         agreementReading: agreement === null ? 'Not enough people are covered by both to compare the orderings.'
             : agreement >= 0.6 ? 'The two instruments broadly put people in the same order, so the exceptions below are worth a look rather than a rewrite of either.'

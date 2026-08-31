@@ -5,25 +5,17 @@ const Objective = require('../model/objective')
 const Comment = require('../model/comment')
 const Attachment = require('../model/attachment')
 
-// All database access for Module 3 lives here, so the controllers stay about
-// HTTP and never build a query themselves.
+// All database access for Module 3 lives here.
 
 const ASSIGNEE_FIELDS = 'name email jobTitle department color skills'
 
-// --- Calculated fields ------------------------------------------------------
-// Worked out on read rather than stored, so they can never disagree with the
-// checklist underneath them.
+// Calculated fields ------------------------------------------------------ Worked out on read.
 
-// Whole days between now and the deadline. Negative once the date has passed,
-// and zero for the whole of the day something is due.
+// Whole days between now and the deadline.
 const daysUntil = (dueDate) =>
     dueDate ? Math.ceil((new Date(dueDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)) : null
 
-// The one definition of "late", used by both the per-task fields and the
-// department counts. They were worked out separately before, and disagreed: a
-// raw `dueDate < now` calls a task late from one minute past midnight on the
-// day it is due, while the task list is still calling it "due today". A task is
-// late only once its day has fully passed.
+// The one definition of "late", used by both the per-task fields and the department counts.
 const isOverdue = (task) => {
     if (task.status === 'done') return false
     const days = daysUntil(task.dueDate)
@@ -124,17 +116,11 @@ const buildTaskDocument = (input) => ({
     source: input.source || 'manual',
     aiReason: input.aiReason || '',
 
-    // Set here as well as in stampDates, because createManyTasks goes through
-    // insertMany, which writes straight to the driver and runs no document code.
+    // Set here as well as in stampDates.
     assignedAt: input.assigneeId ? new Date() : undefined
 })
 
 // Telling somebody work has landed on them.
-//
-// Deliberately fired after the write has succeeded and never awaited by the
-// caller in a way that could fail it: a task that is genuinely assigned must not
-// come back as an error because a mail server was slow. Failures are recorded in
-// the outbox instead, where they can be seen and retried.
 const announce = async (taskIds) => {
     if (!taskIds || taskIds.length === 0) return
 
@@ -156,11 +142,7 @@ const createTask = async (input) => {
     return getTask(task._id)
 }
 
-// Used when a whole plan is accepted from an imported document, so the lot
-// lands as one action rather than a dozen separate saves.
-//
-// The notice goes out once the whole batch is written, which is what makes a
-// nine-task import arrive as one email per person rather than nine.
+// Used when a whole plan is accepted from an imported document.
 const createManyTasks = async (inputs) => {
     const created = await Task.insertMany(inputs.map(buildTaskDocument))
     await announce(created.filter(t => t.assignee).map(t => t._id))
@@ -168,14 +150,6 @@ const createManyTasks = async (inputs) => {
 }
 
 // Moving a deadline, on the record.
-//
-// A manager can already change `dueDate` through the ordinary edit path, and
-// that is fine for correcting a typo. This is the deliberate version: it keeps
-// the date it moved from, who moved it, and why, so a task that has been pushed
-// three times says so on its own face.
-//
-// The assignee is told, because a deadline that moves without the person
-// working to it hearing about it is how work gets done to the wrong date.
 const extendDeadline = async (id, { dueDate, reason } = {}, actor) => {
     const task = await Task.findById(id)
     if (!task) return null
@@ -222,12 +196,7 @@ const extendDeadline = async (id, { dueDate, reason } = {}, actor) => {
 
 const EDITABLE = ['title', 'description', 'department', 'priority', 'status', 'estimateHours', 'spentHours', 'dueDate']
 
-// Keeps the three timestamps honest wherever a task's status moves — from an
-// edit, from a checklist item being ticked, or from "Mark done". Written in one
-// place so the dates cannot depend on which route happened to change the task.
-//
-// Reopening a finished task clears completedAt rather than leaving a completion
-// date on work that is running again.
+// Keeps the three timestamps honest wherever a task's status moves.
 const stampDates = (task) => {
     const now = new Date()
 
@@ -245,8 +214,7 @@ const updateTask = async (id, changes, actor) => {
     const task = await Task.findById(id)
     if (!task) return null
 
-    // Noted before the change so a reassignment can be told apart from an edit
-    // to a task that was already theirs — only the former is worth an email.
+    // Noted before the change so a reassignment can be told apart from an edit to a task.
     const previousAssignee = task.assignee ? String(task.assignee) : null
     const previousDue = task.dueDate ? new Date(task.dueDate) : null
 
@@ -258,17 +226,10 @@ const updateTask = async (id, changes, actor) => {
     if ('assigneeId' in changes) task.assignee = changes.assigneeId || null
     if ('objectiveId' in changes) task.objective = changes.objectiveId || null
 
-    // Ticking the first checklist item should move the task off "to do",
-    // otherwise the orbit and the task page disagree with each other.
+    // Ticking the first checklist item should move the task off "to do".
     if (task.status === 'todo' && task.subtasks.some(s => s.done)) task.status = 'in_progress'
 
     // A deadline moved through the ordinary edit path still gets recorded.
-    //
-    // Without this the audit trail had a hole straight through it: `dueDate` is
-    // an editable field, so anyone could move a date with a plain PATCH and
-    // leave no trace, which makes the extension history worth exactly nothing.
-    // The reason is empty here because none was asked for — and that absence is
-    // itself worth seeing on the record.
     const nextDue = task.dueDate ? new Date(task.dueDate) : null
     const dueMoved = (previousDue?.getTime() ?? null) !== (nextDue?.getTime() ?? null)
 
@@ -286,8 +247,7 @@ const updateTask = async (id, changes, actor) => {
     stampDates(task)
     await task.save()
 
-    // Only when the work has genuinely moved to somebody new — editing a title
-    // on a task somebody already owns is not worth an email.
+    // Only when the work has genuinely moved to somebody new.
     const nowAssignee = task.assignee ? String(task.assignee) : null
     if (nowAssignee && nowAssignee !== previousAssignee) await announce([task._id])
     return getTask(task._id)

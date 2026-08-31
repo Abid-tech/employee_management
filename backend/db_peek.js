@@ -1,14 +1,4 @@
 // Show what is actually in the database, from the terminal.
-//
-//   node db_peek.js                 every collection with a document count
-//   node db_peek.js tasks           the first few documents in one collection
-//   node db_peek.js tasks 10        the first 10
-//
-// Useful when demonstrating that the app is talking to a real database rather
-// than to hard-coded arrays — it connects with the same MONGODB_URI the server
-// uses, so if this prints data, the server is reading that same data.
-//
-// It never prints the connection string or the password.
 
 require('dotenv').config({ path: require('path').join(__dirname, '.env') })
 

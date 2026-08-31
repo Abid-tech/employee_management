@@ -1,5 +1,4 @@
-/* Company calendar. Scoped under .cal so nothing collides with Bootstrap
- * or the other module stylesheets. */
+/* Company calendar. */
 
 .cal {
     --navy: #0A2947;
@@ -32,7 +31,7 @@
 .cal *::before,
 .cal *::after { box-sizing: border-box; }
 
-/* ── Head ─────────────────────────────────────────────────────────────── */
+/* ── Head ───────────────────────────────────────────────────────────────. */
 
 .cal .cal-head {
     display: flex;
@@ -86,7 +85,7 @@
 .cal .cal-nav button:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
 .cal .cal-nav .cal-today { font-size: 13px; font-weight: 600; }
 
-/* ── Legend ───────────────────────────────────────────────────────────── */
+/* ── Legend ─────────────────────────────────────────────────────────────. */
 
 .cal .cal-legend {
     display: flex;
@@ -138,7 +137,7 @@
     border-radius: 6px;
 }
 
-/* ── Layout ───────────────────────────────────────────────────────────── */
+/* ── Layout ─────────────────────────────────────────────────────────────. */
 
 .cal .cal-body {
     display: grid;
@@ -228,7 +227,7 @@
     text-align: center;
 }
 
-/* ── Side panels ──────────────────────────────────────────────────────── */
+/* ── Side panels ────────────────────────────────────────────────────────. */
 
 .cal .cal-side { display: flex; flex-direction: column; gap: 14px; }
 
@@ -346,6 +345,5 @@
     .cal .cal-cell { min-height: 62px; }
 }
 
-/* The app's global footer sits oddly under a full-height calendar, the same
-   reason Module 4 hides it on its own pages. */
+/* The app's global footer sits oddly under a full-height calendar. */
 body:has(.cal) #footer { display: none; }

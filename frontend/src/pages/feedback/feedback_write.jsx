@@ -6,15 +6,6 @@ import { SOURCE } from './feedback_format'
 import { Icon, Stars } from './feedback_ui'
 
 // Writing a review.
-//
-// The same form serves all four sources, because the record they produce is the
-// same shape — only who is speaking changes. A client review swaps the reviewer
-// dropdown for a name field and attaches to the project the feedback is about.
-//
-// The comment boxes check their own language as you type. That check is the same
-// rule the calibration page applies afterwards, moved to the moment it can
-// actually change the outcome: telling a manager in March that their January
-// reviews were vague helps nobody.
 
 const TRAIT_WORDS = [
     'great', 'good', 'excellent', 'amazing', 'awesome', 'brilliant', 'outstanding',
@@ -73,17 +64,10 @@ export default function FeedbackWrite() {
 
     const set = (key, value) => setForm(prev => ({ ...prev, [key]: value }))
 
-    // Both of these used to be effects that wrote back into form state the
-    // moment something else changed, which is a render loop wearing a disguise:
-    // the component set state, re-rendered, and the effect ran again to check
-    // its own work. They are derivations, so they are derived.
-    //
-    // The cycle falls back to whichever one the server says is current, until
-    // the user types their own.
+    // Both of these used to be effects that wrote back into form state the moment something else.
     const cycle = form.cycle || meta?.currentCycle || ''
 
-    // A self-assessment is always about the person writing it, so the subject
-    // field would be a trick question.
+    // A self-assessment is always about the person writing it.
     const employeeId = form.source === 'self' ? (actorId || '') : form.employee
 
     const competencies = meta?.competencies || []
@@ -201,7 +185,7 @@ export default function FeedbackWrite() {
                 </div>
             </section>
 
-            {/* ---- Ratings ---- */}
+            {/* Ratings. */}
             <section className="fb-card s6">
                 <div className="fb-lbl">
                     <span>Ratings</span>
@@ -228,7 +212,7 @@ export default function FeedbackWrite() {
                 </div>
             </section>
 
-            {/* ---- Comments ---- */}
+            {/* Comments. */}
             <section className="fb-card s6">
                 <div className="fb-lbl"><span>In writing</span></div>
                 <p className="fb-sub">

@@ -4,14 +4,6 @@ import { formatDate, relative } from './feedback_format'
 import { Icon } from './feedback_ui'
 
 // The trust log.
-//
-// Performance evaluation is one of the uses regulators treat as higher-risk, and
-// what that actually demands is less about the model and more about the record:
-// a human stayed in the loop, and you can show afterwards who it was.
-//
-// So this is append-only. Nothing here can be edited or deleted, because a log
-// you can edit is not evidence. Agent actions and human decisions are separated
-// by colour, so "what did the software do on its own" is answerable at a glance.
 
 const ACTION_COPY = {
     'agent.scanned': 'Read the reviews',

@@ -1,16 +1,9 @@
-// One place that talks to the server, so the base URL and the error handling
-// live in a single file rather than in every page.
-//
-// Calls go to /api/... on this origin and Vite forwards them to Express in
-// development (see vite.config.js). The same relative paths work in production.
+// One place that talks to the server.
 
 import { API_BASE } from './api_base'
 const BASE = `${API_BASE}/api`
 
-// A backend that accepts the connection but never replies — two instances
-// fighting over the port, say — would otherwise leave every page on "Loading..."
-// for good, with nothing on screen to explain it. Giving up after a while turns
-// that into the error message the pages already know how to show.
+// A backend that accepts the connection but never replies.
 const TIMEOUT = 15000
 
 const request = async (path, { method = 'GET', body, formData, timeout = TIMEOUT } = {}) => {
@@ -19,8 +12,7 @@ const request = async (path, { method = 'GET', body, formData, timeout = TIMEOUT
     try {
         response = await fetch(`${BASE}${path}`, {
             method,
-            // The browser must set its own multipart boundary, so no
-            // Content-Type header when sending a FormData.
+            // The browser must set its own multipart boundary.
             headers: body && !formData ? { 'Content-Type': 'application/json' } : undefined,
             body: formData || (body ? JSON.stringify(body) : undefined),
             signal: AbortSignal.timeout(timeout)
@@ -93,8 +85,7 @@ export const api = {
         if (file) formData.append('document', file)
         if (text) formData.append('text', text)
         if (notes) formData.append('notes', notes)
-        // Reading a document and drafting tasks from it is slow work — parsing a
-        // large PDF, then a round trip to Gemini. Well past the default budget.
+        // Reading a document and drafting tasks from it is slow work.
         return request('/ai/analyse', { method: 'POST', formData, timeout: 120000 })
     },
 

@@ -1,8 +1,6 @@
 const multer = require('multer')
 
-// Files stay in memory: task attachments go straight into MongoDB and imported
-// documents are read then discarded. Nothing touches the disk, which is what
-// lets the same code run on Vercel.
+// Files stay in memory: task attachments go straight into MongoDB and imported documents are read.
 const memory = multer.memoryStorage()
 
 const attachmentUpload = multer({ storage: memory, limits: { fileSize: 5 * 1024 * 1024, files: 1 } })

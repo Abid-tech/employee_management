@@ -1,17 +1,4 @@
 // Demo data for Employee Feedback & Evaluation.
-//
-//   node seed_feedback_demo.js          add the demo data
-//   node seed_feedback_demo.js --undo   remove exactly what it added
-//
-// Like the performance seed, this only ever INSERTs and records every id it
-// creates, so the undo is a pure delete.
-//
-// The cast is shaped so each part of the module has something real to show:
-// a lenient manager and a severe one for calibration to find, a manager who
-// gives everyone the same score, one who writes only trait language, employees
-// whose self-assessment disagrees with everyone else's, client feedback tied to
-// real projects, and two people with a theme raised by three separate reviewers
-// so the agent has a genuine pattern to act on.
 
 require('dotenv').config({ path: require('path').join(__dirname, '.env') })
 
@@ -42,11 +29,7 @@ const intBetween = (lo, hi) => Math.round(lo + rnd() * (hi - lo))
 
 const KEYS = ['delivery', 'quality', 'communication', 'collaboration', 'ownership', 'initiative']
 
-// --- Reviewers, each with a deliberate habit --------------------------------
-//
-//   bias      added to every score they give — what calibration detects as drift
-//   spread    how much they vary; near zero means everyone gets the same mark
-//   style     'specific' writes evidence, 'trait' describes the person
+// Reviewers.
 const MANAGERS = [
     { name: 'Golam Rabbani Shanto', bias: +0.75, spread: 0.5, style: 'specific' },
     { name: 'Farhana Islam', bias: -0.7, spread: 0.6, style: 'specific' },
@@ -62,8 +45,7 @@ const ABILITY = {
     'Shakib Rahman': 3.2, 'Ayan Mahmud': 2.7, 'Sumaiya Akter': 2.4
 }
 
-// How each person rates themselves relative to how others see them. The gap is
-// the interesting part — over-raters and under-raters need opposite coaching.
+// How each person rates themselves relative to how others see them.
 const SELF_GAP = {
     'Ayan Mahmud': +1.1, 'Rahim Uddin': +0.8, 'Sumaiya Akter': +0.9,
     'Sadia Karim': -0.7, 'Rima Sultana': -0.4, 'Karim Chowdhury': +0.5
@@ -147,10 +129,6 @@ const undo = async () => {
     const r = await Review.deleteMany({ _id: { $in: manifest.reviews } })
 
     // Proposals and log entries are cleared wholesale rather than by id.
-    // The agent creates them after this script runs, so they are not in the
-    // manifest — and a proposal whose evidence has just been deleted points at
-    // nothing. Both collections exist only for this module, so nothing else
-    // loses anything.
     const s = await FeedbackSignal.deleteMany({})
     const a = await AuditEvent.deleteMany({})
 
@@ -238,8 +216,7 @@ const seed = async () => {
             cycle: 'Q3 2026',
             ratings: KEYS.map(key => ({
                 competency: key,
-                // A self-assessment does not know about its own weak spot, which
-                // is exactly why the self-gap is worth plotting.
+                // A self-assessment does not know about its own weak spot.
                 score: clamp(ability + gap + (rnd() - 0.5) * 0.5),
                 note: ''
             })),
@@ -251,9 +228,7 @@ const seed = async () => {
         })
     }
 
-    // --- Client feedback on delivered projects -------------------------------
-    // Attached to the people who actually did the work, so it lands on a record
-    // rather than in a mailbox.
+    // Client feedback on delivered projects ------------------------------- Attached to the people.
     const CLIENTS = ['Northwind Retail', 'Meridian Health', 'BlueRiver Logistics', 'Kestrel Media']
     for (const objective of objectives.slice(0, 4)) {
         const client = pick(CLIENTS)

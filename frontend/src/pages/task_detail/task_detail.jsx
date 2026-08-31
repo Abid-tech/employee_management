@@ -369,9 +369,7 @@ export default function TaskDetail() {
                         </div>
                     </section>
 
-                    {/* Moving a deadline shows the money consequence first —
-                        the one question a task tool and a time tracker each
-                        only know half of. */}
+                    {/* Moving a deadline shows the money consequence first. */}
                     <section className="panel">
                         <div className="panel-body">
                             <DeadlineMove task={task} employees={employees} onDone={setTask} />
@@ -427,10 +425,7 @@ export default function TaskDetail() {
                         </div>
                     </section>
 
-                    {/* The dates the work actually moved through, not just when
-                        the record was made. Each one is stamped by the service
-                        layer as the status changes, so they cannot be edited
-                        into saying something that did not happen. */}
+                    {/* The dates the work actually moved through, not just when the record was made. */}
                     <section className="panel">
                         <div className="panel-header"><h2>Dates</h2></div>
                         <div className="panel-body">

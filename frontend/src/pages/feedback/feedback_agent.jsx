@@ -6,15 +6,6 @@ import { formatDate } from './feedback_format'
 import { Avatar, Icon } from './feedback_ui'
 
 // The agent's inbox.
-//
-// This is the loop-closer. The agent reads every submitted review, finds themes
-// raised by three or more separate reviewers, and drafts the objective that
-// would address each one — already shaped for the Task & Objective module.
-//
-// It cannot create anything itself. Approving is the only route from here into
-// that module, the draft is editable before it goes, and both the decision and
-// any edit are written to the trust log against a named person. That is the
-// human-in-the-loop requirement, built as a gate rather than as a promise.
 
 export default function FeedbackAgent() {
     const { actorId } = useActor()

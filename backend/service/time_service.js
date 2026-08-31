@@ -5,11 +5,7 @@ const Task = require('../model/task')
 const Employee = require('../model/employee')
 const budget = require('./budget_service')
 
-// The write side of the budget module: clocking on and off, setting rates, and
-// configuring a project's budget.
-//
-// Everything that changes money lives here so the read model in
-// budget_service.js stays a pure calculation over whatever this wrote.
+// The write side of the budget module: clocking on and off.
 
 const DAY = 24 * 60 * 60 * 1000
 const money = (n) => Math.round((Number(n) || 0) * 100) / 100
@@ -21,20 +17,6 @@ const round = (n, dp = 2) => {
 // --- Keeping hours honest ----------------------------------------------------
 
 // One source of truth for how long a task took.
-//
-// This was wrong and quietly so. `task.spentHours` was being incremented on
-// every clock-out, while the time entries themselves were also a complete record
-// of the same hours — two writers, one number, no reconciliation. Ninety-five of
-// a hundred and twenty tasks had drifted apart, and because the performance
-// module reads `spentHours` to score estimate accuracy, the drift was silently
-// dragging down people's Quality pillar.
-//
-// So the ledger is authoritative and this recomputes the cached total from it.
-// Recomputing rather than incrementing also makes the operation idempotent: a
-// retried request, or a double-fired handler, can no longer inflate the number.
-//
-// Tasks with no ledger entries keep whatever they had — those hours were entered
-// directly and there is nothing better to replace them with.
 const recomputeSpentHours = async (taskIds) => {
     const ids = [...new Set((taskIds || []).filter(Boolean).map(String))]
     if (ids.length === 0) return 0
@@ -64,9 +46,7 @@ const reconcileAll = async () => {
 
 // --- Clock in / out ----------------------------------------------------------
 
-// An open shift is simply an entry with a clockIn and no clockOut. Storing it in
-// the same collection rather than a separate "active shifts" table means there is
-// one place a day's work can live, and no way for the two to disagree.
+// An open shift is simply an entry with a clockIn and no clockOut.
 const openShift = (employeeId) =>
     TimeEntry.findOne({ employee: employeeId, clockIn: { $ne: null }, clockOut: null })
         .populate('task', 'title objective')
@@ -78,8 +58,7 @@ const clockIn = async ({ employee, task, objective, note }) => {
     const existing = await openShift(employee)
     if (existing) return { error: 'You are already clocked in. Clock out first.' }
 
-    // A task carries its own project, so clocking onto a task is enough to know
-    // which budget the time belongs to.
+    // A task carries its own project.
     let objectiveId = objective || null
     if (task && !objectiveId) {
         const found = await Task.findById(task).select('objective')
@@ -118,8 +97,7 @@ const clockOut = async ({ employee, note }) => {
     if (note) entry.note = note
     await entry.save()
 
-    // Recomputed from the ledger rather than incremented, so the task board and
-    // the budget can never tell two different stories about the same work.
+    // Recomputed from the ledger rather than incremented.
     if (entry.task) await recomputeSpentHours([entry.task])
 
     const fired = entry.objective ? await fireThresholds(entry.objective) : []
@@ -127,8 +105,6 @@ const clockOut = async ({ employee, note }) => {
 }
 
 // Logging time that was not clocked live — yesterday's work, remembered today.
-// `workedOn` is what the rate resolves against, so back-dated entries are costed
-// at the rate that was in force on the day the work happened.
 const logManual = async ({ employee, task, objective, hours, workedOn, note }) => {
     if (!employee) return { error: 'Choose whose time this is.' }
     if (!(Number(hours) > 0)) return { error: 'Enter how many hours were worked.' }
@@ -189,11 +165,6 @@ const shape = async (id) => {
 // --- The hard stop -----------------------------------------------------------
 
 // Refusing to accept time on a project that has hit its cap.
-//
-// Off by default and deliberately so: blocking somebody from recording work they
-// genuinely did is a worse failure than an overrun, because it makes the ledger
-// a lie. It exists for the teams whose contracts make a cap a hard limit, and it
-// says exactly why it refused.
 const checkHardStop = async (objectiveId) => {
     const config = await ProjectBudget.findOne({ objective: objectiveId })
     if (!config?.hardStop) return null
@@ -225,17 +196,6 @@ const fireThresholds = async (objectiveId) => {
     await config.save()
 
     // Told to the people on the project, not left sitting in a dashboard.
-    //
-    // This block used to require the mail service and then throw the reference
-    // away, so the comment above was a promise the code did not keep: a
-    // threshold painted a percentage red and nobody who could act on it was ever
-    // told. It now sends — through the same outbox the task module uses, so it
-    // demonstrates without SMTP credentials — to whoever has actually logged
-    // time on the project, since they are the people spending the budget.
-    //
-    // A mail failure must never undo the threshold: the crossing is recorded
-    // first and saved above, so a dead mail server costs a notification, not
-    // the record of what happened.
     try {
         const mail = require('./mail_service')
         const team = await Employee.find({
@@ -243,11 +203,7 @@ const fireThresholds = async (objectiveId) => {
             email: { $nin: [null, ''] }
         }).select('name email')
 
-        // One message for the highest level crossed, not one per level. A single
-        // entry can take a project from 45% straight past 50, 75, 90 and 100 —
-        // four emails saying the same thing five minutes apart is how a useful
-        // alert becomes a mail rule. All four are still recorded as fired, so
-        // none of them can fire again later.
+        // One message for the highest level crossed, not one per level.
         const highest = Math.max(...fresh)
 
         await mail.notifyBudgetThreshold(detail.objective, {
@@ -266,8 +222,7 @@ const fireThresholds = async (objectiveId) => {
 
 // --- Rates -------------------------------------------------------------------
 
-// A new rate never edits an old one. It is a new row with its own start date, so
-// the history stays intact and last quarter's numbers do not move.
+// A new rate never edits an old one.
 const setRate = async ({ employee, costRate, billRate, effectiveFrom, reason, currency }, actor) => {
     if (!employee) return { error: 'Choose whose rate this is.' }
     if (!(Number(costRate) >= 0) || !(Number(billRate) >= 0)) {
@@ -289,11 +244,6 @@ const setRate = async ({ employee, costRate, billRate, effectiveFrom, reason, cu
 }
 
 // Shaping a rate document that is already in hand.
-//
-// This used to be `shapeRate(id)`, which re-read the document it had just been
-// handed — so listing rates fetched every row, then fetched every row again one
-// at a time to shape it. Fourteen rates meant fifteen round trips to Atlas for
-// data already in memory. The pure function does the same job with none.
 const shapeRateDoc = (rate) => {
     if (!rate) return null
 
@@ -322,8 +272,7 @@ const listRates = async () => {
     const shaped = rates.map(shapeRateDoc)
     const now = Date.now()
 
-    // Grouped per person, newest first, with the one currently in force marked —
-    // the whole point of effective dating is being able to see the timeline.
+    // Grouped per person, newest first, with the one currently in force marked.
     const byPerson = new Map()
     for (const rate of shaped.filter(Boolean)) {
         const key = rate.employee?.id
@@ -347,8 +296,7 @@ const setBudget = async ({ objective, totalBudget, currency, thresholds, hardSto
 
     const config = await ProjectBudget.findOne({ objective }) || new ProjectBudget({ objective })
 
-    // Raising the budget re-arms any threshold the project has dropped back
-    // under, so a project that is topped up starts warning again on the way up.
+    // Raising the budget re-arms any threshold the project has dropped back under.
     const previous = config.totalBudget || 0
     config.totalBudget = Number(totalBudget)
     if (Number(totalBudget) > previous) {

@@ -5,11 +5,6 @@ import { PROJECT_HEALTH, daysUntil, formatDate, relativeDays } from '../../lib/f
 import './projects.css'
 
 // Page 4 — every project, and how far through each one is.
-//
-// The orbit answers "what is urgent in this department". It cannot answer "is
-// the supplier portal going to land", because a project cuts across departments
-// and the orbit only ever shows one at a time. This page is that second view:
-// one row per project, progress counted from the work underneath it.
 
 export default function Projects() {
     const navigate = useNavigate()
@@ -141,8 +136,7 @@ export default function Projects() {
                 <div><strong>{totals.remaining}h</strong><span>still to do</span></div>
             </section>
 
-            {/* Same filter control the orbit list uses, so the two pages behave
-                alike rather than each inventing their own. */}
+            {/* Same filter control the orbit list uses. */}
             <div className="list-filters" role="group" aria-label="Filter projects">
                 {[
                     { key: 'open', label: `Live (${projects.filter(p => p.health !== 'delivered').length})` },

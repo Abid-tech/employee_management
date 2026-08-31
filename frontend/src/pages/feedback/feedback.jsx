@@ -5,11 +5,6 @@ import { SOURCE, formatDate, relative, sourceColour } from './feedback_format'
 import { Avatar, Icon, Score, SourceTag } from './feedback_ui'
 
 // Page 1 — the whole feedback picture at a glance.
-//
-// Ordered by what a manager can act on. The people waiting on feedback after a
-// delivery come before the leaderboard-style roster, because a review written
-// while the project is still fresh is worth more than one written in a cycle
-// three months later.
 
 export default function Feedback() {
     const [data, setData] = useState(null)
@@ -56,7 +51,7 @@ export default function Feedback() {
         <div className="fb-grid">
             {error && <div className="fb-err s12">{error}</div>}
 
-            {/* ---- Headline ---- */}
+            {/* Headline. */}
             <section className="fb-card s12">
                 <div className="fb-lbl">
                     <span>Feedback across the company</span>
@@ -98,7 +93,7 @@ export default function Feedback() {
                 </div>
             </section>
 
-            {/* ---- Waiting on feedback after a delivery ---- */}
+            {/* Waiting on feedback after a delivery. */}
             <section className="fb-card s7">
                 <div className="fb-lbl">
                     <span>Delivered work with no feedback yet</span>
@@ -128,7 +123,7 @@ export default function Feedback() {
                     ))}
             </section>
 
-            {/* ---- Agent proposals ---- */}
+            {/* Agent proposals. */}
             <section className="fb-card s5">
                 <div className="fb-lbl">
                     <span>The agent is waiting on a decision</span>
@@ -161,7 +156,7 @@ export default function Feedback() {
                 )}
             </section>
 
-            {/* ---- Everyone ---- */}
+            {/* Everyone. */}
             <section className="fb-card s7">
                 <div className="fb-lbl"><span>Everyone with feedback on record</span><Icon name="users" size={14} /></div>
                 <p className="fb-sub">Open a person to see all four sources on one chart.</p>
@@ -196,7 +191,7 @@ export default function Feedback() {
                 </div>
             </section>
 
-            {/* ---- Recent + trail ---- */}
+            {/* Recent + trail. */}
             <section className="fb-card s5">
                 <div className="fb-lbl"><span>Latest feedback</span><Icon name="clock" size={14} /></div>
 

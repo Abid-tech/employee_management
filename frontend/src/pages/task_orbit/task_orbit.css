@@ -1,4 +1,4 @@
-/* --- Department tabs ------------------------------------------------------ */
+/* Department tabs. */
 
 .dept-tabs {
     display: grid;
@@ -66,7 +66,7 @@
 
 .dept-tab-on .dept-tab-flag { background: var(--critical); color: #fff; }
 
-/* --- Layout --------------------------------------------------------------- */
+/* Layout. */
 
 .orbit-layout {
     display: grid;
@@ -98,7 +98,7 @@
 
 .orbit-side { display: flex; flex-direction: column; gap: 16px; }
 
-/* --- Legend --------------------------------------------------------------- */
+/* Legend. */
 
 .legend { display: flex; flex-direction: column; gap: 10px; }
 
@@ -124,7 +124,7 @@
 
 .legend-note { font-size: 11.5px; line-height: 1.55; }
 
-/* --- Breakdown ------------------------------------------------------------ */
+/* Breakdown. */
 
 .breakdown { display: flex; flex-direction: column; gap: 16px; }
 
@@ -216,14 +216,12 @@
 
 .hours-total strong { color: var(--navy-800); }
 
-/* --- Task list ------------------------------------------------------------ */
-/* The segmented filter this list uses now lives in styles/theme.css, because
-   the projects page shows the same control and neither page should have to
-   import the other's stylesheet to get it. */
+/* Task list. */
+/* The segmented filter this list uses now lives in styles/theme.css. */
 
 .list-empty { padding: 34px 16px; text-align: center; font-size: 13px; }
 
-/* --- Projects carried by this department ----------------------------------- */
+/* Projects carried by this department. */
 
 .orbit-project {
     display: flex;

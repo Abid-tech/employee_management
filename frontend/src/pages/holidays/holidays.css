@@ -1,4 +1,4 @@
-/* Company holidays. Scoped under .hol to avoid collisions. */
+/* Company holidays. */
 
 .hol {
     --navy: #0A2947;
@@ -29,7 +29,7 @@
 .hol *::before,
 .hol *::after { box-sizing: border-box; }
 
-/* ── Head ─────────────────────────────────────────────────────────────── */
+/* ── Head ───────────────────────────────────────────────────────────────. */
 
 .hol .hol-head {
     display: flex;
@@ -82,7 +82,7 @@
 .hol .hol-years button:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
 .hol .hol-years button.is-on { color: var(--cream); background: var(--navy); border-color: var(--navy); }
 
-/* ── Messages ─────────────────────────────────────────────────────────── */
+/* ── Messages ───────────────────────────────────────────────────────────. */
 
 .hol .hol-msg {
     margin-bottom: 14px;
@@ -95,7 +95,7 @@
 .hol .hol-msg.is-ok    { color: #2C4C38; background: var(--ok-bg); border: 1px solid #C3D8CA; }
 .hol .hol-msg.is-warn  { color: #6B5116; background: #F8EFD8; border: 1px solid #E3D2A6; }
 
-/* ── Layout ───────────────────────────────────────────────────────────── */
+/* ── Layout ─────────────────────────────────────────────────────────────. */
 
 .hol .hol-body {
     display: grid;
@@ -226,7 +226,7 @@
 .hol .hol-report ul { margin: 0 0 10px; padding-left: 18px; font-size: 12.5px; color: var(--ink-soft); }
 .hol .hol-report li { margin-bottom: 3px; }
 
-/* ── Side ─────────────────────────────────────────────────────────────── */
+/* ── Side ───────────────────────────────────────────────────────────────. */
 
 .hol .hol-side { display: flex; flex-direction: column; gap: 14px; }
 

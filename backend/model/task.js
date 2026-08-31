@@ -24,9 +24,7 @@ const taskSchema = new mongoose.Schema({
     spentHours: { type: Number, default: 0, min: 0 },
     dueDate: { type: Date },
 
-    // Stamped by the service layer as the task moves, so the detail page can
-    // show when work actually started and finished rather than only when the
-    // record was created. Cleared again if a task is reopened.
+    // Stamped by the service layer as the task moves.
     assignedAt: { type: Date },
     startedAt: { type: Date },
     completedAt: { type: Date },
@@ -35,13 +33,6 @@ const taskSchema = new mongoose.Schema({
     attachments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Attachment' }],
 
     // Every time a deadline moved, who moved it and why.
-    //
-    // A due date that can be edited silently is not a commitment — the date
-    // simply becomes whatever it needs to be, and a project that slipped four
-    // times looks identical to one that never slipped at all. Keeping the
-    // original alongside each change is what makes "this is the third
-    // extension" a visible fact rather than something only the person who did
-    // it remembers.
     deadlineChanges: [{
         from: { type: Date },
         to: { type: Date },
@@ -56,8 +47,7 @@ const taskSchema = new mongoose.Schema({
     aiReason: { type: String, default: '' }
 }, { timestamps: true })
 
-// Progress is calculated, never stored. A number somebody typed in drifts from
-// reality the moment the checklist changes underneath it.
+// Progress is calculated, never stored.
 taskSchema.methods.progressPercent = function () {
     if (this.status === 'done') return 100
     if (this.subtasks.length > 0) {

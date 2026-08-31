@@ -1,8 +1,4 @@
 // Formatting for the Project Budget Tracker.
-//
-// Kept out of budget_ui.jsx deliberately: a file that exports both components
-// and plain functions cannot be hot-reloaded at component granularity, so a
-// one-character change to a formatter would remount every chart on the page.
 
 const SYMBOL = { USD: '$', GBP: '£', EUR: '€', BDT: '৳' }
 

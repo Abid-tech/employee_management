@@ -73,13 +73,6 @@ const getReview = async (id) => {
 // --- The feedback graph ------------------------------------------------------
 
 // Four sources on one set of axes.
-//
-// Most tools collect manager, peer, self and client input and then show them in
-// four tabs, which means nobody ever compares them — and the comparison is the
-// only part that tells you anything. A person whose self-scores sit a point
-// above everyone else's is a different coaching conversation from one whose
-// self-scores sit a point below, and neither is visible until the four are
-// drawn on the same axis.
 const buildGraph = (reviews) => {
     const submitted = reviews.filter(r => r.status !== 'draft')
 
@@ -96,8 +89,7 @@ const buildGraph = (reviews) => {
         const all = submitted.flatMap(r => r.ratings.filter(x => x.competency === c.key).map(x => x.score))
         axis.overall = all.length ? round(mean(all), 2) : null
 
-        // The gap that matters: how a person rates themselves against how
-        // everyone else rates them, on this axis.
+        // The gap that matters: how a person rates themselves against how everyone else rates them.
         const others = submitted
             .filter(r => r.source !== 'self')
             .flatMap(r => r.ratings.filter(x => x.competency === c.key).map(x => x.score))
@@ -108,8 +100,7 @@ const buildGraph = (reviews) => {
         return axis
     })
 
-    // One point per submitted review, ordered in time, so the timeline shows
-    // every source against the same date axis.
+    // One point per submitted review.
     const timeline = submitted
         .filter(r => r.overall !== null)
         .map(r => ({
@@ -141,8 +132,7 @@ const buildGraph = (reviews) => {
         bySource,
         average: overallScores.length ? round(mean(overallScores), 2) : null,
         reviewCount: submitted.length,
-        // Feedback that was written but never read. A number worth surfacing:
-        // an unacknowledged review has not actually reached anybody.
+        // Feedback that was written but never read.
         unacknowledged: submitted.filter(r => r.status === 'submitted').length
     }
 }
@@ -165,9 +155,7 @@ const employeeDossier = async (employeeId) => {
         },
         competencies: COMPETENCIES,
         graph: buildGraph(reviews),
-        // The complete history, newest first. "For future reference" is the
-        // requirement; nothing is ever overwritten, so a review from two cycles
-        // ago reads exactly as it was signed off.
+        // The complete history, newest first.
         history: reviews
     }
 }
@@ -224,9 +212,7 @@ const updateReview = async (id, changes, actor) => {
     return getReview(id)
 }
 
-// The employee side of the loop. A review that has been written is not feedback
-// until somebody has read it, so acknowledging is a real state change and the
-// employee gets a right of reply on their own record.
+// The employee side of the loop.
 const acknowledgeReview = async (id, { response } = {}, actor) => {
     const doc = await Review.findById(id)
     if (!doc) return null
@@ -260,8 +246,6 @@ const defaultCycle = () => {
 }
 
 // Which people finished an objective recently and have had no feedback on it.
-// This is what turns "feedback after completing a project" from a policy into a
-// list of two clicks.
 const pendingAfterDelivery = async () => {
     const Task = require('../model/task')
 

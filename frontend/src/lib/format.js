@@ -1,5 +1,4 @@
-// Small display helpers, kept together so dates and labels read the same way on
-// every page.
+// Small display helpers, kept together so dates and labels read the same way on every page.
 
 export const PRIORITY_LABELS = {
     critical: 'Critical',
@@ -15,9 +14,7 @@ export const STATUS_LABELS = {
     done: 'Done'
 }
 
-// How a project's derived health is shown. Kept here rather than in a page,
-// because three screens display it and a project reading "Late" on one of them
-// and "Behind" on another would be its own small bug.
+// How a project's derived health is shown.
 export const PROJECT_HEALTH = {
     on_track: { label: 'On track', tone: 'ok' },
     late: { label: 'Late', tone: 'bad' },
@@ -26,9 +23,7 @@ export const PROJECT_HEALTH = {
     empty: { label: 'No tasks yet', tone: 'muted' }
 }
 
-// Whole days from now until a date. Matches the rule the server uses for a
-// task's daysLeft, so a date never reads as late in one place and due today in
-// another.
+// Whole days from now until a date.
 export const daysUntil = (date) => {
     if (!date) return null
     return Math.ceil((new Date(date).getTime() - Date.now()) / (1000 * 60 * 60 * 24))

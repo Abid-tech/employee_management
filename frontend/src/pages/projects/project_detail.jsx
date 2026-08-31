@@ -5,10 +5,6 @@ import { PRIORITY_LABELS, PROJECT_HEALTH, STATUS_LABELS, daysUntil, formatDate, 
 import './projects.css'
 
 // Page 5 — one project end to end.
-//
-// The task page answers "what is this one piece of work". This answers the
-// question a client actually asks: how far through is the whole thing, who is
-// on it, what is late, and when did it start.
 
 const STAGES = ['todo', 'in_progress', 'review', 'done']
 
@@ -166,9 +162,7 @@ export default function ProjectDetail() {
                                                     <span>{STATUS_LABELS[task.status]}</span>
                                                 </div>
 
-                                                {/* Assigned next to due, so it is possible to see
-                                                    how long something has been sitting with
-                                                    somebody rather than only when it is wanted. */}
+                                                {/* Assigned next to due. */}
                                                 <div className="project-task-dates">
                                                     <span>
                                                         <em>Assigned</em>
@@ -194,9 +188,7 @@ export default function ProjectDetail() {
                                             </div>
                                         </Link>
 
-                                        {/* The checklist is where a task's progress actually
-                                            comes from, so showing it here is what makes this
-                                            page a view of the work rather than of the records. */}
+                                        {/* The checklist is where a task's progress actually comes from. */}
                                         {task.subtasks.length > 0 && (
                                             <ul className="project-subtasks">
                                                 {task.subtasks.map(subtask => (

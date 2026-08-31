@@ -6,8 +6,7 @@ const Employee = require('../model/employee')
 const Objective = require('../model/objective')
 const TimeEntry = require('../model/time_entry')
 
-// HTTP only. Every calculation lives in budget_service; every write in
-// time_service.
+// HTTP only.
 
 const asyncRoute = (handler) => (req, res, next) =>
     Promise.resolve(handler(req, res, next)).catch(next)
@@ -108,12 +107,9 @@ const postBudget = asyncRoute(async (req, res) => {
     res.json(result)
 })
 
-
 // --- The advisor -------------------------------------------------------------
 
-// What went wrong across every project, and what to budget differently next
-// time. `plan` is an optional {department: hours} object — when present the
-// calibration factors are applied to it and a recommended figure comes back.
+// What went wrong across every project, and what to budget differently next time.
 const getAdvice = asyncRoute(async (req, res) => {
     let plan = null
     if (req.query.plan) {
@@ -122,10 +118,7 @@ const getAdvice = asyncRoute(async (req, res) => {
     res.json(await advisor.advise({ plan }))
 })
 
-
-// --- Decision simulation -----------------------------------------------------
-// Three questions that each need half the answer from a task tool and half from
-// a cost tool. This app holds both halves.
+// Decision simulation ----------------------------------------------------- Three questions.
 
 const simQuote = asyncRoute(async (req, res) => {
     if (!req.query.date) return res.status(400).json({ error: 'Give the date you want to promise.' })

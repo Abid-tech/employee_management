@@ -14,12 +14,6 @@ const asyncRoute = (handler) => (req, res, next) =>
     Promise.resolve(handler(req, res, next)).catch(next)
 
 // Who is doing this.
-//
-// The project has no login yet, so the acting person arrives with the request
-// and the interface makes you choose one. That is honest for a prototype, and it
-// keeps the audit trail meaningful: every approval is still attributed to a
-// named human rather than to "the system". When authentication lands, this is
-// the one function that changes.
 const actorFrom = async (req) => {
     const id = req.body?.actorId || req.query?.actorId
     if (!id) return { id: null, name: 'Unassigned user' }
@@ -76,8 +70,7 @@ const getOverview = asyncRoute(async (req, res) => {
         }
     })
 
-    // Everyone who has a review, with their headline numbers — the entry point
-    // into an individual record.
+    // Everyone who has a review, with their headline numbers.
     const people = new Map()
     for (const review of submitted) {
         if (!review.employee) continue
@@ -183,9 +176,7 @@ const getCalibration = asyncRoute(async (req, res) => {
 
 // --- Record against reviewers -------------------------------------------------
 
-// The one endpoint in this module that reads the performance module. It is a
-// read, never a write: this asks Module 4 what its own score says and puts it
-// beside what people said, without either module owning the other.
+// The one endpoint in this module that reads the performance module.
 const getReconciliation = asyncRoute(async (req, res) => {
     res.json(await reconciliation.reconcile({ department: req.query.department }))
 })

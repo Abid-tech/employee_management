@@ -1,19 +1,4 @@
 // Demo data for the Project Budget Tracker.
-//
-//   node seed_budget_demo.js          add it
-//   node seed_budget_demo.js --undo   remove exactly what it added
-//
-// Shaped so every claim the module makes has something real behind it:
-//
-//   - one project burning steadily and comfortably inside budget
-//   - one that looks fine on its lifetime average but has spiked in the last
-//     week, so the rolling-window forecast catches an overrun the percentage
-//     bar would not
-//   - one already over
-//   - a mid-project pay rise, to prove hours logged before the raise still cost
-//     what they cost
-//   - a senior logging junior work at an overridden rate
-//   - weekend hours, for the narration to notice
 
 require('dotenv').config({ path: require('path').join(__dirname, '.env') })
 
@@ -59,9 +44,6 @@ const RATES = {
 }
 
 // How each project should behave, so the forecast has distinct cases to find.
-//   steady   even burn, lands inside budget
-//   spike    calm for weeks, then a sharp recent acceleration
-//   over     already past the cap
 const SHAPES = ['spike', 'steady', 'over', 'steady']
 
 const readManifest = () => {
@@ -113,8 +95,7 @@ const seed = async () => {
         })
     }
 
-    // Two people got a raise 21 days ago. Hours logged before that date must
-    // still cost the old rate — that is the whole point of effective dating.
+    // Two people got a raise 21 days ago.
     const raised = employees.filter(e => ['Rima Sultana', 'Sadia Karim'].includes(e.name))
     for (const person of raised) {
         const base = RATES[person.name]
@@ -159,23 +140,13 @@ const seed = async () => {
         if (team.length === 0) team.push(employees[i % employees.length])
 
         // How many hours each task can absorb before it stops looking credible.
-        //
-        // Entries used to be attached to a task picked purely at random, so a
-        // three-hour job could end up carrying eleven hours of logged time. That
-        // reads as broken on the task board, and it is worse than cosmetic:
-        // the performance module scores estimate accuracy from exactly this
-        // ratio, so nonsense here quietly drags down people's Quality pillar.
         const capacity = new Map(tasks.map(t => [String(t._id), (t.estimateHours || 4) * between(0.7, 1.35)]))
         const withRoom = () => tasks.filter(t => (capacity.get(String(t._id)) || 0) > 0.3)
 
         // Roughly how much of the cap this project should have consumed.
         const targetSpend = shape === 'over' ? cap * 1.12 : shape === 'spike' ? cap * 0.52 : cap * 0.44
 
-        // Generate across the whole period first and scale to the target
-        // afterwards. Stopping as soon as the target was reached filled the
-        // oldest days and left the recent fortnight empty — which is precisely
-        // the window the forecast reads, so every project came back with a zero
-        // burn rate and no ETA.
+        // Generate across the whole period first and scale to the target afterwards.
         const draft = []
         let raw = 0
 
@@ -186,9 +157,7 @@ const seed = async () => {
             // How hard the project is being pushed on this day.
             let intensity
             if (shape === 'spike') {
-                // Calm for seven weeks, then a sharp acceleration in the last
-                // ten days — invisible to a lifetime average, obvious to a
-                // rolling window.
+                // Calm for seven weeks, then a sharp acceleration in the last ten days.
                 intensity = day > 10 ? between(0.25, 0.6) : between(2.1, 3.4)
             } else if (shape === 'over') {
                 intensity = between(1.0, 1.7)
@@ -209,15 +178,12 @@ const seed = async () => {
                 const hours = Math.round(between(1.5, 6) * intensity * 10) / 10
                 if (hours <= 0) continue
 
-                // Prefer a task that still has room. Once every task on the
-                // project is full the time is still real — it just belongs to
-                // the project rather than to any one item on the board.
+                // Prefer a task that still has room.
                 const open = withRoom()
                 const task = open.length ? open[Math.floor(rnd() * open.length)] : null
                 if (task) capacity.set(String(task._id), capacity.get(String(task._id)) - hours)
 
-                // One senior doing junior cleanup at an agreed lower rate, so
-                // the override path has a real example behind it.
+                // One senior doing junior cleanup at an agreed lower rate.
                 const override = person.name === 'Golam Rabbani Shanto' && rnd() < 0.18
 
                 draft.push({
@@ -238,8 +204,7 @@ const seed = async () => {
             }
         }
 
-        // Scale every entry so the project lands on its intended spend while
-        // keeping the shape of the burn — including the recent spike.
+        // Scale every entry so the project lands on its intended spend while keeping the shape of the burn.
         const factor = raw > 0 ? targetSpend / raw : 1
         for (const entry of draft) {
             entry.hours = Math.max(0.25, Math.round(entry.hours * factor * 10) / 10)
@@ -253,9 +218,7 @@ const seed = async () => {
     const entries = await TimeEntry.insertMany(entryDocs)
     console.log(`  Time entries:        ${entries.length}`)
 
-    // Recomputed from the ledger, not incremented — the seed has to obey the
-    // same single-source-of-truth rule as the app, or it recreates the drift
-    // the app was just fixed to prevent.
+    // Recomputed from the ledger, not incremented.
     const { reconcileAll } = require('./service/time_service')
     const reconciled = await reconcileAll()
     console.log(`  Task hours synced:   ${reconciled.updated} tasks from the ledger`)

@@ -1,8 +1,4 @@
 // Dummy data for Module 3 (Task & Objective Management).
-//
-// It lives in memory rather than in MongoDB for now, so the module runs with no
-// database setup. When the team is ready to persist it, the shape below already
-// matches what a Mongoose schema would hold — only the store changes.
 
 const DEPARTMENTS = [
     { name: 'Engineering', mark: '</>', blurb: 'Builds and runs the product' },
@@ -33,12 +29,7 @@ const days = (n) => {
     return date.toISOString()
 }
 
-// Projects. They deliberately cut across departments — that is the whole reason
-// they exist alongside them, and why the project page can answer a question the
-// per-department orbit never can.
-//
-// The dates are relative to whenever the seed is run, so the demo never goes
-// stale: one project is always overdue, one is close, one has room.
+// Projects.
 const OBJECTIVES = [
     {
         id: 'o1',

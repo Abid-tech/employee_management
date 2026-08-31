@@ -4,11 +4,6 @@ import { PRIORITY_LABELS } from '../../lib/format'
 import './document_import.css'
 
 // Hand over a project document; get back a draft set of tasks.
-//
-// The review step is the important part. The system reads the document and
-// proposes work, but a manager edits and approves it before anything is
-// created — silently generating a dozen tasks from a half-read brief would be
-// worse than no feature at all.
 
 const SAMPLE = `Client Brief: Customer Self-Service Portal
 
@@ -23,13 +18,6 @@ Constraints
 The login work is critical and must be finished first. The help centre is nice to have.`
 
 // Checked here rather than through the input's accept attribute.
-//
-// Any accept list turns the Windows "Open" dialog into a custom-filter dialog,
-// which has to match every name in the folder before it can draw the list. On a
-// large Downloads folder that is enough to hang the dialog outright, and the
-// browser offers no way to reach past it. Opening on the unfiltered path and
-// checking the name ourselves costs nothing and cannot wedge the picker — and
-// it also covers dropped files, which an accept attribute never did.
 const SUPPORTED = ['.txt', '.md', '.csv', '.pdf', '.docx']
 
 const extensionOf = (name = '') => {
@@ -44,8 +32,7 @@ export default function DocumentImport({ departments = [], employees = [], onCre
     const [dragOver, setDragOver] = useState(false)
 
     const [draft, setDraft] = useState(null)
-    // A document describes one piece of work, so the tasks it produces are filed
-    // together under a project. Blank means the manager chose not to.
+    // A document describes one piece of work.
     const [projectTitle, setProjectTitle] = useState('')
     const [projectDueDate, setProjectDueDate] = useState('')
     const [groupAsProject, setGroupAsProject] = useState(true)
@@ -60,8 +47,7 @@ export default function DocumentImport({ departments = [], employees = [], onCre
         api.aiStatus().then(setEngine).catch(() => {})
     }, [])
 
-    // One way in for both the picker and a dropped file, so an unreadable file
-    // is refused the same way and immediately, rather than after a round trip.
+    // One way in for both the picker and a dropped file.
     const chooseFile = (chosen) => {
         if (!chosen) return
 
@@ -166,20 +152,14 @@ export default function DocumentImport({ departments = [], employees = [], onCre
                         </div>
 
                         <div className="panel-body import-input">
-                            {/* Kept outside the dropzone on purpose. Inside it, the
-                                click() below would dispatch a click that bubbles
-                                straight back into the dropzone's own onClick, asking
-                                for the file picker a second time within one gesture —
-                                which the browser treats as a duplicate request and
-                                cancels, so no dialog ever opens. */}
+                            {/* Kept outside the dropzone on purpose. */}
                             <input
                                 ref={fileInput}
                                 type="file"
                                 hidden
                                 onChange={(event) => {
                                     chooseFile(event.target.files?.[0])
-                                    // Let the same file be picked again after a Remove;
-                                    // without this, choosing it twice fires no change event.
+                                    // Let the same file be picked again after a Remove.
                                     event.target.value = ''
                                 }}
                             />
@@ -301,10 +281,7 @@ export default function DocumentImport({ departments = [], employees = [], onCre
                         </div>
                     </section>
 
-                    {/* Without this the twelve tasks scatter into their departments
-                        and the document they came from stops existing as a thing.
-                        Filing them under a project is what makes it possible to ask
-                        later how the whole brief is going. */}
+                    {/* Without this the twelve tasks scatter into their departments and the document they came. */}
                     <section className="panel">
                         <div className="panel-header"><h2>File these under a project</h2></div>
                         <div className="panel-body">

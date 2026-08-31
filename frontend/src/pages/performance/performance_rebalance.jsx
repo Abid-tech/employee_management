@@ -4,16 +4,6 @@ import { performanceApi } from '../../lib/performance_api'
 import { Avatar } from './performance_ui'
 
 // "Move work off them this week" — turned into which work, to whom, at what cost.
-//
-// The overview already says who is carrying too much. Every performance product
-// on the market can say that much. None of them can say what to do about it,
-// because the answer needs the load, the demonstrated pace, the rate card and
-// the deadlines at the same time, and those four live in four different
-// products. They live in one database here.
-//
-// The page is deliberately willing to say no. Where the company has no slack it
-// refuses the move and says so, because a tool that always produces a
-// reassignment ends up recommending the overload it was built to prevent.
 
 const VERDICT = {
     resolved: { label: 'Fully relieved', tone: 'mint' },
@@ -23,8 +13,7 @@ const VERDICT = {
     nothing_open: { label: 'No open work', tone: 'plain' }
 }
 
-// The before/after of one person's queue, drawn to one scale so the relief is a
-// distance rather than a subtraction the reader has to do.
+// The before/after of one person's queue.
 function LoadBar({ before, after, ceiling }) {
     const top = Math.max(before || 0, ceiling * 1.15, 1)
     const pct = (v) => Math.min(100, ((v || 0) / top) * 100)
@@ -202,9 +191,7 @@ export default function PerformanceRebalance() {
                     </div>
                 </div>
 
-                {/* The rules, on screen. A proposal about somebody's workload has
-                    to be arguable, and it cannot be argued with if the rules that
-                    produced it are buried in a service file. */}
+                {/* The rules, on screen. */}
                 <div className="p-note gold">
                     <b>What counts as movable.</b> Not started, not critical, and not due within{' '}
                     {movableRule.minDaysOfRunway} days. Work already underway carries context in somebody's head

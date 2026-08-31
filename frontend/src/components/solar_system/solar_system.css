@@ -14,7 +14,7 @@
     aspect-ratio: 1;
 }
 
-/* --- Rings ---------------------------------------------------------------- */
+/* Rings. */
 
 .orbit-path {
     position: absolute;
@@ -28,12 +28,7 @@
     opacity: 0.7;
 }
 
-/* One layer per ring, rotating as a whole. Every planet on it is a child, so
-   the whole ring turns together like a real orbit.
-
-   These layers each cover the full stage and sit on top of one another, so
-   without pointer-events: none the outermost ring swallows every click meant
-   for the rings underneath it — only its own planets would be clickable. */
+/* One layer per ring, rotating as a whole. */
 .orbit-spin {
     position: absolute;
     inset: 0;
@@ -41,18 +36,13 @@
     animation: spin var(--duration) linear infinite;
 }
 
-/* Both elements are named so this rule outranks a single class, because source
-   order alone is not enough here: .planet-body further down sets the `animation`
-   shorthand, and a shorthand resets animation-play-state to `running`. A bare
-   .orbit-paused above it was silently undone — the ring froze while the planets
-   kept counter-rotating against a ring that was no longer turning, which slowly
-   tipped every label off square. */
+/* Both elements are named so this rule outranks a single class. */
 .orbit-spin.orbit-paused,
 .planet-body.orbit-paused {
     animation-play-state: paused;
 }
 
-/* --- Planets -------------------------------------------------------------- */
+/* Planets. */
 
 .planet {
     position: absolute;
@@ -67,13 +57,11 @@
     background: transparent;
     border: 0;
     cursor: pointer;
-    /* Rotate to the planet's slot, step out to the ring, then rotate back so it
-       sits square rather than tipping over as the ring turns. */
+    /* Rotate to the planet's slot. */
     transform: rotate(var(--angle)) translateX(var(--distance)) rotate(calc(var(--angle) * -1));
 }
 
-/* The inner body spins backwards at the ring's own speed, which cancels the
-   ring's rotation and keeps the text upright the whole way round. */
+/* The inner body spins backwards at the ring's own speed. */
 .planet-body {
     position: relative;
     display: grid;
@@ -139,7 +127,7 @@
     box-shadow: 0 0 0 3px var(--surface), 0 0 0 6px var(--critical), var(--shadow);
 }
 
-/* --- Centre --------------------------------------------------------------- */
+/* Centre. */
 
 .solar-core {
     position: absolute;
@@ -173,7 +161,7 @@
     color: var(--sage);
 }
 
-/* --- Below the diagram ---------------------------------------------------- */
+/* Below the diagram. */
 
 .solar-foot {
     display: flex;
@@ -211,7 +199,7 @@
     line-height: 1.5;
 }
 
-/* --- Empty ---------------------------------------------------------------- */
+/* Empty. */
 
 .solar-empty {
     display: flex;

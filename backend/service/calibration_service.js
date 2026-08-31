@@ -4,16 +4,6 @@ const Employee = require('../model/employee')
 const { COMPETENCIES } = Review
 
 // Calibration, with the reasoning shown.
-//
-// The usual failure of a calibration tool is that it is accurate and opaque: it
-// tells an HR lead that a rating "looks anomalous" and offers nothing to argue
-// with. A manager cannot act on that, and cannot push back on it either.
-//
-// So every finding here carries three things: the number, the comparison that
-// produced it, and a sentence a person can disagree with. If the tool says a
-// manager rates 15% above the org mean, it also says what their mean is, what
-// the org mean is, and how many reviews that rests on — because a 15% gap over
-// three reviews is noise and over thirty is a pattern.
 
 const round = (n, dp = 2) => {
     const f = 10 ** dp
@@ -26,17 +16,12 @@ const stdev = (list) => {
     return Math.sqrt(mean(list.map(v => (v - m) ** 2)))
 }
 
-// Below this a finding is a coincidence rather than a tendency. Stated out loud
-// rather than buried, because "how much evidence is enough" is exactly the sort
-// of judgement a reader is entitled to question.
+// Below this a finding is a coincidence rather than a tendency.
 const MIN_REVIEWS = 3
 
 // --- The language check ------------------------------------------------------
 
 // Trait words describe a person; behaviour words describe something they did.
-// "Ali is proactive" cannot be argued with, improved on, or evidenced. "Ali
-// rewrote the import retry after the Tuesday outage" can. Research on review
-// quality has said this for years and almost no tool checks for it.
 const TRAIT_WORDS = [
     'great', 'good', 'excellent', 'amazing', 'awesome', 'brilliant', 'outstanding',
     'smart', 'clever', 'talented', 'gifted', 'rockstar', 'superstar', 'ninja',
@@ -82,16 +67,6 @@ const LANGUAGE_COPY = {
 // --- Reviewer-level findings -------------------------------------------------
 
 // Drift is measured against the same people, not against the company.
-//
-// Comparing a reviewer's average to the org average sounds right and is quietly
-// wrong: a manager whose reports genuinely are struggling comes out looking
-// harsh, and one who happens to lead the strongest team looks generous. The
-// measure ends up describing who somebody reviews rather than how they review.
-//
-// So for every review, this compares the score that reviewer gave to the score
-// *other* reviewers gave the same person, and averages those differences. A
-// reviewer only drifts if they disagree with their colleagues about the same
-// individuals — which is the only version of the question worth asking.
 const driftAgainstPeers = (mine, allReviews) => {
     const deltas = []
 
@@ -103,11 +78,7 @@ const driftAgainstPeers = (mine, allReviews) => {
         const others = allReviews.filter(other =>
             other.overall != null &&
             String(other.employee?._id || other.employee) === employeeId &&
-            // Every other review this reviewer wrote about the same person —
-            // an earlier cycle, say — has to come out of the baseline too.
-            // Leaving it in compares a reviewer partly against themselves,
-            // which pulls every measured drift towards zero and quietly hides
-            // exactly the habit this is looking for.
+            // Every other review this reviewer wrote about the same person.
             String(other.reviewer?._id || other.reviewer) !== reviewerId &&
             other.source !== 'self')
 
@@ -123,8 +94,7 @@ const analyseReviewers = (reviews, orgMean) => {
 
     for (const review of reviews) {
         if (!review.reviewer) continue
-        // A self-assessment is not somebody reviewing other people, so it must
-        // not count towards how they rate as a reviewer.
+        // A self-assessment is not somebody reviewing other people.
         if (review.source === 'self') continue
         const key = String(review.reviewer._id || review.reviewer)
         if (!byReviewer.has(key)) byReviewer.set(key, [])
@@ -236,8 +206,7 @@ const analyseCompetencies = (reviews) => COMPETENCIES.map(c => {
 
 // --- Distribution ------------------------------------------------------------
 
-// How the whole company's scores fall. A healthy set is a spread; a wall at 4 is
-// a sign nobody is being told anything.
+// How the whole company's scores fall.
 const buildDistribution = (reviews) => {
     const buckets = [1, 2, 3, 4, 5].map(band => ({
         band,
@@ -279,8 +248,7 @@ const calibration = async ({ cycle } = {}) => {
         departments: analyseDepartments(reviews, orgMean),
         competencies: analyseCompetencies(reviews),
 
-        // Written out so the interface never has to hard-code a copy of the
-        // rules it is displaying.
+        // Written out so the interface never has to hard-code a copy of the rules it is displaying.
         method: {
             drift: `A reviewer is flagged when they sit 10% or more from what other reviewers gave the same people, over at least ${MIN_REVIEWS} people who were reviewed by more than one person. Comparing against the company average instead would flag anyone whose team is genuinely strong or genuinely struggling.`,
             clustering: 'Flagged when four or more reviews sit within 0.25 of each other — a rating that never varies carries no information.',

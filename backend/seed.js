@@ -1,8 +1,4 @@
 // Fills the Atlas database with the starting data in data/dummy_data.js.
-// Safe to re-run: it clears only the collections Module 3 owns.
-//
-//   npm run seed
-//
 require('dotenv').config({ path: require('path').join(__dirname, '.env') })
 const mongoose = require('mongoose')
 const connectDB = require('./config/db')
@@ -32,8 +28,7 @@ const run = async () => {
 
     await Department.insertMany(DEPARTMENTS)
 
-    // Skills are inferred from the job title so the AI import has something to
-    // match work against without a second data file to maintain.
+    // Skills are inferred from the job title so the AI import has something to match work against.
     const skillsFor = (jobTitle) => {
         const title = jobTitle.toLowerCase()
         const skills = []
@@ -73,10 +68,7 @@ const run = async () => {
         OBJECTIVES.map((objective, index) => [objective.id, objectives[index]._id])
     )
 
-    // The three lifecycle stamps have to be written here as well. insertMany
-    // goes straight to the driver and runs none of the document code that sets
-    // them, so without this every seeded task would claim to be unassigned and
-    // never started, however far along its status says it is.
+    // The three lifecycle stamps have to be written here as well.
     const hoursAfter = (date, hours) => new Date(new Date(date).getTime() + hours * 3600 * 1000)
 
     const tasks = await Task.insertMany(TASKS.map(task => {
@@ -101,8 +93,7 @@ const run = async () => {
             })),
             createdAt,
 
-            // Assigned the same day it was raised; started a day later if it has
-            // moved off "to do"; finished two days after that if it is done.
+            // Assigned the same day it was raised.
             assignedAt: task.assigneeId ? hoursAfter(createdAt, 2) : undefined,
             startedAt: started ? hoursAfter(createdAt, 26) : undefined,
             completedAt: task.status === 'done' ? hoursAfter(createdAt, 74) : undefined

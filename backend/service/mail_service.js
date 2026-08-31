@@ -2,20 +2,6 @@ const nodemailer = require('nodemailer')
 const MailMessage = require('../model/mail_message')
 
 // Sending mail, and proving it was sent.
-//
-// The module follows the same shape as the Gemini integration already in this
-// project: it works fully without credentials, and it always says which route a
-// message actually took. With SMTP settings in .env it posts to a real server;
-// without them it records the message to an outbox collection instead. Nothing
-// silently does nothing, and no feature is unreachable because a marker's
-// machine has no mail password.
-//
-// To send for real, add to backend/.env:
-//   SMTP_HOST=smtp.gmail.com
-//   SMTP_PORT=587
-//   SMTP_USER=you@gmail.com
-//   SMTP_PASS=an app password, not your account password
-//   MAIL_FROM="Company Booster <you@gmail.com>"
 
 const isConfigured = () => Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)
 
@@ -44,12 +30,7 @@ const formatDate = (value) => value
     ? new Date(value).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
     : 'no date set'
 
-// Written in the brand palette so the mail looks like the product it came from:
-// navy #0A2947, cream #F3E4C9, sage #D3D4C0, clay #8B5E3C.
-//
-// Table-based and inline-styled on purpose — mail clients strip <style> blocks
-// and have no support for flexbox or grid, so a layout that renders correctly in
-// a browser will collapse in Outlook.
+// Written in the brand palette so the mail looks like the product it came from: navy #0A2947.
 const buildHtml = ({ name, tasks, appUrl }) => {
     const rows = tasks.map(task => `
       <tr>
@@ -141,8 +122,7 @@ const buildText = ({ name, tasks, appUrl }) => {
     ].join('\n')
 }
 
-// Escaped because a task title is user input and this ends up as HTML in
-// somebody's mail client.
+// Escaped because a task title is user input and this ends up as HTML in somebody's mail client.
 const escapeHtml = (value) => String(value ?? '')
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;')
@@ -153,8 +133,7 @@ const deliver = async (message) => {
     const record = await MailMessage.create({ ...message, status: 'queued', transport: isConfigured() ? 'smtp' : 'outbox' })
 
     if (!isConfigured()) {
-        // No mail server. The message is kept so it can be shown, and the
-        // console line makes it obvious during a demo that this fired.
+        // No mail server.
         console.log(`[mail] queued to outbox → ${message.to} — ${message.subject}`)
         return record
     }
@@ -173,9 +152,7 @@ const deliver = async (message) => {
         await record.save()
         console.log(`[mail] sent → ${message.to} — ${message.subject}`)
     } catch (error) {
-        // A mail failure must never fail the assignment that triggered it. The
-        // task is still assigned; the message is marked failed and can be
-        // retried or read from the outbox.
+        // A mail failure must never fail the assignment that triggered it.
         record.status = 'failed'
         record.error = error.message
         await record.save()
@@ -188,11 +165,6 @@ const deliver = async (message) => {
 // --- The public call ---------------------------------------------------------
 
 // One message per person, not one per task.
-//
-// Assigning a plan of nine tasks should not put nine emails in somebody's inbox
-// — that is how a notification becomes something people filter away. The tasks
-// are grouped by assignee and each person gets a single digest of everything
-// that just landed on them.
 const notifyAssignments = async (tasks, { appUrl } = {}) => {
     const assigned = (tasks || []).filter(task => task.assignee && task.assignee.email)
     if (assigned.length === 0) return []
@@ -237,9 +209,7 @@ const notifyAssignments = async (tasks, { appUrl } = {}) => {
     return out
 }
 
-// A deadline moving is worth telling the person working to it. The reason is
-// carried through verbatim — a date that changes with no explanation is the
-// thing that erodes trust in the date.
+// A deadline moving is worth telling the person working to it.
 const notifyDeadlineChange = async (task, { previous, reason, actor, moved } = {}) => {
     const person = task.assignee
     if (!person?.email) return null
@@ -317,14 +287,6 @@ const notifyDeadlineChange = async (task, { previous, reason, actor, moved } = {
 }
 
 // A budget crossing a threshold is worth telling the people spending it.
-//
-// A threshold that only paints a dashboard red is a threshold nobody acts on,
-// because the person who needs to know is not looking at the dashboard — they
-// are working. This goes to whoever has actually been logging time on the
-// project, since they are both the people burning the budget and the people who
-// can stop. One message per person per crossing, and it carries the forecast
-// rather than only the percentage: "90% used" is a fact about the past, while
-// "trending to $11,568 against $9,000" is the thing worth reacting to.
 const notifyBudgetThreshold = async (project, { threshold, forecast, currency = 'USD', recipients = [] } = {}) => {
     const people = (recipients || []).filter(person => person?.email)
     if (people.length === 0) return []

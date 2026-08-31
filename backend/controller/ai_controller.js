@@ -6,8 +6,7 @@ const fallback = require('../service/fallback_planner')
 
 const PRIORITIES = ['critical', 'high', 'medium', 'low']
 
-// Tells the interface which engine is available, so it can say so plainly
-// rather than implying an AI is involved when no key is configured.
+// Tells the interface which engine is available.
 const status = (req, res) => {
     res.json({
         geminiConfigured: gemini.isConfigured(),
@@ -17,10 +16,6 @@ const status = (req, res) => {
 }
 
 // Reads an uploaded document and returns a draft set of tasks.
-//
-// Nothing is saved here. The draft goes back for the manager to edit and
-// approve — a tool that silently creates work from a half-read document is
-// worse than no tool.
 const analyseDocument = async (req, res) => {
     let source
 
@@ -46,9 +41,7 @@ const analyseDocument = async (req, res) => {
 
     const departmentNames = departments.map(d => d.name)
 
-    // Every task has to land in a department. With none on record both planners
-    // would quietly hand back tasks with no department at all, and the failure
-    // would only surface later as a validation error on save.
+    // Every task has to land in a department.
     if (departmentNames.length === 0) {
         return res.status(409).json({
             error: 'There are no departments set up yet, so there is nowhere to file the work. Run "npm run seed" in the backend folder first.'
@@ -76,12 +69,10 @@ const analyseDocument = async (req, res) => {
 
     const byEmail = new Map(employees.map(person => [person.email?.toLowerCase(), person]))
 
-    // Same default the built-in reader uses, so a department name Gemini invented
-    // does not land on whichever team sorts first alphabetically.
+    // Same default the built-in reader uses.
     const fallbackDepartment = fallback.defaultDepartment(departmentNames, employees)
 
-    // Normalise whatever came back into exactly what the review screen expects,
-    // so the interface never has to care which engine produced it.
+    // Normalise whatever came back into exactly what the review screen expects.
     const tasks = (plan.tasks || []).slice(0, 12).map((task, index) => {
         const suggested = task.suggestedAssigneeEmail
             ? byEmail.get(String(task.suggestedAssigneeEmail).toLowerCase())
@@ -112,16 +103,12 @@ const analyseDocument = async (req, res) => {
         engine: plan.engine,
         notice,
         source: { name: source.name, truncated: source.truncated },
-        // A document is one piece of work, so the review screen offers to file
-        // the whole plan under a project. The name is only a suggestion — the
-        // summary reads better than the filename, but either is editable.
+        // A document is one piece of work.
         suggestedProject: projectNameFrom(plan.summary, source.name)
     })
 }
 
-// Turns whatever the reader produced into something that reads like a project
-// name. The summary is usually a sentence about the document; the filename is
-// the fallback when there is no summary worth using.
+// Turns whatever the reader produced into something that reads like a project name.
 const projectNameFrom = (summary, filename) => {
     const cleaned = String(summary || '')
         .replace(/^(client\s+)?brief\s*[—:-]\s*/i, '')
@@ -134,9 +121,7 @@ const projectNameFrom = (summary, filename) => {
     return base.charAt(0).toUpperCase() + base.slice(1)
 }
 
-// Creates the tasks the manager kept from the draft, and files them under a
-// project so the document they came from survives as one thing rather than
-// scattering into a dozen unrelated tasks.
+// Creates the tasks the manager kept from the draft.
 const createFromDraft = async (req, res) => {
     const tasks = Array.isArray(req.body.tasks) ? req.body.tasks : []
 
@@ -144,8 +129,7 @@ const createFromDraft = async (req, res) => {
         return res.status(400).json({ error: 'There are no tasks to create.' })
     }
 
-    // Three ways in: file under an existing project, start a new one, or skip
-    // projects entirely and let the tasks stand on their own.
+    // Three ways in: file under an existing project.
     let objectiveId = req.body.objectiveId || null
     let project = null
 

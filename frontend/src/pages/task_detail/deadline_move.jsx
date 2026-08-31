@@ -2,19 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import './deadline_move.css'
 
 // Moving a deadline, with the money consequence shown before it is committed.
-//
-// This is the one thing the specialist tools structurally cannot do. Harvest,
-// Clockify and Productive know exactly what a project costs but have no idea
-// when anything is due. Jira and Asana own every date and know nothing about
-// money. Because this app owns both, the cost of a delay can be put in front of
-// the person making the decision at the moment they make it, instead of arriving
-// as a surprise on a report a month later — by which point the choice is spent.
-//
-// The framing is deliberately careful. Extending a date does not by itself
-// create cost: the outstanding work costs what it costs whenever it is done.
-// What a later date buys is a project that stays open longer, and an open
-// project keeps burning. So the figure is an exposure at the current daily burn
-// rate, and it is labelled as one.
 
 const fmt = (value, currency = 'USD') => {
     const symbol = { USD: '$', GBP: '£', EUR: '€', BDT: '৳' }[currency] || ''
@@ -37,8 +24,7 @@ export default function DeadlineMove({ task, employees = [], onDone }) {
 
     const history = task.deadlineChanges || []
 
-    // The preview is fetched as the date changes, so the consequence is visible
-    // while the decision is still being made rather than after it.
+    // The preview is fetched as the date changes.
     const check = useCallback(async (value) => {
         if (!value || value === iso(task.dueDate)) { setImpact(null); return }
 
@@ -134,7 +120,7 @@ export default function DeadlineMove({ task, employees = [], onDone }) {
                             onChange={e => setReason(e.target.value)} />
                     </label>
 
-                    {/* ---- The part nothing else can show ---- */}
+                    {/* The part nothing else can show. */}
                     {checking && <div className="dm-impact loading">Working out what this costs…</div>}
 
                     {impact && !checking && (

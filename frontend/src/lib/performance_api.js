@@ -1,8 +1,4 @@
 // Module 4 — Employee Performance Management talks to the API through here.
-//
-// Deliberately its own client rather than an addition to lib/api.js: this module
-// owns its endpoints end to end, so nothing it needs can break another module's
-// calls and nothing another module changes can break these.
 
 import { API_BASE } from './api_base'
 const BASE = `${API_BASE}/api/performance`
@@ -52,12 +48,10 @@ export const performanceApi = {
     employee: (id, filters) => request(`/employee/${id}`, filters),
     report: (filters) => request('/report', filters),
 
-    // Reads the whole company scoring plus the rate table, so it is allowed
-    // longer than the rest of this client.
+    // Reads the whole company scoring plus the rate table.
     rebalance: () => request('/rebalance', undefined, 45000),
     rules: () => request('/rules'),
 
-    // Handed straight to the browser as a download rather than fetched, so the
-    // file arrives with the filename the server chose.
+    // Handed straight to the browser as a download rather than fetched.
     reportCsvUrl: (filters) => `${BASE}/report.csv${query(filters)}`
 }

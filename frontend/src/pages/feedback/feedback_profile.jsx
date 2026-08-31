@@ -6,12 +6,6 @@ import { SOURCE, formatDate, relative, sourceColour } from './feedback_format'
 import { Avatar, Bar, Icon, Radar, Score, SourceTag, Timeline } from './feedback_ui'
 
 // One person's record — and the argument for the whole module.
-//
-// Manager, peer, self and client feedback are drawn on one set of axes rather
-// than in four tabs. The disagreement between them is the finding: where the
-// self polygon sits outside everyone else's, that is a blind spot; where a
-// client rates delivery well above the internal view, the team is being harder
-// on itself than the people paying for the work are.
 
 export default function FeedbackProfile() {
     const { id } = useParams()
@@ -81,7 +75,7 @@ export default function FeedbackProfile() {
         <div className="fb-grid">
             {error && <div className="fb-err s12">{error}</div>}
 
-            {/* ---- Header ---- */}
+            {/* Header. */}
             <section className="fb-card s12">
                 <Link className="fb-back" to="/feedback"><Icon name="left" size={13} /> Back to everyone</Link>
 
@@ -107,7 +101,7 @@ export default function FeedbackProfile() {
                 </div>
             </section>
 
-            {/* ---- The one graph ---- */}
+            {/* The one graph. */}
             <section className="fb-card s5">
                 <div className="fb-lbl"><span>All four sources, one chart</span></div>
 
@@ -146,7 +140,7 @@ export default function FeedbackProfile() {
                 )}
             </section>
 
-            {/* ---- Competency detail + timeline ---- */}
+            {/* Competency detail + timeline. */}
             <section className="fb-card s7">
                 <div className="fb-lbl"><span>Every review over time</span></div>
                 <Timeline points={graph.timeline} />
@@ -175,7 +169,7 @@ export default function FeedbackProfile() {
                 </div>
             </section>
 
-            {/* ---- Agent proposals for this person ---- */}
+            {/* Agent proposals for this person. */}
             {signals.length > 0 && (
                 <section className="fb-card s12">
                     <div className="fb-lbl">
@@ -197,7 +191,7 @@ export default function FeedbackProfile() {
                 </section>
             )}
 
-            {/* ---- The history ---- */}
+            {/* The history. */}
             <section className="fb-card s12">
                 <div className="fb-lbl">
                     <span>Evaluation history</span>

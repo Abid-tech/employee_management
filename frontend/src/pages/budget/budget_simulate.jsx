@@ -5,15 +5,6 @@ import { formatDate, money } from './budget_format'
 import { Icon } from './budget_ui'
 
 // Three decisions, simulated before they are made.
-//
-// Each of these needs half the answer from a task tool and half from a cost
-// tool, which is why in practice nobody answers them at all — the choice gets
-// made on instinct and the consequence arrives weeks later on a report. Because
-// this app owns the tasks, the time, the rates and the leave requests, it can
-// put the consequence in front of the person deciding.
-//
-// Every panel shows its assumptions. A prediction that hides its working is one
-// a manager is right to ignore.
 
 const TABS = [
     { key: 'quote', label: 'Promise a date', blurb: 'What is this delivery date worth?' },
@@ -163,7 +154,7 @@ export default function BudgetSimulate() {
                 </button>
             </section>
 
-            {/* ---- 1. Quote a date ---- */}
+            {/* 1. */}
             {tab === 'quote' && quote && (
                 <>
                     <section className={`bd-hero ${quote.verdict === 'unrealistic' ? 'over' : ''}`}>
@@ -216,7 +207,7 @@ export default function BudgetSimulate() {
                 </>
             )}
 
-            {/* ---- 2. Add a person ---- */}
+            {/* 2. */}
             {tab === 'people' && staffing && (
                 <>
                     <section className={`bd-hero ${staffing.verdict === 'makes_it_later' ? 'over' : ''}`}>
@@ -275,7 +266,7 @@ export default function BudgetSimulate() {
                 </>
             )}
 
-            {/* ---- 3. Leave ---- */}
+            {/* 3. */}
             {tab === 'leave' && leave && (
                 <>
                     <section className={`bd-hero ${leave.verdict === 'at_risk' ? 'over' : ''}`}>

@@ -1,6 +1,4 @@
 // Shared pieces for the Project Budget Tracker.
-//
-// Components only — the formatters live in budget_format.js.
 
 import { money } from './budget_format'
 
@@ -38,17 +36,11 @@ export function Avatar({ person, size = 'md' }) {
 
 // --- The forecast bar --------------------------------------------------------
 
-// The classic used bar, demoted to supporting evidence, with the forecast drawn
-// on top of it.
-//
-// Two marks matter more than the fill: where the central estimate lands, and how
-// wide the range around it is. A bar that only shows spend cannot say "you are
-// at 55% and heading for 140%", which is the sentence a manager needs.
+// The classic used bar, demoted to supporting evidence, with the forecast drawn on top of it.
 export function ForecastBar({ spent, projected, low, high, total, currency = 'USD' }) {
     if (!total) return null
 
-    // The scale runs to whichever is larger — the budget, or the worst case —
-    // so an overrun is drawn outside the budget line rather than clipped at it.
+    // The scale runs to whichever is larger.
     const ceiling = Math.max(total, high || 0) * 1.04
     const pct = (v) => Math.max(0, Math.min(100, (v / ceiling) * 100))
 
@@ -58,17 +50,17 @@ export function ForecastBar({ spent, projected, low, high, total, currency = 'US
     return (
         <div className="bd-fbar">
             <div className="fb-track">
-                {/* range */}
+                {/* range. */}
                 {high > low && (
                     <span className="fb-range" style={{ left: `${pct(low)}%`, width: `${pct(high) - pct(low)}%` }} />
                 )}
-                {/* spent so far */}
+                {/* spent so far. */}
                 <span className={`fb-spent ${spent > total ? 'over' : ''}`} style={{ width: `${pct(spent)}%` }} />
-                {/* central estimate */}
+                {/* central estimate. */}
                 <span className={`fb-proj ${overruns ? 'over' : ''}`} style={{ left: `${pct(projected)}%` }}>
                     <i />
                 </span>
-                {/* the budget line */}
+                {/* the budget line. */}
                 <span className="fb-cap" style={{ left: `${budgetAt}%` }}><i /></span>
             </div>
 
@@ -84,9 +76,7 @@ export function ForecastBar({ spent, projected, low, high, total, currency = 'US
 
 // --- Burn chart --------------------------------------------------------------
 
-// Cumulative spend against the budget line. The point of the cumulative form is
-// that the slope is the burn rate — a curve that steepens is a project changing
-// pace, which is exactly what the lifetime average hides.
+// Cumulative spend against the budget line.
 export function BurnChart({ series = [], total, projected, currency = 'USD', width = 640, height = 170 }) {
     if (series.length < 2) {
         return <p className="bd-state">Not enough logged time yet to draw a burn curve.</p>
@@ -145,4 +135,3 @@ export function Note({ note }) {
         </div>
     )
 }
-

@@ -1,13 +1,6 @@
 const mongoose = require('mongoose')
 
-// Every notification the system produced, whether or not a mail server was
-// configured to carry it.
-//
-// Recording the message rather than only sending it does two useful things:
-// the app can be demonstrated end to end without SMTP credentials, and when
-// credentials *are* set there is still a record of exactly what each person was
-// told and when — which matters, because "I was never told about that task" is
-// the argument this feature exists to settle.
+// Every notification the system produced, whether or not a mail server was configured to carry it.
 
 const STATUSES = ['queued', 'sent', 'failed']
 
@@ -22,8 +15,7 @@ const mailSchema = new mongoose.Schema({
 
     kind: { type: String, default: 'task_assignment', index: true },
 
-    // The tasks this message was about, so the record can be traced back to the
-    // work rather than only to a date.
+    // The tasks this message was about.
     tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
     taskCount: { type: Number, default: 0 },
 

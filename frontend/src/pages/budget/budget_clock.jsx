@@ -5,12 +5,6 @@ import { shortDate } from './budget_format'
 import { Icon } from './budget_ui'
 
 // Clocking on and off, and logging hours after the fact.
-//
-// The forgot-to-start path matters as much as the live timer: hours that only
-// exist if somebody remembered to press a button at the right moment produce a
-// ledger nobody trusts, and a budget built on an untrusted ledger is decoration.
-// A manual entry carries the day the work happened, so it is costed at the rate
-// in force then rather than the rate today.
 
 const elapsed = (since) => {
     const ms = Date.now() - new Date(since).getTime()
@@ -51,8 +45,7 @@ export default function BudgetClock() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     useEffect(() => { load() }, [load])
 
-    // Only runs while a shift is open, so an idle page is not re-rendering once
-    // a second for no reason.
+    // Only runs while a shift is open.
     useEffect(() => {
         if (!shift?.clockIn) return undefined
         const timer = setInterval(() => setTick(t => t + 1), 1000)
@@ -107,7 +100,7 @@ export default function BudgetClock() {
             {error && <div className="bd-err s12">{error}</div>}
             {note && <div className="bd-ok s12">{note}</div>}
 
-            {/* ---- The clock ---- */}
+            {/* The clock. */}
             <section className="bd-card s6">
                 <div className="bd-lbl"><span>Time clock</span><Icon name="clock" size={14} /></div>
 
@@ -147,7 +140,7 @@ export default function BudgetClock() {
                 )}
             </section>
 
-            {/* ---- Forgot to start ---- */}
+            {/* Forgot to start. */}
             <section className="bd-card s6">
                 <div className="bd-lbl"><span>Log hours you forgot to start</span></div>
                 <p className="bd-sub">
@@ -179,7 +172,7 @@ export default function BudgetClock() {
                 </button>
             </section>
 
-            {/* ---- Recent ---- */}
+            {/* Recent. */}
             <section className="bd-card s12">
                 <div className="bd-lbl"><span>Your recent entries</span></div>
                 {entries.length === 0

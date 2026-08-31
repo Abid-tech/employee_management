@@ -1,13 +1,4 @@
-// Builds a .pdf and a .docx from a Markdown brief in this folder, so the
-// document import can be demonstrated with the file formats a client would
-// actually send.
-//
-//   node demo/make_demo_files.js                 # project_brief.md
-//   node demo/make_demo_files.js hospital_brief  # hospital_brief.md
-//
-// Both writers are deliberately minimal and dependency-free: a PDF with one
-// text stream per page, and a .docx (which is just a ZIP of XML) written with
-// stored — uncompressed — entries.
+// Builds a .pdf and a .docx from a Markdown brief in this folder.
 
 const fs = require('fs')
 const path = require('path')
@@ -18,19 +9,13 @@ const basename = (process.argv[2] || 'project_brief').replace(/\.md$/i, '')
 const markdown = fs.readFileSync(path.join(here, `${basename}.md`), 'utf8')
 
 // Strip the Markdown marks; the point is the words, not the formatting.
-//
-// Bullets stay as an ASCII hyphen. A "•" is written through the WinAnsi map
-// below like any other non-ASCII character.
 const lines = markdown
     .split('\n')
     .map(line => line.replace(/^#{1,6}\s+/, '').replace(/^-\s+/, '- ').trimEnd())
 
 // --- PDF --------------------------------------------------------------------
 
-// The font below is declared /WinAnsiEncoding, so every character has to be
-// written as the single byte WinAnsi gives it. Without this an em dash — which
-// a written brief nearly always contains — is not representable in latin1 and
-// disappears from the text a reader pulls back out.
+// The font below is declared /WinAnsiEncoding.
 const WIN_ANSI = {
     '€': 0x80, '‚': 0x82, 'ƒ': 0x83, '„': 0x84, '…': 0x85, '†': 0x86, '‡': 0x87,
     'ˆ': 0x88, '‰': 0x89, 'Š': 0x8A, '‹': 0x8B, 'Œ': 0x8C, 'Ž': 0x8E,
@@ -94,9 +79,7 @@ const buildPdf = (allLines) => {
     return Buffer.from(pdf, 'latin1')
 }
 
-// --- DOCX -------------------------------------------------------------------
-// A .docx is a ZIP archive of XML parts. Writing the archive by hand avoids
-// pulling in a zip dependency just to produce a demo file.
+// DOCX ------------------------------------------------------------------- A .docx is a ZIP.
 
 const crc32Table = (() => {
     const table = new Int32Array(256)

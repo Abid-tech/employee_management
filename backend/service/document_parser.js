@@ -1,6 +1,4 @@
-// Turns an uploaded brief, spec or set of meeting notes into plain text the
-// planner can read. Everything runs in memory — nothing is written to disk,
-// which also means it works unchanged on Vercel's read-only filesystem.
+// Turns an uploaded brief, spec or set of meeting notes into plain text the planner can read.
 
 const MAX_CHARS = 20000
 

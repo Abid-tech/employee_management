@@ -6,21 +6,10 @@ const Task = require('../model/task')
 const Employee = require('../model/employee')
 
 // Project money: what has been spent, what it is trending to, and why.
-//
-// The ordinary version of this feature is a percentage and a bar. That answers
-// "how much has gone" and nothing else, and it answers it using the lifetime
-// average — which is exactly how a project sails along at 45% while the last
-// fortnight has quietly guaranteed an overrun.
-//
-// So the headline here is the forecast, not the percentage, and it is built from
-// a rolling window of recent burn rather than the whole history. It is published
-// as a range, because a single predicted number is a confidence nobody has
-// earned. And it explains itself, unprompted, in sentences.
 
 const DAY = 24 * 60 * 60 * 1000
 
-// Recent means recent. Two weeks is long enough to survive one quiet Friday and
-// short enough that a change of pace shows up while it still matters.
+// Recent means recent.
 const WINDOW_DAYS = 14
 
 const round = (n, dp = 2) => {
@@ -40,10 +29,6 @@ const dayKey = (date) => new Date(date).toISOString().slice(0, 10)
 // --- Rates -------------------------------------------------------------------
 
 // The rate in force for a person on a given day.
-//
-// Rates are sorted newest-first and the first one that started on or before the
-// work happened wins. Nothing is ever recalculated backwards: correcting a rate
-// that starts next month leaves last month's costs exactly as they were.
 const rateOn = (employeeId, date, ratesByEmployee) => {
     const history = ratesByEmployee.get(String(employeeId)) || []
     const when = new Date(date).getTime()
@@ -84,15 +69,6 @@ const priceEntry = (entry, budget, ratesByEmployee) => {
 // --- The forecast ------------------------------------------------------------
 
 // Where this is heading, and how sure we are.
-//
-// Central estimate: what has been spent, plus the work still outstanding priced
-// at the rate the project has *recently* been running at — not its lifetime
-// average, which is dragged towards whatever the team was doing months ago.
-//
-// The range is built from how variable the daily burn has actually been. A
-// steady project earns a narrow band; a lumpy one earns a wide one and deserves
-// it. Showing "$10,900–$13,200" is less impressive than "$12,050" and far more
-// honest, because it tells a manager whether the number is worth acting on.
 const buildForecast = ({ priced, remainingHours, budget, now = new Date() }) => {
     const spent = money(priced.reduce((sum, p) => sum + p.cost, 0))
     const total = budget?.totalBudget || 0
@@ -103,9 +79,7 @@ const buildForecast = ({ priced, remainingHours, budget, now = new Date() }) => 
     const recentHours = recent.reduce((sum, p) => sum + p.hours, 0)
     const recentCost = money(recent.reduce((sum, p) => sum + p.cost, 0))
 
-    // Every calendar day in the window, including the empty ones — a team that
-    // worked flat out for three days and nothing for eleven is not burning at
-    // three days' pace.
+    // Every calendar day in the window, including the empty ones.
     const byDay = new Map()
     for (let i = 0; i < WINDOW_DAYS; i += 1) {
         byDay.set(dayKey(new Date(now.getTime() - i * DAY)), 0)
@@ -120,8 +94,7 @@ const buildForecast = ({ priced, remainingHours, budget, now = new Date() }) => 
     const burnSd = money(stdev(daily))
     const hoursPerDay = round(recentHours / WINDOW_DAYS, 2)
 
-    // The rate the project is actually running at lately, blended across whoever
-    // has been on it. Falls back to the lifetime blend when the window is empty.
+    // The rate the project is actually running at lately, blended across whoever has been on it.
     const lifetimeHours = priced.reduce((sum, p) => sum + p.hours, 0)
     const recentBlend = recentHours > 0
         ? recentCost / recentHours
@@ -130,9 +103,7 @@ const buildForecast = ({ priced, remainingHours, budget, now = new Date() }) => 
     const remainingCost = money(remainingHours * recentBlend)
     const projected = money(spent + remainingCost)
 
-    // Coefficient of variation of the daily burn, floored and capped: a project
-    // with two data points has not earned a 3% band, and one truly chaotic week
-    // should not produce a range so wide it says nothing.
+    // Coefficient of variation of the daily burn.
     const cv = burnPerDay > 0 ? burnSd / burnPerDay : 0.25
     const spread = Math.min(0.42, Math.max(0.08, cv * 0.6))
 
@@ -160,8 +131,7 @@ const buildForecast = ({ priced, remainingHours, budget, now = new Date() }) => 
         high,
         overBy: total > 0 ? money(projected - total) : null,
         willOverrun: total > 0 && projected > total,
-        // Even a central estimate inside budget is worth flagging when the top
-        // of the range is not.
+        // Even a central estimate inside budget is worth flagging when the top of the range is not.
         couldOverrun: total > 0 && high > total && projected <= total,
 
         burnPerDay,
@@ -181,11 +151,6 @@ const buildForecast = ({ priced, remainingHours, budget, now = new Date() }) => 
 // --- Narration ---------------------------------------------------------------
 
 // The part nobody else does: saying what changed, without being asked.
-//
-// Every tool surveyed either shows a number and waits, or hides its reasoning
-// behind an assistant you have to go and prompt. These are written as sentences
-// a manager can act on, and each one names the figure it came from so it can be
-// argued with.
 const narrate = ({ priced, forecast, budget, people, now = new Date() }) => {
     const notes = []
     const cut = now.getTime() - 7 * DAY
@@ -250,8 +215,7 @@ const narrate = ({ priced, forecast, budget, people, now = new Date() }) => {
         })
     }
 
-    // 4. Work priced off the standard rate — worth surfacing because it is
-    //    usually deliberate and occasionally a mistake.
+    // 4.
     const overridden = priced.filter(p => p.rateSource === 'entry')
     if (overridden.length > 0) {
         const value = money(overridden.reduce((s, p) => s + p.cost, 0))
@@ -297,8 +261,6 @@ const fmt = (value, budget) => {
 // --- Alerts ------------------------------------------------------------------
 
 // Which thresholds this project has crossed, and which are newly crossed.
-// Firing once is the whole point: an alert that repeats every day is an alert
-// people learn to ignore.
 const evaluateAlerts = (budget, percentUsed) => {
     if (!budget || percentUsed === null) return { crossed: [], fresh: [] }
 
@@ -323,11 +285,6 @@ const loadRates = async () => {
 }
 
 // The shared context every project calculation needs.
-//
-// Split out so the portfolio can load it once instead of once per project. The
-// first version called projectFinancials in a loop, and each call re-fetched the
-// entire rate table and the whole employee list — with four projects that is
-// twenty-four round trips to Atlas to answer one screen.
 const loadContext = async () => {
     const [employees, ratesByEmployee] = await Promise.all([
         Employee.find().select('name department color jobTitle'),
@@ -350,9 +307,7 @@ const projectFinancials = async (objectiveId, { now = new Date(), context, full 
 
     const { people, ratesByEmployee } = shared
 
-    // The tasks are already loaded for the outstanding-work figure, so naming
-    // the task on an entry costs nothing. Without it a row in the ledger says
-    // "3.1 hours, $149" and cannot say what the money was spent doing.
+    // The tasks are already loaded for the outstanding-work figure.
     const taskTitles = new Map(tasks.map(t => [String(t._id), t.title]))
 
     const priced = entries.map(entry => ({
@@ -385,12 +340,6 @@ const projectFinancials = async (objectiveId, { now = new Date(), context, full 
     const margin = money(billed - forecast.spent)
 
     // Who the money went on.
-    //
-    // The row itself only ever needs three figures, but the row is also the
-    // handle a manager reaches for when they want to know *why* somebody is at
-    // the top of it. That answer — what they were doing, at what rate, how much
-    // of it was billable — is built here rather than left to a second request,
-    // because every piece of it is already in this loop.
     const projectCost = priced.reduce((s, p) => s + p.cost, 0)
     const projectHours = priced.reduce((s, p) => s + p.hours, 0)
 
@@ -402,8 +351,7 @@ const projectFinancials = async (objectiveId, { now = new Date(), context, full 
         const billableHours = mine.filter(p => p.billable).reduce((s, p) => s + p.hours, 0)
         const days = [...new Set(mine.map(p => dayKey(p.workedOn)))].sort()
 
-        // What they actually spent the hours on, largest first. Three is enough
-        // to recognise a pattern and short enough to stay inside a row.
+        // What they actually spent the hours on, largest first.
         const byTask = new Map()
         for (const p of mine) {
             const key = p.taskTitle || 'Not attached to a task'
@@ -425,8 +373,7 @@ const projectFinancials = async (objectiveId, { now = new Date(), context, full 
             margin: money(billedHere - cost),
             marginPercent: billedHere > 0 ? round(((billedHere - cost) / billedHere) * 100, 1) : null,
             entries: mine.length,
-            // The rate they actually ran at here, which is not their card rate
-            // whenever an entry carried an override or the project set its own.
+            // The rate they actually ran at here.
             blendedCostRate: hours > 0 ? round(cost / hours, 2) : 0,
             billableHours: round(billableHours, 1),
             nonBillableHours: round(hours - billableHours, 1),
@@ -484,19 +431,11 @@ const projectFinancials = async (objectiveId, { now = new Date(), context, full 
         byPerson,
         series,
 
-        // The page only ever shows the most recent few, so the rest would be
-        // payload nobody reads. Anything that needs the whole ledger — the
-        // advisor pricing an overrun per task, say — asks for `full` and gets
-        // it; without that flag the truncated list silently priced most tasks
-        // at zero, which produced findings claiming "$0 of the overrun came
-        // from these tasks".
+        // The page only ever shows the most recent few, so the rest would be payload nobody reads.
         entries: priced.slice(-40).reverse(),
         allEntries: full ? priced : undefined,
 
-        // The caller that asks for the full ledger is always the advisor, and
-        // the advisor needs the same task documents this function has already
-        // loaded. Handing them back saves it re-running an identical
-        // Task.find({ objective }) once per project.
+        // The caller that asks for the full ledger is always the advisor.
         tasks: full ? tasks : undefined,
         narration: narrate({ priced, forecast, budget, people, now })
     }
@@ -510,8 +449,7 @@ const portfolio = async ({ now = new Date() } = {}) => {
         loadContext()
     ])
 
-    // Run the projects together rather than one after another. They share no
-    // state, so waiting for each in turn only adds latency.
+    // Run the projects together rather than one after another.
     const details = await Promise.all(
         budgets
             .filter(b => b.objective)
@@ -526,9 +464,7 @@ const portfolio = async ({ now = new Date() } = {}) => {
             objective: detail.objective,
             budget: detail.budget,
             forecast: detail.forecast,
-            // Carried so the portfolio's headline figures can be broken back
-            // down per project without a second round trip — a total nobody can
-            // decompose is a total nobody can check.
+            // Carried so the portfolio's headline figures can be broken back down per project without.
             billed: detail.billed,
             margin: detail.margin,
             marginPercent: detail.marginPercent,
@@ -566,22 +502,6 @@ const portfolio = async ({ now = new Date() } = {}) => {
 // --- What a deadline change costs --------------------------------------------
 
 // The question no time-tracking tool can answer and no task tool can either.
-//
-// Harvest, Clockify and Productive know what a project costs but have no idea
-// when your tasks are due. Jira and Asana own the dates but know nothing about
-// money. A manager pushing a date therefore makes the decision blind, finds out
-// the financial consequence a month later, and by then the choice is spent.
-//
-// This app owns both sides, so the consequence can be shown before the button is
-// pressed rather than after.
-//
-// The honest model matters here. Extending a deadline does not by itself create
-// cost — the remaining work costs what it costs whenever it is done. What moving
-// the date changes is *how long the project stays open*, and a project that
-// stays open keeps burning: people stay assigned, meetings keep happening, the
-// team does not move on. So the extra is charged at the project's recent daily
-// burn across the days added, and it is labelled as an exposure rather than as a
-// certainty.
 const deadlineImpact = async (task, newDueDate, { now = new Date() } = {}) => {
     const previous = task.dueDate ? new Date(task.dueDate) : null
     const next = new Date(newDueDate)
@@ -614,9 +534,7 @@ const deadlineImpact = async (task, newDueDate, { now = new Date() } = {}) => {
     const f = detail.forecast
     const currency = detail.budget.currency
 
-    // Days of burn the project is exposed to by staying open longer. Only
-    // counted when the date actually moves later — pulling a date forward does
-    // not hand money back.
+    // Days of burn the project is exposed to by staying open longer.
     const extraDays = daysAdded && daysAdded > 0 ? daysAdded : 0
     const exposure = money(extraDays * f.burnPerDay)
 
@@ -624,8 +542,7 @@ const deadlineImpact = async (task, newDueDate, { now = new Date() } = {}) => {
     const percentBefore = f.percentUsed
     const percentAfter = f.total > 0 ? round((projectedAfter / f.total) * 100, 1) : null
 
-    // The finding a manager actually needs: does this decision change the
-    // answer to "will this project come in on budget?"
+    // The finding a manager actually needs: does this decision change the answer.
     const tipsIntoOverrun = f.total > 0 && f.projected <= f.total && projectedAfter > f.total
 
     return {
@@ -646,8 +563,7 @@ const deadlineImpact = async (task, newDueDate, { now = new Date() } = {}) => {
         confidence: f.confidence,
         windowDays: WINDOW_DAYS,
 
-        // Everything else on this project that is already late — pushing one
-        // date rarely happens in isolation.
+        // Everything else on this project that is already late.
         otherLate: (await Task.find({
             objective: task.objective._id || task.objective,
             status: { $ne: 'done' },

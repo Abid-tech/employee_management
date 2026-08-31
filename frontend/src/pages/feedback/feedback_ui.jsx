@@ -1,6 +1,4 @@
 // Shared pieces for the Feedback & Evaluation module.
-//
-// Components only — the constants and formatters live in feedback_format.js.
 
 import { SOURCE, sourceColour, sourceLabel } from './feedback_format'
 
@@ -58,13 +56,6 @@ export function SourceTag({ source }) {
 // --- The radar ---------------------------------------------------------------
 
 // Four sources on one set of axes.
-//
-// This is the whole argument of the module in a single picture. Collecting
-// manager, peer, self and client feedback is common; showing them in four
-// separate tabs is also common, and it means nobody ever compares them. Drawn on
-// top of each other, the shape of the disagreement is the finding — a self
-// polygon sitting outside everyone else's is a different conversation from one
-// sitting inside it, and neither is visible any other way.
 export function Radar({ axes = [], sources = ['manager', 'peer', 'self', 'client'], size = 300, max = 5 }) {
     if (axes.length < 3) return null
 
@@ -87,7 +78,7 @@ export function Radar({ axes = [], sources = ['manager', 'peer', 'self', 'client
     return (
         <svg className="fb-radar" viewBox={`0 0 ${size} ${size}`} role="img"
             aria-label="Competency ratings from each feedback source">
-            {/* Rings, so a reader can read a value off the chart rather than guess */}
+            {/* Rings. */}
             {[1, 2, 3, 4].map(level => (
                 <polygon key={level} points={ringPath(level)} fill="none"
                     stroke="rgba(10,41,71,.12)" strokeWidth="1" />
@@ -129,10 +120,7 @@ export function Radar({ axes = [], sources = ['manager', 'peer', 'self', 'client
 
 // --- The timeline ------------------------------------------------------------
 
-// Every submitted review as one dot in time, coloured by who wrote it. The
-// horizontal axis is real dates, so a gap in feedback is as visible as a low
-// score — and a run of manager-only dots shows a team that never asked anyone
-// else what they thought.
+// Every submitted review as one dot in time, coloured by who wrote it.
 export function Timeline({ points = [], width = 640, height = 132, max = 5 }) {
     if (points.length === 0) {
         return <p className="fb-state">No submitted feedback yet, so there is nothing to plot.</p>
@@ -219,4 +207,3 @@ export function Bar({ value, max = 5, tone = '' }) {
     const percent = Math.max(0, Math.min(100, (value / max) * 100))
     return <span className={`fb-bar ${tone}`}><i style={{ width: `${percent}%` }} /></span>
 }
-

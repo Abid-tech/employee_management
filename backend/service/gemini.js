@@ -1,8 +1,4 @@
-// Google Gemini, called over its REST API with fetch (built into Node 18+)
-// rather than an SDK, so there is one less dependency to keep in step.
-//
-// The free tier covers this comfortably: get a key at
-// https://aistudio.google.com/apikey and put it in backend/.env.
+// Google Gemini.
 
 const API_ROOT = 'https://generativelanguage.googleapis.com/v1beta/models'
 const TIMEOUT_MS = 120000
@@ -10,8 +6,7 @@ const TIMEOUT_MS = 120000
 const isConfigured = () => Boolean(process.env.GEMINI_API_KEY)
 const modelName = () => process.env.GEMINI_MODEL || 'gemini-2.5-flash'
 
-// Gemini accepts an OpenAPI-style schema and will only answer with JSON that
-// matches it, which saves parsing loose prose out of a chat reply.
+// Gemini accepts an OpenAPI-style schema and will only answer with JSON that matches it.
 const PLAN_SCHEMA = {
     type: 'OBJECT',
     properties: {
@@ -70,10 +65,7 @@ ${text}
 Break this document into tasks.`
 }
 
-// Google answers 503 "high demand" and 429 "rate limited" on the free tier often
-// enough that a single attempt is a coin toss. Both are temporary by definition,
-// so they are worth waiting out; anything else is a real error and is raised at
-// once rather than retried into a long silence.
+// Google answers 503 "high demand" and 429 "rate limited" on the free tier often enough.
 const RETRY_ON = [429, 503]
 const RETRIES = 3
 const BACKOFF_MS = 2500

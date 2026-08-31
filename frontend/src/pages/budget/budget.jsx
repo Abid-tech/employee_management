@@ -5,21 +5,8 @@ import { money } from './budget_format'
 import { ForecastBar, Icon, Note } from './budget_ui'
 
 // The portfolio, led by where each project is heading.
-//
-// The conventional version of this screen is a list of percentages. A percentage
-// is a fact about the past; on its own it cannot distinguish a project at 55%
-// that is coasting to a comfortable finish from one at 55% that has doubled its
-// burn in the last fortnight and is now guaranteed to overrun. Both of those
-// exist in this list. So the trending figure leads and the percentage supports
-// it, rather than the other way round.
-//
-// Every headline figure here is a sum, and a sum a reader cannot take apart is a
-// sum they have to take on trust. Each of the four stats opens into the projects
-// that produced it, and each project card opens into its own ledger.
 
-// The four drill-downs behind the headline stats. Each is built from the same
-// portfolio payload the cards below are drawn from — no second request, and no
-// figure that cannot be traced to a row.
+// The four drill-downs behind the headline stats.
 const DRILLS = {
     spent: {
         title: 'Where the money has gone',
@@ -92,8 +79,7 @@ const DRILLS = {
     }
 }
 
-// The panel that opens under the headline. Rows are links, because the question
-// after "which projects" is always "show me that one".
+// The panel that opens under the headline.
 function Drill({ kind, rows, totals, onClose }) {
     const spec = DRILLS[kind]
     if (!spec) return null
@@ -186,7 +172,7 @@ export default function Budget() {
         <div className="bd-grid">
             {error && <div className="bd-err s12">{error}</div>}
 
-            {/* ---- Portfolio headline ---- */}
+            {/* Portfolio headline. */}
             <section className={`bd-hero ${portfolioOver ? 'over' : ''}`}>
                 <span className="h-eyebrow">All projects · forecast from the last {windowDays} days</span>
 
@@ -203,8 +189,7 @@ export default function Budget() {
                             : `${money(totals.budget - totals.projected, currency)} headroom`}
                     </span>
 
-                    {/* Each of these is a sum. Clicking one shows the projects it
-                        is a sum of, rather than asking the reader to trust it. */}
+                    {/* Each of these is a sum. */}
                     <div className="h-stats">
                         {stat('spent', money(totals.spent, currency, { compact: true }), 'Spent so far')}
                         {stat('margin', money(totals.margin, currency, { compact: true }), 'Margin on billable work')}
@@ -222,7 +207,7 @@ export default function Budget() {
                 </div>
             </section>
 
-            {/* ---- One card per project ---- */}
+            {/* One card per project. */}
             {rows.length === 0 && (
                 <section className="bd-card s12">
                     <p className="bd-state">No project has a budget set yet.</p>
@@ -237,9 +222,7 @@ export default function Budget() {
                 const open = () => navigate(href)
 
                 return (
-                    // The whole card is the target. The link at the bottom stays,
-                    // because a card that is silently clickable is a card nobody
-                    // clicks — but the affordance should not be a 90-pixel strip.
+                    // The whole card is the target.
                     <section className="bd-card s6 clickable" key={row.objective.id}
                         role="link" tabIndex={0}
                         aria-label={`Open ${row.objective.title}`}

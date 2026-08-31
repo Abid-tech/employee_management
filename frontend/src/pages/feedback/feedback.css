@@ -1,16 +1,7 @@
-/* ---------------------------------------------------------------------------
-   Employee Feedback & Evaluation.
-
-   Every rule is scoped under .fb, for the same reason Module 3 scopes under .m3
-   and the performance module under .perf: this app already carries Bootstrap,
-   the team's index.css, and two module stylesheets that all define .card, .btn
-   and .row. A fourth unscoped sheet would let whichever file the bundler emitted
-   last decide what the leave form looks like.
-   --------------------------------------------------------------------------- */
+/* Employee Feedback & Evaluation. */
 
 .fb {
-    /* The four brand colours, used raw.
-       navy #0A2947 · cream #F3E4C9 · sage #D3D4C0 · clay #8B5E3C */
+    /* The four brand colours, used raw. */
     --f-navy: #0A2947;
     --f-cream: #F3E4C9;
     --f-sage: #D3D4C0;
@@ -53,12 +44,10 @@
 .fb *, .fb *::before, .fb *::after { box-sizing: border-box; }
 .fb .fb-mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
 
-/* The app's global footer reads as part of the report under a card here. Hidden
-   in this stylesheet rather than in the Footer component, so other modules keep
-   it and this module changes nothing outside its own file. */
+/* The app's global footer reads as part of the report under a card here. */
 body:has(.fb) #footer { display: none; }
 
-/* --- Shell ---------------------------------------------------------------- */
+/* Shell. */
 
 .fb .fb-wrap { max-width: 1320px; margin: 0 auto; }
 
@@ -103,7 +92,7 @@ body:has(.fb) #footer { display: none; }
 
 .fb .fb-ctx { font-size: 12.5px; color: var(--f-muted); margin-bottom: 14px; }
 
-/* --- Grid + card ---------------------------------------------------------- */
+/* Grid + card. */
 
 .fb .fb-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px; }
 .fb .s3 { grid-column: span 3; } .fb .s4 { grid-column: span 4; }
@@ -139,7 +128,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-pill.rose { background: rgba(179, 64, 47, .13); color: var(--f-rose); }
 .fb .fb-pill.plain { background: var(--f-raise-2); color: var(--f-soft); }
 
-/* --- KPIs ----------------------------------------------------------------- */
+/* KPIs. */
 
 .fb .fb-kpis {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -163,7 +152,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-kpi .k-n { font-size: 24px; font-weight: 700; letter-spacing: -.02em; margin-top: 3px; line-height: 1.1; color: var(--f-text); }
 .fb .fb-kpi .k-s { font-size: 12px; color: var(--f-muted); margin-top: 2px; }
 
-/* --- Avatars, source tags, scores ---------------------------------------- */
+/* Avatars. */
 
 .fb .fb-av {
     border-radius: 50%; display: grid; place-items: center; flex: none;
@@ -196,7 +185,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-bar.gold > i { background: var(--f-clay); }
 .fb .fb-bar.rose > i { background: var(--f-rose); }
 
-/* --- Radar + timeline ----------------------------------------------------- */
+/* Radar + timeline. */
 
 .fb .fb-radar { width: 100%; max-width: 340px; height: auto; display: block; margin: 0 auto; }
 .fb .fb-radar-label { font-size: 9.5px; fill: var(--f-soft); font-family: var(--f-font); font-weight: 600; }
@@ -208,7 +197,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-legend .l i { width: 11px; height: 11px; border-radius: 3px; display: block; flex: none; }
 .fb .fb-legend .l b { font-family: var(--f-mono); color: var(--f-text); }
 
-/* --- Lists and rows ------------------------------------------------------- */
+/* Lists and rows. */
 
 .fb .fb-row {
     display: flex; align-items: center; gap: 10px;
@@ -228,7 +217,7 @@ body:has(.fb) #footer { display: none; }
 }
 .fb .fb-quote b { color: var(--f-text); font-weight: 600; }
 
-/* --- Agent proposals ------------------------------------------------------ */
+/* Agent proposals. */
 
 .fb .fb-prop {
     border: 1px solid var(--f-line); border-left: 3px solid var(--f-clay);
@@ -253,7 +242,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-prop .p-draft .d-d { font-size: 11.5px; color: var(--f-soft); margin-top: 4px; line-height: 1.5; }
 .fb .fb-prop .p-acts { display: flex; gap: 8px; margin-top: 11px; flex-wrap: wrap; align-items: center; }
 
-/* --- Calibration findings ------------------------------------------------- */
+/* Calibration findings. */
 
 .fb .fb-find {
     border: 1px solid var(--f-line); border-radius: var(--f-r);
@@ -269,7 +258,7 @@ body:has(.fb) #footer { display: none; }
 }
 .fb .fb-find dd { margin: 0; font-size: 13px; color: var(--f-soft); line-height: 1.5; }
 
-/* --- Forms ---------------------------------------------------------------- */
+/* Forms. */
 
 .fb .fb-form { display: grid; gap: 14px; margin-top: 14px; }
 .fb .fb-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
@@ -318,7 +307,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-btn.go { background: var(--f-green); border-color: var(--f-green); }
 .fb .fb-btn.sm { font-size: 12px; padding: 4px 10px; border-radius: var(--f-r-sm); }
 
-/* --- Trust log ------------------------------------------------------------ */
+/* Trust log. */
 
 .fb .fb-log { margin-top: 8px; }
 .fb .fb-log .e {
@@ -335,7 +324,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-log .e .t { font-size: 12px; color: var(--f-text); line-height: 1.45; }
 .fb .fb-log .e .m { font-size: 10.5px; color: var(--f-muted); margin-top: 2px; }
 
-/* --- Table ---------------------------------------------------------------- */
+/* Table. */
 
 .fb .fb-tablewrap { overflow-x: auto; margin-top: 12px; border: 1px solid var(--f-line); border-radius: var(--f-r); }
 .fb table.fb-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 560px; }
@@ -349,7 +338,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-table tbody tr:hover td { background: var(--f-raise); color: var(--f-text); }
 .fb .fb-table td.num { font-family: var(--f-mono); text-align: right; }
 
-/* --- States --------------------------------------------------------------- */
+/* States. */
 
 .fb .fb-state { text-align: center; padding: 36px 20px; color: var(--f-muted); font-size: 13px; }
 .fb .fb-err {
@@ -361,8 +350,7 @@ body:has(.fb) #footer { display: none; }
     color: #1F5A50; border-radius: var(--f-r); padding: 12px 15px; font-size: 12.5px; margin-bottom: 14px;
 }
 
-/* An instruction, not a failure. Red is reserved for things that went wrong, so
-   it stays worth reacting to when it does appear. */
+/* An instruction, not a failure. */
 .fb .fb-notice {
     display: flex; align-items: flex-start; gap: 10px;
     background: var(--f-raise); border: 1px solid var(--f-line);
@@ -385,15 +373,9 @@ body:has(.fb) #footer { display: none; }
 }
 .fb .fb-back:hover { color: var(--f-text); }
 
-/* --- Record against reviewers ----------------------------------------------
-   The one page in this module that reads Module 4. Its job is to compare two
-   orderings of the same people, so almost all of the design work is in the
-   slope graph — the rest of the page exists to explain it and to say what the
-   two instruments each cannot see.
-   --------------------------------------------------------------------------- */
+/* Record against reviewers ---------------------------------------------- The one page. */
 
-/* A dark headline band, matching the convention the other three modules use for
-   the one figure a page exists to deliver. */
+/* A dark headline band. */
 .fb .fb-hero {
     grid-column: span 12;
     border-radius: var(--f-r);
@@ -416,16 +398,14 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-hero .h-stat .s-l { display: block; font-size: 10px; color: rgba(243, 228, 201, .58); margin-top: 2px; line-height: 1.4; }
 .fb .fb-hero .h-foot { margin-top: 16px; padding-top: 13px; border-top: 1px solid rgba(243, 228, 201, .14); font-size: 11.5px; color: rgba(243, 228, 201, .72); line-height: 1.55; }
 
-/* Spearman runs from minus one to plus one, so the bar is drawn on that whole
-   domain with the zero line marked. A correlation of -0.4 has to look like it is
-   on the wrong side of something, not merely like a short bar. */
+/* Spearman runs from minus one to plus one. */
 .fb .fb-hero .h-scale { margin-top: 16px; }
 .fb .fb-hero .sc-track { position: relative; display: block; height: 9px; border-radius: 5px; background: rgba(243, 228, 201, .16); overflow: hidden; }
 .fb .fb-hero .sc-fill { position: absolute; inset: 0 auto 0 0; border-radius: 5px; background: var(--f-cream); }
 .fb .fb-hero .sc-zero { position: absolute; top: -3px; bottom: -3px; left: 50%; width: 2px; margin-left: -1px; background: rgba(243, 228, 201, .55); }
 .fb .fb-hero .sc-ends { display: flex; justify-content: space-between; font-size: 9.5px; color: rgba(243, 228, 201, .55); margin-top: 6px; }
 
-/* --- The slope graph ------------------------------------------------------- */
+/* The slope graph. */
 
 .fb .fb-slopewrap { margin-top: 14px; }
 .fb .fb-slope { width: 100%; height: auto; display: block; overflow: visible; }
@@ -460,7 +440,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-slopekey .k i.gold { background: var(--f-clay); }
 .fb .fb-slopekey .k i.rose { background: var(--f-rose); }
 
-/* --- Notes ----------------------------------------------------------------- */
+/* Notes. */
 
 .fb .fb-note {
     border: 1px solid var(--f-line); border-left: 3px solid var(--f-muted);
@@ -473,7 +453,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-note .n-h { display: block; font-size: 14px; font-weight: 600; color: var(--f-text); }
 .fb .fb-note .n-d { display: block; font-size: 13px; color: var(--f-soft); margin-top: 4px; line-height: 1.55; }
 
-/* --- One person's disagreement --------------------------------------------- */
+/* One person's disagreement. */
 
 .fb .fb-gaps { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 12px; margin-top: 12px; }
 
@@ -493,8 +473,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-gap .g-name { display: block; font-size: 14px; font-weight: 600; color: var(--f-text); }
 .fb .fb-gap .g-role { display: block; font-size: 12px; color: var(--f-muted); margin-top: 1px; }
 
-/* The two readings, drawn as two sides of one comparison rather than as two
-   unrelated statistics stacked in a list. */
+/* The two readings. */
 .fb .fb-gap .g-pair {
     display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: center;
     margin-top: 14px; padding: 12px 0; border-top: 1px solid var(--f-line); border-bottom: 1px solid var(--f-line);
@@ -532,7 +511,7 @@ body:has(.fb) #footer { display: none; }
 .fb .fb-table tbody tr.on td { background: var(--f-raise-2); color: var(--f-text); }
 .fb .fb-table tbody tr { cursor: pointer; }
 
-/* --- Responsive ----------------------------------------------------------- */
+/* Responsive. */
 
 @media (max-width: 1080px) {
     .fb .s3, .fb .s4, .fb .s5 { grid-column: span 6; }

@@ -4,18 +4,8 @@ import { performanceApi } from '../../lib/performance_api'
 import { Avatar, Icon, MomentumTag, Sparkline } from './performance_ui'
 
 // Module 4, page 1 — the whole company at a glance.
-//
-// The ordering is deliberate. A leaderboard on its own answers "who is ahead",
-// which is the least useful question a manager has. So the rank sits beside
-// three things it cannot say by itself: who is carrying invisible work, who the
-// ranking is being unfair to, and who is about to burn out holding their place.
 
-// Slices of the contribution bar. A navy-to-clay ramp rather than a rainbow:
-// the order carries the ranking, so the colours only need to stay apart from
-// each other and inside the brand family.
-// One hue per department, from the brand family. Departments are keyed by name
-// in sorted order so a department keeps the same colour between renders and
-// between the bar and its legend.
+// Slices of the contribution bar.
 const DEPARTMENT_HUES = ['#0A2947', '#2E7D6F', '#8B5E3C', '#2C6E9B', '#B3402F', '#4E8163']
 
 const departmentsIn = (shares) => [...new Set(shares.map(s => s.department))].sort()
@@ -23,8 +13,7 @@ const departmentsIn = (shares) => [...new Set(shares.map(s => s.department))].so
 const departmentColour = (department, shares) =>
     DEPARTMENT_HUES[departmentsIn(shares).indexOf(department) % DEPARTMENT_HUES.length]
 
-// Mix a colour towards white. Used to separate the people inside one department
-// without leaving that department's hue — so the block still reads as one team.
+// Mix a colour towards white.
 const lighten = (hex, amount) => {
     const n = parseInt(hex.slice(1), 16)
     const mix = (c) => Math.round(c + (255 - c) * amount)
@@ -32,8 +21,7 @@ const lighten = (hex, amount) => {
     return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`
 }
 
-// Largest contributor in a department keeps the pure hue; each person below them
-// is one step lighter.
+// Largest contributor in a department keeps the pure hue.
 const personColour = (share, shares) => {
     const base = departmentColour(share.department, shares)
     const peers = shares.filter(s => s.department === share.department)
@@ -45,8 +33,7 @@ const personColour = (share, shares) => {
 const SEVERITY_LABEL = { urgent: 'Do now', soon: 'This week', opportunity: 'Worth doing' }
 const ACTION_TONE = { urgent: 'risk', soon: 'warn', opportunity: 'rise' }
 
-// Rising, steady, slipping — one colour each, matching the pillar tones used
-// everywhere else on the page.
+// Rising, steady, slipping.
 const MOMENTUM_COLOUR = { up: '#2E7D6F', flat: '#6B7C8C', down: '#B3402F' }
 
 export default function Performance() {
@@ -55,8 +42,7 @@ export default function Performance() {
     const [error, setError] = useState('')
     const [department, setDepartment] = useState('')
 
-    // Which department row is expanded. One at a time: the panel is tall enough
-    // that two open at once pushes everything else off the screen.
+    // Which department row is expanded.
     const [openDept, setOpenDept] = useState('')
 
     const load = useCallback(async () => {
@@ -110,14 +96,7 @@ export default function Performance() {
 
             <div className="p-grid">
 
-                {/* ---- Company headline -----------------------------------
-                    A navy band rather than another cream card. The page was
-                    cream panels on a cream ground from top to bottom, which
-                    read as one undifferentiated surface — nothing told the eye
-                    where to start. Putting the single most important number on
-                    the one dark field on the page fixes that with contrast
-                    rather than with decoration, and it is the brand's own navy
-                    and cream doing the work. */}
+                {/* Company headline ----------------------------------- A navy band rather than another cream card. */}
                 <section className="p-band s12">
                     <div className="b-head">
                         <span className="b-eyebrow">Company performance · {period}</span>
@@ -167,7 +146,7 @@ export default function Performance() {
                     </div>
                 </section>
 
-                {/* ---- Leaderboard ---- */}
+                {/* Leaderboard. */}
                 <section className="p-card s7">
                     <div className="p-lbl">
                         <span>Leaderboard {department && `· ${department}`}</span>
@@ -207,12 +186,7 @@ export default function Performance() {
 
                                 <span className="p-pts">◈{person.points.toLocaleString()}</span>
 
-                                {/* Shape and colour are the same measurement:
-                                    weighted hours per week, coloured by the
-                                    momentum state. Three states, three colours —
-                                    green for rising only, so a steady line that
-                                    happens to drift down is not painted as
-                                    growth or as decline. */}
+                                {/* Shape and colour are the same measurement: weighted hours per week. */}
                                 <Sparkline
                                     points={person.weekly}
                                     colour={MOMENTUM_COLOUR[person.momentum.direction] || '#6B7C8C'}
@@ -223,13 +197,7 @@ export default function Performance() {
                     </div>
                 </section>
 
-                {/* ---- Recommended actions -------------------------------------
-                    What replaced "what the rank cannot see". That panel described
-                    two statistical corrections and then asked the reader to work
-                    out the implication themselves, which is where most dashboards
-                    lose people. Every row here names someone, gives the fact that
-                    triggered it, and states the decision — sorted so the top of
-                    the list is the thing to do first. */}
+                {/* Recommended actions ------------------------------------- What replaced "what the rank cannot. */}
                 <section className="p-card s5">
                     <div className="p-lbl">
                         <span>Recommended actions</span>
@@ -241,9 +209,7 @@ export default function Performance() {
                         recognising — ordered by urgency.
                     </p>
 
-                    {/* "Move work off them" is advice until somebody works out
-                        which work and to whom. That page exists, so the finding
-                        links to it rather than leaving the reader to find it. */}
+                    {/* "Move work off them" is advice until somebody works out which work and to whom. */}
                     {actions.some(item => item.kind === 'protect') && (
                         <Link className="p-btn ghost" to="/performance/rebalance" style={{ marginTop: 10 }}>
                             <Icon name="users" size={13} /> Work out who can take the load
@@ -284,7 +250,7 @@ export default function Performance() {
                         )}
                 </section>
 
-                {/* ---- Departments ---- */}
+                {/* Departments. */}
                 <section className="p-card s6">
                     <div className="p-lbl"><span>Department performance</span><Icon name="chart" size={14} /></div>
                     <p className="p-sub">
@@ -364,7 +330,7 @@ export default function Performance() {
                     </div>
                 </section>
 
-                {/* ---- Needs attention ---- */}
+                {/* Needs attention. */}
                 <section className="p-card s6">
                     <div className="p-lbl"><span>Needs attention</span><Icon name="heart" size={14} /></div>
                     <p className="p-sub">
@@ -393,7 +359,7 @@ export default function Performance() {
                         ))}
                 </section>
 
-                {/* ---- Contribution to the company goal ---- */}
+                {/* Contribution to the company goal. */}
                 <section className="p-card s12">
                     <div className="p-lbl">
                         <span>Contribution to the company goal · who moved it</span>
@@ -412,8 +378,7 @@ export default function Performance() {
                             <>
                                 <div className="p-contrib">
                                     {contribution.shares.map((share) => {
-                                        // Below ~7% a label cannot fit legibly, so the segment keeps its
-                                        // tooltip and drops the text rather than showing a clipped name.
+                                        // Below ~7% a label cannot fit legibly.
                                         const width = share.share * (contribution.goalProgress / 100)
                                         return (
                                             <span
@@ -436,8 +401,7 @@ export default function Performance() {
                                     <span>Goal 100%</span>
                                 </div>
 
-                                {/* Department legend — the key to the colours above, and a
-                                    departmental read of the same bar. */}
+                                {/* Department legend — the key to the colours above, and a departmental read of the same bar. */}
                                 <div className="p-legend">
                                     {contribution.byDepartment.map(dept => (
                                         <div className="l-row" key={dept.name}>
@@ -454,9 +418,7 @@ export default function Performance() {
                                     ))}
                                 </div>
 
-                                {/* The goals themselves. A single blended number hid a project
-                                    at 48% behind one at 80%, so they are listed separately,
-                                    furthest behind first. */}
+                                {/* The goals themselves. */}
                                 <div className="p-lbl" style={{ marginTop: 18 }}>
                                     <span>The {contribution.goalCount} projects behind that number</span>
                                 </div>

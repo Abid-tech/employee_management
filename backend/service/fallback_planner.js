@@ -1,33 +1,19 @@
 // Used when no Gemini key is set, or when the API call fails.
-//
-// It reads the document's own structure — headings, bullets, numbered lists —
-// and returns the same shape Gemini does, so nothing downstream can tell the
-// difference. The response always names which engine produced it, so the
-// interface can be honest about it.
 
-// Bullets survive a PDF badly. Depending on the font, a "•" can come back as a
-// quote, a middle dot, or U+F0B7 from Word's Symbol font — so this matches any
-// single leading symbol followed by a space, not just the tidy characters.
+// Bullets survive a PDF badly.
 const BULLET = /^\s*(?:[-*+•‣▪◦·–—"'“”‘’·•▪●◦]|\d+[.)]|[a-z][.)])\s+/i
 const HEADING_HASH = /^\s*#{1,6}\s+/
 const TRAILING = /[.:;,]\s*$/
 
 // Maps words in a document to the skill tags kept on employee records.
 const SKILL_WORDS = {
-    // "page" is deliberately absent. It reads as frontend work about as often
-    // as it reads as "Facebook page" or "page of the brief", and one stray
-    // match is enough to tip a task into the wrong department.
+    // "page" is deliberately absent.
     frontend: ['frontend', 'front-end', 'ui', 'interface', 'react', 'screen', 'component', 'responsive', 'layout'],
     backend: ['backend', 'back-end', 'api', 'endpoint', 'server', 'node', 'express', 'service', 'integration', 'database', 'schema'],
     design: ['design', 'wireframe', 'mockup', 'prototype', 'figma', 'branding', 'typography', 'ux', 'icon'],
     testing: ['test', 'testing', 'qa', 'quality', 'bug', 'regression', 'coverage'],
     research: ['research', 'analysis', 'analyse', 'analyze', 'benchmark', 'survey', 'investigate', 'interview'],
-    // "dashboard" is absent for a subtler reason than "page" above. These lists
-    // are matched against lines that nearly all begin "Build...", "Create...",
-    // and building a dashboard is engineering work — it is only reading one
-    // that is reporting work. Left in, it pulled "Build the operations
-    // dashboard showing every rider on a map" into Marketing. A genuine
-    // analytics job still matches on "analytics", "metric" or "report".
+    // "dashboard" is absent for a subtler reason than "page" above.
     reporting: ['report', 'analytics', 'metric', 'chart', 'kpi', 'campaign',
         'announcement', 'newsletter', 'press', 'social'],
     documentation: ['document', 'documentation', 'readme', 'guide', 'manual', 'specification', 'spec', 'policy', 'copy', 'content']
@@ -37,8 +23,7 @@ const URGENT = ['critical', 'blocker', 'urgent', 'asap', 'immediately', 'must', 
 const IMPORTANT = ['important', 'priority', 'key', 'essential', 'deadline', 'soon']
 const RELAXED = ['optional', 'nice to have', 'later', 'if time', 'stretch', 'future', 'eventually']
 
-// Whole-word matching: a plain substring search finds "ui" inside "build" and
-// "api" inside "rapid", which quietly mislabels half a document.
+// Whole-word matching: a plain substring search finds "ui" inside "build" and "api" inside "rapid".
 const escape = (word) => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const hasWord = (text, word) =>
     new RegExp(`(^|[^a-z0-9])${escape(word)}(s|es)?($|[^a-z0-9])`, 'i').test(text)
@@ -55,8 +40,7 @@ const priorityFor = (text) => {
     return 'medium'
 }
 
-// Longer, denser lines describe bigger jobs. Rounded so the numbers look like
-// something a person would have written.
+// Longer, denser lines describe bigger jobs.
 const estimateFor = (text) => {
     const words = text.split(/\s+/).length
     let hours = 4
@@ -85,12 +69,7 @@ const isHeading = (line) => {
     if (raw.length < 60 && raw.endsWith(':')) return true
     if (raw.length < 50 && raw === raw.toUpperCase() && /[A-Z]/.test(raw)) return true
 
-    // A PDF keeps none of Markdown's "#" marks and a Word heading carries its
-    // weight in the style, not the text — so by the time either reaches here a
-    // section title is just a short line on its own. Recognise it by shape: a
-    // handful of words, opening in caps, ending in no punctuation. Anything
-    // that opens with an action verb is left alone, because that reads as a
-    // piece of work rather than a section title.
+    // A PDF keeps none of Markdown's "#" marks and a Word heading carries its weight in the style.
     if (raw.length <= 60 &&
         /^[A-Z0-9]/.test(raw) &&
         !/[.,;!?]$/.test(raw) &&
@@ -103,9 +82,7 @@ const isHeading = (line) => {
 }
 
 const titleFrom = (text) => {
-    // Collapse whitespace first. Text pulled out of a PDF keeps the line breaks
-    // of the printed page, and a title with a newline through the middle of it
-    // looks broken wherever it is shown.
+    // Collapse whitespace first.
     const flat = String(text).replace(/\s+/g, ' ').trim()
 
     const first = flat.split(/(?<=[.!?])\s/)[0] || flat
@@ -139,8 +116,7 @@ const collectCandidates = (text) => {
         }
     }
 
-    // If the document had no list structure at all, fall back to sentences so
-    // the manager still gets something to edit rather than an empty result.
+    // If the document had no list structure at all.
     if (candidates.length < 3) {
         text.split(/(?<=[.!?])\s+/)
             .map(s => s.trim())
@@ -156,12 +132,6 @@ const collectCandidates = (text) => {
 }
 
 // Where a task goes when nothing in its wording points anywhere in particular.
-//
-// Taking the first department in the list makes that an alphabetical accident —
-// "Design" simply sorts before "Engineering" — which quietly piles unrecognised
-// work onto whichever team happens to be named early. The busiest team is used
-// instead, on the grounds that general work belongs where most of the people
-// are. Ties keep the order they were given in.
 const defaultDepartment = (departments, employees) => {
     const headcount = {}
     for (const person of employees) {

@@ -1,7 +1,4 @@
 // Module 4 — the small visual pieces the three performance pages share.
-//
-// Kept in one file so a gauge on the dashboard and a gauge on a profile can
-// never drift apart, and so each page file stays about its own layout.
 
 const PATHS = {
     trophy: 'M7 4h10v3a5 5 0 0 1-10 0V4ZM7 5H4v1a3 3 0 0 0 3 3M17 5h3v1a3 3 0 0 1-3 3M9 15h6M10 15v-2M14 15v-2M8 20h8',
@@ -54,8 +51,7 @@ export function Icon({ name, size = 16, className = '', style }) {
     return <svg {...common}><path d={PATHS[name] || PATHS.spark} /></svg>
 }
 
-// Initials on a coloured disc — the same approach the employee records already
-// take, so no photo uploads are needed anywhere.
+// Initials on a coloured disc.
 export function Avatar({ person, size = '' }) {
     const initials = person.initials
         || (person.name || '?').split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase()
@@ -71,8 +67,7 @@ export function Avatar({ person, size = '' }) {
     )
 }
 
-// Darken a hex colour so every avatar reads as a small gradient rather than a
-// flat disc. Falls back to the input if it is not a plain 6-digit hex.
+// Darken a hex colour so every avatar reads as a small gradient rather than a flat disc.
 function shade(hex) {
     const match = /^#([0-9a-f]{6})$/i.exec(hex)
     if (!match) return hex
@@ -82,14 +77,12 @@ function shade(hex) {
     return `rgb(${dark.join(',')})`
 }
 
-// The same five tones the stylesheet uses, kept here in hex because SVG strokes
-// and gradient stops are built as attribute strings rather than CSS.
+// The same five tones the stylesheet uses.
 const toneColour = (tone) => ({
     peak: '#2E7D6F', good: '#4E8163', fair: '#B87333', warn: '#8B5E3C', risk: '#B3402F'
 }[tone] || '#0A2947')
 
-// The score dial. An open arc rather than a full ring so the gap reads as
-// "distance still to travel" rather than as a missing slice of a pie.
+// The score dial.
 export function Gauge({ score = 0, label = '', size = 132 }) {
     const radius = 50
     const arc = 235.6                     // 270° of a 314 circumference
@@ -127,8 +120,7 @@ export function Gauge({ score = 0, label = '', size = 132 }) {
     )
 }
 
-// Twelve weeks of output as a single glyph, small enough to sit inside a
-// leaderboard row without turning it into a chart.
+// Twelve weeks of output as a single glyph.
 export function Sparkline({ points = [], width = 56, height = 22, colour = '#2E7D6F', title }) {
     if (!points.length) return <svg className="p-spark" width={width} height={height} aria-hidden="true" />
 
@@ -154,8 +146,7 @@ export function Sparkline({ points = [], width = 56, height = 22, colour = '#2E7
     )
 }
 
-// The area chart on the profile page — the same shape as the sparkline, drawn
-// at a size where the axis labels earn their place.
+// The area chart on the profile page.
 export function TrendChart({ weekly = [], height = 150 }) {
     if (!weekly.length) return null
 
@@ -200,16 +191,6 @@ export function TrendChart({ weekly = [], height = 150 }) {
 }
 
 // The four weighted pillars, shown the same way wherever they appear.
-// The score, shown as arithmetic rather than as a verdict.
-//
-// Each row carries two different numbers and they are easy to confuse, so the
-// component shows both and labels them:
-//
-//   score        how well the pillar itself is going, 0–100
-//   contributed  what that pillar puts into the final score, out of its weight
-//
-// The four weights are a partition of 100, so the `contributed` column adds up
-// to the overall score exactly — which is the point of showing it.
 export function Pillars({ pillars, definitions, showDetail = true }) {
     return (
         <div className="p-pillars">

@@ -9,7 +9,7 @@
 
 .import-input { display: flex; flex-direction: column; gap: 13px; }
 
-/* --- Engine badge --------------------------------------------------------- */
+/* Engine badge. */
 
 .engine-chip {
     display: inline-flex;
@@ -29,7 +29,7 @@
 /* A halo marks a live API key, so it is obvious which engine is answering. */
 .engine-dot-live { background: var(--ok); box-shadow: 0 0 0 3px var(--ok-soft); }
 
-/* --- Project grouping on the review screen -------------------------------- */
+/* Project grouping on the review screen. */
 
 .draft-group-toggle {
     display: flex;
@@ -52,7 +52,7 @@
     .draft-project { grid-template-columns: 1fr; }
 }
 
-/* --- Dropzone ------------------------------------------------------------- */
+/* Dropzone. */
 
 .dropzone {
     display: flex;
@@ -109,7 +109,7 @@
 
 .import-go { padding: 11px; }
 
-/* --- Draft review --------------------------------------------------------- */
+/* Draft review. */
 
 .draft-top {
     display: flex;

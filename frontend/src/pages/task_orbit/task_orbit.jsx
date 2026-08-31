@@ -5,12 +5,7 @@ import SolarSystem, { ORBITS } from '../../components/solar_system/solar_system'
 import { PRIORITY_LABELS, PROJECT_HEALTH, STATUS_LABELS, daysUntil, formatDate, initialsOf, relativeDays } from '../../lib/format'
 import './task_orbit.css'
 
-// Page 1 — a department's work as a solar system, with the numbers and the
-// full list underneath it.
-//
-// The orbit answers "what is urgent here" in one look. It is deliberately not
-// the only thing on the page: a picture cannot tell you which three tasks are
-// late or how the hours split, so the breakdown and the list carry that.
+// Page 1.
 
 const STATUS_ORDER = ['todo', 'in_progress', 'review', 'done']
 
@@ -22,8 +17,7 @@ export default function TaskOrbit() {
     const [objectives, setObjectives] = useState([])
     const [selected, setSelected] = useState('Engineering')
     const [loading, setLoading] = useState(true)
-    // Motion is off to begin with. A label sliding around a circle is hard to
-    // read, so the orbit sits still until somebody asks it to move.
+    // Motion is off to begin with.
     const [animate, setAnimate] = useState(false)
     const [listFilter, setListFilter] = useState('open')
     const [error, setError] = useState('')
@@ -43,9 +37,7 @@ export default function TaskOrbit() {
         }
     }, [])
 
-    // load() awaits the request before setting anything, so this is a plain
-    // data fetch rather than a synchronous render cascade.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // load() awaits the request before setting anything.
     useEffect(() => { load(selected) }, [load, selected])
 
     const stats = useMemo(() => {
@@ -97,16 +89,6 @@ export default function TaskOrbit() {
     }, [tasks, listFilter])
 
     // The bottom of the page lists projects, not tasks.
-    //
-    // Listing every task here made this a second copy of the table above the
-    // fold, and a department's work is not one flat pile anyway — it is several
-    // projects being pushed along at once. "Eleven open in Engineering" hides
-    // which of them is in trouble. One row per project answers that, and the
-    // tasks inside it are one click away on the project page.
-    //
-    // Each row carries the project's whole-company progress rather than only the
-    // slice in this department, because half a project is not an answer to "how
-    // is the portal going".
     const projectRows = useMemo(() => {
         const here = new Set(listed.map(task => task.objectiveId).filter(Boolean))
 
@@ -124,9 +106,7 @@ export default function TaskOrbit() {
             })
     }, [listed, objectives])
 
-    // Work that belongs to nobody's project. Kept as its own section rather than
-    // dropped in with the rest, because a one-off assignment with no project
-    // around it is the easiest thing in any tracker to lose sight of.
+    // Work that belongs to nobody's project.
     const looseTasks = useMemo(
         () => listed.filter(task => !task.objectiveId),
         [listed]
@@ -226,8 +206,7 @@ export default function TaskOrbit() {
                             <div className="breakdown-block">
                                 <span className="section-label">Hours left, by priority</span>
 
-                                {/* A single bar split by priority, so the total is not just
-                                    one number with no shape to it. */}
+                                {/* A single bar split by priority, so the total is not just one number with no shape to it. */}
                                 <div className="hours-bar" role="img" aria-label={`${stats.remaining} hours remaining split by priority`}>
                                     {stats.hoursByPriority.filter(entry => entry.hours > 0).map(entry => (
                                         <span
@@ -281,9 +260,7 @@ export default function TaskOrbit() {
                 </aside>
             </div>
 
-            {/* Projects, not tasks. The orbit above shows shape; this says
-                which pieces of work this department is carrying and how far
-                through each one is. The tasks inside are one click away. */}
+            {/* Projects, not tasks. */}
             <section className="panel">
                 <div className="panel-header">
                     <h2>{selected} projects</h2>
@@ -359,9 +336,7 @@ export default function TaskOrbit() {
                 )}
             </section>
 
-            {/* Standalone work. A task with no project around it is the easiest
-                thing in any tracker to lose, so it keeps its own record rather
-                than being mixed in above. */}
+            {/* Standalone work. */}
             <section className="panel">
                 <div className="panel-header">
                     <h2>Single tasks</h2>

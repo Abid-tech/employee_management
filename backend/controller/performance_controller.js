@@ -6,9 +6,7 @@ const staffing = require('../service/staffing_service')
 const asyncRoute = (handler) => (req, res, next) =>
     Promise.resolve(handler(req, res, next)).catch(next)
 
-// Query strings arrive as strings or, for repeated keys, as arrays. This turns
-// `?columns=a&columns=b` and `?columns=a,b` into the same list so the report
-// page can build its URL whichever way is convenient.
+// Query strings arrive as strings or, for repeated keys, as arrays.
 const listParam = (value) => {
     if (!value) return []
     if (Array.isArray(value)) return value.flatMap(v => String(v).split(','))
@@ -48,8 +46,7 @@ const getReport = asyncRoute(async (req, res) => {
     res.json(await service.report(reportOptions(req.query)))
 })
 
-// A spreadsheet is still how most of this gets shared, so the same report the
-// page is showing can leave as a file without a second trip through the builder.
+// A spreadsheet is still how most of this gets shared.
 const escapeCell = (value) => {
     const text = value === null || value === undefined ? '' : String(value)
     return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
@@ -70,8 +67,7 @@ const getReportCsv = asyncRoute(async (req, res) => {
     res.send(lines.join('\n'))
 })
 
-// The scoring rules themselves, so the interface can explain the score without
-// hard-coding a copy of the weights that would drift from the real ones.
+// The scoring rules themselves.
 const getRules = asyncRoute(async (req, res) => {
     res.json({
         pillars: service.PILLARS,
@@ -86,9 +82,7 @@ const getRules = asyncRoute(async (req, res) => {
 
 // --- Rebalancing -------------------------------------------------------------
 
-// Turns the overload findings into specific, costed moves. A read like every
-// other route in this module: it proposes and stops, because reassigning
-// somebody's work is a decision a named human has to make.
+// Turns the overload findings into specific, costed moves.
 const getRebalance = asyncRoute(async (req, res) => {
     res.json(await staffing.rebalance())
 })

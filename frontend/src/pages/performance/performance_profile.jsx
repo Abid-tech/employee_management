@@ -4,11 +4,6 @@ import { performanceApi } from '../../lib/performance_api'
 import { Avatar, Gauge, Icon, Pillars, TrendChart } from './performance_ui'
 
 // Module 4, page 2 — one person's record.
-//
-// The page answers three questions in order: where does this score come from,
-// which way is it moving, and what is the single most useful thing to do next.
-// The last one is the point. A score that only describes is a report card; a
-// score that names the next move is a tool somebody will actually open again.
 
 const LEDGER_ICON = {
     delivery: 'target', on_time: 'bolt', critical: 'shield', milestone: 'star'
@@ -67,7 +62,7 @@ export default function PerformanceProfile() {
     return (
         <div className="p-grid">
 
-            {/* ---- Header ---- */}
+            {/* Header. */}
             <section className="p-card s12">
                 <Link className="p-back" to="/performance"><Icon name="left" size={13} /> Back to the leaderboard</Link>
 
@@ -94,10 +89,7 @@ export default function PerformanceProfile() {
                 </div>
             </section>
 
-            {/* ---- The score as arithmetic ----------------------------------
-                The four pillars are shown as points banked out of points
-                available, so the reader can add the column up and land on the
-                score. Prose about "levers" told them nothing they could check. */}
+            {/* The score as arithmetic ---------------------------------- The four pillars are shown as points. */}
             <section className="p-card s12" style={{ borderColor: 'rgba(10,41,71,.35)' }}>
                 <div className="p-lbl">
                     <span>Score sheet · {employee.score} out of {scoreMax}</span>
@@ -138,7 +130,7 @@ export default function PerformanceProfile() {
                 )}
             </section>
 
-            {/* ---- Score breakdown ---- */}
+            {/* Score breakdown. */}
             <section className="p-card s5">
                 <div className="p-lbl"><span>How the score is built</span></div>
 
@@ -155,9 +147,7 @@ export default function PerformanceProfile() {
                     of <b>{companyAverage}</b>.
                 </div>
 
-                {/* Badges say what somebody did, so each one states the rule that
-                    earns it and whether this person has met it. A badge whose
-                    condition is a secret is decoration, not recognition. */}
+                {/* Badges say what somebody did. */}
                 <div className="p-lbl" style={{ marginTop: 16 }}><span>Badges · what earns each one</span></div>
                 <div className="p-bdglist">
                     {employee.badges.map(badge => (
@@ -179,7 +169,7 @@ export default function PerformanceProfile() {
                 </div>
             </section>
 
-            {/* ---- Trend, work, wellbeing ---- */}
+            {/* Trend. */}
             <section className="p-card s7">
                 <div className="p-lbl">
                     <span>Output · last 12 weeks</span>
@@ -232,7 +222,7 @@ export default function PerformanceProfile() {
                 </div>
             </section>
 
-            {/* ---- Reward ledger ---- */}
+            {/* Reward ledger. */}
             <section className="p-card s12">
                 <div className="p-lbl">
                     <span>Reward points · every point traced to the work that earned it</span>

@@ -2,21 +2,13 @@ const Objective = require('../model/objective')
 const Task = require('../model/task')
 const { decorate } = require('./task_service')
 
-// Everything about projects. A project is an Objective plus the tasks that
-// point at it — the record itself holds almost nothing, because every number
-// worth knowing is a fact about the work underneath it.
+// Everything about projects.
 
 const ASSIGNEE_FIELDS = 'name email jobTitle department color'
 
 // --- The rollup -------------------------------------------------------------
 
 // Progress is weighted by estimated hours rather than counted per task.
-//
-// Counting tasks would let five one-hour chores outweigh a forty-hour build, so
-// a project could read 80% complete with all the real work still to do. Hours
-// are the closest thing to effort this system records, so they are what the
-// percentage is built from. With no estimates anywhere it falls back to a plain
-// average, which is better than dividing by zero.
 const rollUp = (tasks) => {
     const open = tasks.filter(task => task.status !== 'done')
     const totalHours = tasks.reduce((sum, task) => sum + (task.estimateHours || 0), 0)
@@ -71,8 +63,7 @@ const rollUp = (tasks) => {
     }
 }
 
-// A project is late if anything in it is late, or its own target has passed
-// with work still open. Derived, like everything else here.
+// A project is late if anything in it is late, or its own target has passed with work still open.
 const healthOf = (objective, stats) => {
     if (stats.taskCount === 0) return 'empty'
     if (stats.doneCount === stats.taskCount) return 'delivered'
@@ -97,8 +88,7 @@ const shape = (objective, tasks) => {
 
 // --- Reads ------------------------------------------------------------------
 
-// One query for every task rather than one per project, so adding projects does
-// not add round trips.
+// One query for every task rather than one per project.
 const listObjectives = async () => {
     const [objectives, tasks] = await Promise.all([
         Objective.find().sort({ createdAt: -1 }),
@@ -159,8 +149,7 @@ const updateObjective = async (id, changes) => {
     return full.objective
 }
 
-// Deleting a project must not delete the work. The tasks are real and somebody
-// may still be doing them; they are simply released back to their departments.
+// Deleting a project must not delete the work.
 const deleteObjective = async (id) => {
     const removed = await Objective.findByIdAndDelete(id)
     if (!removed) return false

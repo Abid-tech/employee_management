@@ -1,28 +1,13 @@
-/* ---------------------------------------------------------------------------
-   Module 4 — Employee Performance Management.
-
-   Every rule in this file is scoped under .perf.
-
-   The app already carries two design systems: Bootstrap plus the team's
-   index.css for most pages, and Module 3's own tokens under .m3. Both define
-   .card, .btn and .row. A third unscoped stylesheet would let whichever file
-   the bundler emitted last decide what the leave form looks like, so this one
-   never escapes its wrapper — the same containment Module 3 uses.
-   --------------------------------------------------------------------------- */
+/* Module 4 — Employee Performance Management. */
 
 .perf {
-    /* The four brand colours, used raw. Everything else on this page is mixed
-       from them, so the module sits in the same family as the rest of the app
-       rather than introducing a fifth palette.
-
-       navy #0A2947 · cream #F3E4C9 · sage #D3D4C0 · clay #8B5E3C */
+    /* The four brand colours, used raw. */
     --p-navy: #0A2947;
     --p-cream: #F3E4C9;
     --p-sage: #D3D4C0;
     --p-clay: #8B5E3C;
 
-    /* Surfaces. Cream paper rather than white: the cards are white-ish and only
-       read as raised because the canvas underneath them is warm. */
+    /* Surfaces. */
     --p-void: #061A2E;
     --p-canvas: #FFFFFF;
     --p-surface: #FFFFFF;
@@ -31,11 +16,7 @@
     --p-line: rgba(10, 41, 71, 0.11);
     --p-line-2: rgba(10, 41, 71, 0.18);
 
-    /* One accent means one thing throughout: `mint` is good, `gold` is watch,
-       `rose` is act now, `violet` is the module's own identity.
-       The names are the roles, not the hues — the values below are the brand
-       palette and Module 3's derived scale, so a green here is the same green
-       the task board already uses. */
+    /* One accent means one thing throughout: `mint` is good. */
     --p-mint: #2E7D6F;
     --p-mint-2: #4E8163;
     --p-violet: #0A2947;
@@ -75,7 +56,7 @@
 .perf .p-down { color: var(--p-rose); }
 .perf .p-flat { color: var(--p-soft); }
 
-/* --- Shell ---------------------------------------------------------------- */
+/* Shell. */
 
 .perf .p-wrap { max-width: 1320px; margin: 0 auto; }
 
@@ -99,14 +80,10 @@
     background: var(--p-navy);
 }
 
-/* An inline SVG sits on the text baseline, which left the glyph a couple of
-   pixels below the centre of its tile however the tile itself was aligned. */
+/* An inline SVG sits on the text baseline. */
 .perf .p-logo svg { display: block; }
 
-/* The app's global footer is a site-wide credit line that reads as part of the
-   report when it lands under a performance card. Hidden here rather than in the
-   Footer component, so the other modules keep it and Module 4 changes nothing
-   outside its own stylesheet. */
+/* The app's global footer is a site-wide credit line that reads as part of the report. */
 body:has(.perf) #footer { display: none; }
 
 .perf .p-brand h1 {
@@ -117,10 +94,7 @@ body:has(.perf) #footer { display: none; }
     letter-spacing: 0;
 }
 
-/* Scoped to the subtitle's own wrapper rather than to any span in the brand.
-   As `.p-brand span` this also matched .p-logo — one class plus an element beats
-   two classes, so it overrode the logo's `display: grid` with `display: block`
-   and left the icon sitting on the top edge of its tile instead of centred. */
+/* Scoped to the subtitle's own wrapper rather than to any span in the brand. */
 .perf .p-brand > div > span {
     display: block;
     font-size: 10px;
@@ -169,7 +143,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-ctx { font-size: 13px; color: var(--p-muted); margin-bottom: 14px; }
 .perf .p-ctx b { color: var(--p-soft); font-weight: 600; }
 
-/* --- Grid ----------------------------------------------------------------- */
+/* Grid. */
 
 .perf .p-grid {
     display: grid;
@@ -185,7 +159,7 @@ body:has(.perf) #footer { display: none; }
 .perf .s8 { grid-column: span 8; }
 .perf .s12 { grid-column: span 12; }
 
-/* --- Card ----------------------------------------------------------------- */
+/* Card. */
 
 .perf .p-card {
     background: var(--p-surface);
@@ -198,7 +172,7 @@ body:has(.perf) #footer { display: none; }
     overflow: hidden;
 }
 
-/* --- The navy band -------------------------------------------------------- */
+/* The navy band. */
 
 .perf .p-band {
     grid-column: span 12;
@@ -308,7 +282,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-pill.violet { background: rgba(10, 41, 71, 0.1); color: var(--p-navy); }
 .perf .p-pill.plain { background: var(--p-raise-2); color: var(--p-soft); }
 
-/* --- KPI tiles ------------------------------------------------------------ */
+/* KPI tiles. */
 
 .perf .p-kpis {
     display: grid;
@@ -349,14 +323,14 @@ body:has(.perf) #footer { display: none; }
 .perf .p-kpi .k-n { font-size: 24px; margin-top: 3px; line-height: 1.1; color: var(--p-text); }
 .perf .p-kpi .k-s { font-size: 12px; color: var(--p-muted); margin-top: 2px; }
 
-/* --- Score gauge ---------------------------------------------------------- */
+/* Score gauge. */
 
 .perf .p-hero { display: flex; gap: 18px; align-items: center; margin-top: 12px; flex-wrap: wrap; }
 .perf .p-gauge { flex: none; width: 132px; height: 132px; }
 .perf .p-gauge svg { width: 100%; height: 100%; display: block; }
 .perf .p-gauge .g-cap { fill: var(--p-muted); font-size: 7px; letter-spacing: 0.22em; }
 
-/* --- Pillar bars ---------------------------------------------------------- */
+/* Pillar bars. */
 
 .perf .p-pillars { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 9px; }
 
@@ -373,7 +347,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-pl .v { font-family: var(--p-mono); text-align: right; color: var(--p-text); font-weight: 600; }
 .perf .p-pl .v .of { color: var(--p-muted); font-weight: 400; font-size: 10px; }
 
-/* --- Pillar rows with their explanation ----------------------------------- */
+/* Pillar rows with their explanation. */
 
 .perf .p-plx { padding: 4px 0 7px; border-bottom: 1px solid var(--p-line); }
 .perf .p-plx:last-child { border-bottom: 0; }
@@ -392,7 +366,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-plx-note .s-own b { color: var(--p-soft); font-family: var(--p-mono); }
 .perf .p-plx-note .s-formula { font-family: var(--p-mono); font-size: 11px; color: var(--p-soft); }
 
-/* --- Score sheet ---------------------------------------------------------- */
+/* Score sheet. */
 
 .perf .p-sheet { margin-top: 12px; }
 
@@ -422,7 +396,7 @@ body:has(.perf) #footer { display: none; }
 
 .perf .p-sheet-row.total .sr-out b { font-size: 17px; }
 
-/* --- Badge list ----------------------------------------------------------- */
+/* Badge list. */
 
 .perf .p-bdglist { margin-top: 8px; }
 
@@ -451,7 +425,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-bdgrow .b-name { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--p-text); flex-wrap: wrap; }
 .perf .p-bdgrow .b-rule { display: block; font-size: 12px; color: var(--p-muted); margin-top: 2px; line-height: 1.45; }
 
-/* --- Recommended actions -------------------------------------------------- */
+/* Recommended actions. */
 
 .perf .p-act {
     border: 1px solid var(--p-line);
@@ -486,7 +460,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-act .a-people { margin-left: auto; display: inline-flex; gap: 5px; }
 .perf .p-act .a-people a { text-decoration: none; }
 
-/* --- Department drill-down ------------------------------------------------ */
+/* Department drill-down. */
 
 .perf .p-dept .d-t {
     width: 100%;
@@ -559,7 +533,7 @@ body:has(.perf) #footer { display: none; }
 .perf .dx-n small { display: block; font-size: 10px; color: var(--p-muted); }
 .perf .dx-sc { font-weight: 700; color: var(--p-text); }
 
-/* --- The individual goals behind the company bar -------------------------- */
+/* The individual goals behind the company bar. */
 
 .perf .p-goals { margin-top: 8px; }
 
@@ -587,7 +561,7 @@ body:has(.perf) #footer { display: none; }
     .perf .p-goals .g-bar { display: none; }
 }
 
-/* --- Applied-filter chips on the report ----------------------------------- */
+/* Applied-filter chips on the report. */
 
 .perf .p-applied { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 11px; align-items: center; }
 .perf .p-applied .ap-none { font-size: 11px; color: var(--p-muted); }
@@ -621,8 +595,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-bar {
     height: 7px;
     border-radius: 100px;
-    /* Sage is the empty half of every bar, so the third brand colour carries
-       the "not yet done" state everywhere rather than a neutral grey. */
+    /* Sage is the empty half of every bar. */
     background: var(--p-sage);
     overflow: hidden;
 }
@@ -639,7 +612,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-bar.gold > i { background: var(--p-gold-2); }
 .perf .p-bar.rose > i { background: var(--p-rose); }
 
-/* --- Avatar --------------------------------------------------------------- */
+/* Avatar. */
 
 .perf .p-av {
     border-radius: 50%;
@@ -659,7 +632,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-av.lg { width: 62px; height: 62px; font-size: 19px; border-radius: var(--p-r); }
 .perf .p-av.sm { width: 24px; height: 24px; font-size: 8.5px; }
 
-/* --- Leaderboard ---------------------------------------------------------- */
+/* Leaderboard. */
 
 .perf .p-rows { margin-top: 8px; }
 
@@ -680,9 +653,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-row:last-child { border-bottom: 0; }
 .perf .p-row:hover { background: var(--p-raise-2); transform: translateX(2px); }
 
-/* Rank as a typographic element rather than a small grey number. The ordering
-   is the entire point of a leaderboard, so it should be the thing the eye lands
-   on after the name — and the top three earn a treatment the rest do not. */
+/* Rank as a typographic element rather than a small grey number. */
 .perf .p-rk {
     font-size: 17px;
     font-weight: 700;
@@ -701,8 +672,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-row:nth-child(1) .p-rk { color: var(--p-navy); font-size: 20px; }
 .perf .p-row:nth-child(1) .p-nm { font-weight: 600; }
 
-/* A short bar in the gutter, longest for first place. Reads as a podium
-   without needing a medal emoji. */
+/* A short bar in the gutter, longest for first place. */
 .perf .p-row:nth-child(-n+3)::before {
     content: "";
     position: absolute;
@@ -745,7 +715,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-tag.warn { background: rgba(139, 94, 60, 0.15); color: var(--p-gold); }
 .perf .p-tag.rise { background: rgba(46, 125, 111, 0.14); color: var(--p-mint); }
 
-/* --- Department rows ------------------------------------------------------ */
+/* Department rows. */
 
 .perf .p-dept { margin: 11px 0; }
 
@@ -762,7 +732,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-dept .d-t .d-n em { font-style: normal; color: var(--p-muted); font-size: 11px; }
 .perf .p-dept .d-t b { font-family: var(--p-mono); }
 
-/* --- Contribution bar ----------------------------------------------------- */
+/* Contribution bar. */
 
 .perf .p-contrib {
     display: flex;
@@ -831,7 +801,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-note.gold { border-left-color: var(--p-gold); }
 .perf .p-note.rose { border-left-color: var(--p-rose); }
 
-/* --- List entries (heroes, attention, ledger, badges) --------------------- */
+/* List entries (heroes. */
 
 .perf .p-item {
     display: flex;
@@ -891,7 +861,7 @@ body:has(.perf) #footer { display: none; }
 .perf .p-bdg.on b { color: var(--p-gold); }
 .perf .p-bdg.off { opacity: 0.42; }
 
-/* --- Buttons -------------------------------------------------------------- */
+/* Buttons. */
 
 .perf .p-btn {
     font: inherit;
@@ -923,7 +893,7 @@ body:has(.perf) #footer { display: none; }
 
 .perf .p-btn.ghost:hover { background: var(--p-raise); border-color: var(--p-line-2); color: var(--p-text); }
 
-/* --- Form controls (report builder) --------------------------------------- */
+/* Form controls (report builder). */
 
 .perf .p-field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 
@@ -988,7 +958,7 @@ body:has(.perf) #footer { display: none; }
     font-weight: 600;
 }
 
-/* --- Table ---------------------------------------------------------------- */
+/* Table. */
 
 .perf .p-tablewrap {
     overflow-x: auto;
@@ -1035,7 +1005,7 @@ body:has(.perf) #footer { display: none; }
     font-size: 11.5px;
 }
 
-/* --- Profile -------------------------------------------------------------- */
+/* Profile. */
 
 .perf .p-head { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
 .perf .p-head h2 { margin: 0; font-size: 20px; font-weight: 700; color: var(--p-text); letter-spacing: 0; }
@@ -1072,7 +1042,7 @@ body:has(.perf) #footer { display: none; }
 
 .perf .p-back:hover { color: var(--p-text); }
 
-/* --- States --------------------------------------------------------------- */
+/* States. */
 
 .perf .p-state {
     text-align: center;
@@ -1103,7 +1073,7 @@ body:has(.perf) #footer { display: none; }
     100% { background-position: -200% 0; }
 }
 
-/* --- Responsive ----------------------------------------------------------- */
+/* Responsive. */
 
 @media (max-width: 1080px) {
     .perf .s3, .perf .s4, .perf .s5 { grid-column: span 6; }
@@ -1111,8 +1081,7 @@ body:has(.perf) #footer { display: none; }
 }
 
 @media (max-width: 720px) {
-    /* The band stacks: at this width the score and the stats side by side
-       squeeze both into illegibility. */
+    /* The band stacks: at this width the score and the stats side by side squeeze. */
     .perf .p-band { padding: 17px 16px 15px; }
     .perf .p-band .b-body { gap: 18px; align-items: flex-start; }
     .perf .p-band .b-stats { grid-template-columns: repeat(2, 1fr); gap: 12px 16px; }
@@ -1126,8 +1095,7 @@ body:has(.perf) #footer { display: none; }
     .perf .p-top { gap: 12px; }
     .perf .p-tabs { width: 100%; overflow-x: auto; justify-content: flex-start; }
 
-    /* The sparkline and the points column are the first things to go: on a
-       phone the name, score and rank are what the row is actually for. */
+    /* The sparkline and the points column are the first things to go: on a phone the name. */
     .perf .p-row { grid-template-columns: 22px 30px minmax(0, 1fr) 60px; gap: 8px; }
     .perf .p-row .p-pts,
     .perf .p-row .p-spark { display: none; }
@@ -1139,8 +1107,7 @@ body:has(.perf) #footer { display: none; }
     .perf .p-plx-note { margin-left: 0; }
     .perf .p-contrib span { font-size: 9px; }
 
-    /* The score sheet stops being a table and becomes a stack: four narrow
-       columns of numbers are unreadable below this width. */
+    /* The score sheet stops being a table and becomes a stack: four narrow columns of numbers. */
     .perf .p-sheet-row { grid-template-columns: 1fr auto; row-gap: 4px; }
     .perf .p-sheet-row .sr-calc { text-align: right; }
     .perf .p-sheet-row .sr-out { grid-column: 1; text-align: left; }
@@ -1165,11 +1132,7 @@ body:has(.perf) #footer { display: none; }
     }
 }
 
-/* --- Rebalancing the load --------------------------------------------------
-   The page that turns "somebody is overloaded" into "move these two tasks to
-   Sadia". Its job is to make a proposal arguable, so the rules and the
-   before/after are as prominent as the recommendation itself.
-   --------------------------------------------------------------------------- */
+/* Rebalancing the load -------------------------------------------------- The page that turns. */
 
 .perf .rb-summary {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -1187,8 +1150,7 @@ body:has(.perf) #footer { display: none; }
 .perf .rb-plan .rb-role { font-size: 12px; color: var(--p-soft); min-width: 0; }
 .perf .rb-plan .rb-role small { display: block; font-size: 12px; color: var(--p-muted); margin-top: 2px; }
 
-/* Before and after on one track, with the healthy ceiling marked. The relief is
-   the distance between the two bars, which is the thing worth seeing. */
+/* Before and after on one track, with the healthy ceiling marked. */
 .perf .rb-bar { margin-top: 14px; }
 .perf .rb-bar .rb-track {
     position: relative; display: block; height: 22px; border-radius: 7px;
@@ -1251,4 +1213,3 @@ body:has(.perf) #footer { display: none; }
 .perf .rb-stuck .s-t small { color: var(--p-muted); font-family: var(--p-mono); }
 .perf .rb-stuck .s-r { display: block; font-size: 12px; color: var(--p-muted); margin-top: 3px; line-height: 1.5; }
 .perf .rb-stuck .s-row.rose .s-r { color: var(--p-rose); }
-

@@ -1,11 +1,9 @@
 const mongoose = require('mongoose')
 
-// Serverless platforms (Vercel) may call the handler many times on the same
-// container, so the connection promise is cached instead of reconnecting.
+// Serverless platforms (Vercel) may call the handler many times on the same container.
 let connection = null
 
-// Kept so a health check can report why a connection failed without the caller
-// having to reproduce it.
+// Kept so a health check can report why a connection failed without the caller having.
 let lastError = null
 
 const connectDB = async () => {
@@ -18,8 +16,7 @@ const connectDB = async () => {
 
     mongoose.set('strictQuery', true)
 
-    // Below the platform's request limit, so a refused connection returns a
-    // real error instead of the function being killed mid-attempt.
+    // Below the platform's request limit.
     connection = mongoose.connect(uri, { serverSelectionTimeoutMS: 7000 })
 
     try {

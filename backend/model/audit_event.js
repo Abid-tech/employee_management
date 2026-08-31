@@ -1,14 +1,6 @@
 const mongoose = require('mongoose')
 
-// The trust layer: an append-only record of everything the agent touched and
-// every human decision that followed it.
-//
-// Performance evaluation is one of the areas the EU AI Act treats as high-risk,
-// and the obligations that come with that are less about the model and more
-// about the paperwork: a human stays in the loop, and you can show afterwards
-// who that human was. This collection is that record.
-//
-// Nothing here is ever updated or deleted. A log you can edit is not evidence.
+// The trust layer: an append-only record of everything the agent touched and every human decision.
 
 const ACTIONS = [
     'agent.scanned',            // the agent read a set of reviews
@@ -24,19 +16,16 @@ const ACTIONS = [
 const auditSchema = new mongoose.Schema({
     action: { type: String, enum: ACTIONS, required: true, index: true },
 
-    // Who did it. `agent` is the software acting on its own; `human` is a named
-    // person. Keeping the distinction explicit is the point of the log.
+    // Who did it.
     actorKind: { type: String, enum: ['agent', 'human'], required: true },
     actorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee', default: null },
     actorName: { type: String, default: '', trim: true },
 
-    // What it was done to, kept loose because the subject may be a review, a
-    // signal, an employee or an objective.
+    // What it was done to.
     subjectKind: { type: String, default: '', trim: true },
     subjectId: { type: mongoose.Schema.Types.ObjectId, default: null, index: true },
 
-    // Readable in the interface without a lookup, so the log is legible to a
-    // person rather than only to a developer.
+    // Readable in the interface without a lookup.
     summary: { type: String, default: '', trim: true },
     detail: { type: mongoose.Schema.Types.Mixed, default: {} },
 

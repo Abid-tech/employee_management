@@ -2,19 +2,13 @@ const User = require("../model/user.js")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
-// The cookie has to travel between two different hosts in production — the
-// site on one Vercel domain, this API on another — and a browser only sends a
-// cross-site cookie when it is marked Secure with SameSite=None. Locally there
-// is no HTTPS, so it stays lax.
+// The cookie has to travel between two different hosts in production.
 const isProduction = process.env.NODE_ENV === 'production'
 const cookieOptions = {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? 'none' : 'lax'
 }
-
-
-
 
 const HandleRegistration = async (req, res) => {
     try {
@@ -28,7 +22,6 @@ const HandleRegistration = async (req, res) => {
             role
         } = req.body
 
-
         // Check if email already exists
         const existingUser = await User.findOne({ email })
 
@@ -39,10 +32,8 @@ const HandleRegistration = async (req, res) => {
             })
         }
 
-
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10)
-
 
         // Create user
         const user = await User.create({
@@ -54,7 +45,6 @@ const HandleRegistration = async (req, res) => {
             password: hashedPassword,
             role
         })
-
 
         res.status(201).json({
             success: true,
@@ -86,7 +76,6 @@ const HandleLogin = async (req, res) => {
 
         const { email, password } = req.body
 
-
         // Check input
         if (!email || !password) {
             return res.status(400).json({
@@ -94,7 +83,6 @@ const HandleLogin = async (req, res) => {
                 message: "Email and password are required"
             })
         }
-
 
         // Find user
         const user = await User.findOne({ email })
@@ -105,7 +93,6 @@ const HandleLogin = async (req, res) => {
                 message: "Invalid email or password"
             })
         }
-
 
         // Check password
         const isPasswordCorrect = await bcrypt.compare(
@@ -120,7 +107,6 @@ const HandleLogin = async (req, res) => {
             })
         }
 
-
         // Create JWT
         const token = jwt.sign(
             {
@@ -134,13 +120,11 @@ const HandleLogin = async (req, res) => {
             }
         )
 
-
         // Store JWT in HTTP-only cookie
         res.cookie("token", token, {
             ...cookieOptions,
             maxAge: 24 * 60 * 60 * 1000
         })
-
 
         // Send response
         res.status(200).json({
@@ -168,8 +152,6 @@ const HandleLogin = async (req, res) => {
     }
 }
 
-
-
 const HandleAuthMe = async (req, res) => {
 
     try {
@@ -177,14 +159,12 @@ const HandleAuthMe = async (req, res) => {
         const user = await User.findById(req.user.userId)
             .select("-password")
 
-
         if (!user) {
             return res.status(404).json({
                 success: false,
                 message: "User not found"
             })
         }
-
 
         res.status(200).json({
             success: true,
@@ -222,8 +202,6 @@ const HandleLogout = (req, res) => {
     })
 }
 
-
-
 const HandleGetAllEmployees = async (req, res) => {
 
     try {
@@ -249,8 +227,5 @@ const HandleGetAllEmployees = async (req, res) => {
         })
     }
 }
-
-
-
 
 module.exports = { HandleRegistration,HandleLogin,HandleAuthMe,HandleLogout,HandleGetAllEmployees }
