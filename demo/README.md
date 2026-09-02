@@ -7,6 +7,8 @@ Sample documents for showing the **Add work → From a document** feature.
 | `courier_brief.md` / `.pdf` / `.docx` | A courier tracking platform. Twelve bullets, twelve tasks, all four departments. The cleanest one to demonstrate. |
 | `clinic_brief.md` / `.pdf` / `.docx` | A clinic appointment system. Twelve tasks across all four departments. |
 | `project_brief.md` / `.pdf` / `.docx` | A supplier portal. Ten tasks. The original sample. |
+| `restaurant_brief.md` / `.pdf` / `.docx` | A restaurant chain ordering platform. Twelve tasks across all four departments. |
+| `library_brief.md` / `.pdf` / `.docx` | A university library borrowing system. Twelve tasks across all four departments. |
 
 The `.md` file is the source in each case. Regenerate the PDF and Word versions
 after editing it:
@@ -60,6 +62,26 @@ Update the staff onboarding policy ...........  Human Resources  Nusrat Jahan
 ```
 
 Totals on the review screen: **12 tasks, 96h estimated, 9 with an owner**.
+
+## What `restaurant_brief` and `library_brief` should produce
+
+Twelve tasks each, routed the same way as the courier brief:
+
+```
+Engineering       8
+Design            1
+Human Resources   2
+Marketing         1
+```
+
+Restaurant totals 96 estimated hours, library 92. Both were run against the live
+roster before being committed.
+
+Two wording traps if you ever write another brief. `service` is on the backend
+keyword list, so "self-service kiosk" sent a design task to Engineering - it was
+reworded to "borrowing kiosk". And a bullet holding both `design` and `screen`
+can go either way, because `screen` is a frontend word; lead with `wireframe` or
+`branding` when Design should win.
 
 ## A note on the two engines
 

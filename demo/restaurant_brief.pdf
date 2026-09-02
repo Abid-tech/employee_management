@@ -1,0 +1,93 @@
+%PDF-1.4
+1 0 obj
+<</Type/Catalog/Pages 2 0 R>>
+endobj
+2 0 obj
+<</Type/Pages/Kids[4 0 R 6 0 R]/Count 2>>
+endobj
+3 0 obj
+<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>
+endobj
+4 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</Font<</F1 3 0 R>>>>/Contents 5 0 R>>
+endobj
+5 0 obj
+<</Length 3733>>
+stream
+BT /F1 11 Tf 56 760 Td (Client Brief — Bengal Bites Online Ordering Platform) Tj ET
+BT /F1 11 Tf 56 744 Td () Tj ET
+BT /F1 11 Tf 56 728 Td (Prepared for Northwind Digital) Tj ET
+BT /F1 11 Tf 56 712 Td (Contact: Tanvir Alam, Operations Director, Bengal Bites Restaurants) Tj ET
+BT /F1 11 Tf 56 696 Td () Tj ET
+BT /F1 11 Tf 56 680 Td (Background) Tj ET
+BT /F1 11 Tf 56 664 Td () Tj ET
+BT /F1 11 Tf 56 648 Td (Bengal Bites runs eleven restaurants across Dhaka and takes about four thousand) Tj ET
+BT /F1 11 Tf 56 632 Td (delivery orders a week. Every order arrives by phone, is written on a pad at the) Tj ET
+BT /F1 11 Tf 56 616 Td (counter, and is carried to the kitchen by hand. Nobody can tell a customer how) Tj ET
+BT /F1 11 Tf 56 600 Td (long their food will take, branch managers only learn what sold when they count) Tj ET
+BT /F1 11 Tf 56 584 Td (the pads at midnight, and an order lost between the counter and the kitchen is) Tj ET
+BT /F1 11 Tf 56 568 Td (discovered when the customer calls back angry.) Tj ET
+BT /F1 11 Tf 56 552 Td () Tj ET
+BT /F1 11 Tf 56 536 Td (They want a platform where customers order from their phone, the kitchen sees) Tj ET
+BT /F1 11 Tf 56 520 Td (each order appear on a screen as it is placed, and every branch manager can see) Tj ET
+BT /F1 11 Tf 56 504 Td (what is selling while the evening is still running.) Tj ET
+BT /F1 11 Tf 56 488 Td () Tj ET
+BT /F1 11 Tf 56 472 Td (What we need built) Tj ET
+BT /F1 11 Tf 56 456 Td () Tj ET
+BT /F1 11 Tf 56 440 Td (- Build the customer ordering screen for browsing the menu and placing an order) Tj ET
+BT /F1 11 Tf 56 424 Td (- Create the order management API that accepts an order and returns its kitchen status) Tj ET
+BT /F1 11 Tf 56 408 Td (- Set up the database schema for menu items, orders, branches and delivery riders) Tj ET
+BT /F1 11 Tf 56 392 Td (- Design the kitchen display screen that groups incoming orders by preparation stage) Tj ET
+BT /F1 11 Tf 56 376 Td (- Build the branch manager dashboard reporting daily sales and the most popular items) Tj ET
+BT /F1 11 Tf 56 360 Td (- Integrate the payment gateway so customers can pay by card or mobile wallet) Tj ET
+BT /F1 11 Tf 56 344 Td (- Write end to end tests for the ordering, payment and cancellation paths) Tj ET
+BT /F1 11 Tf 56 328 Td (- Research how two competing food delivery apps handle a cancelled order) Tj ET
+BT /F1 11 Tf 56 312 Td (- Deploy the platform to a staging environment for the Dhanmondi branch to trial) Tj ET
+BT /F1 11 Tf 56 296 Td (- Draft the kitchen staff training manual in Bangla with screenshots) Tj ET
+BT /F1 11 Tf 56 280 Td (- Prepare the launch campaign for the loyalty newsletter) Tj ET
+BT /F1 11 Tf 56 264 Td (- Update the delivery rider onboarding policy to cover the new order flow) Tj ET
+BT /F1 11 Tf 56 248 Td () Tj ET
+BT /F1 11 Tf 56 232 Td (Constraints) Tj ET
+BT /F1 11 Tf 56 216 Td () Tj ET
+BT /F1 11 Tf 56 200 Td (The customer ordering screen and the order management API are critical. Bengal) Tj ET
+BT /F1 11 Tf 56 184 Td (Bites has already booked radio advertising for the first week of next month and) Tj ET
+BT /F1 11 Tf 56 168 Td (neither of those can slip.) Tj ET
+BT /F1 11 Tf 56 152 Td () Tj ET
+BT /F1 11 Tf 56 136 Td (The branch manager dashboard is important but can follow two weeks later, once) Tj ET
+BT /F1 11 Tf 56 120 Td (real orders are flowing through the system.) Tj ET
+BT /F1 11 Tf 56 104 Td () Tj ET
+BT /F1 11 Tf 56 88 Td (The loyalty newsletter campaign and the kitchen training manual are nice to have) Tj ET
+BT /F1 11 Tf 56 72 Td (for launch day and can be finished afterwards if time runs short.) Tj ET
+BT /F1 11 Tf 56 56 Td () Tj ET
+BT /F1 11 Tf 56 40 Td (A security review is required before any card payments are accepted.) Tj ET
+endstream
+endobj
+6 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</Font<</F1 3 0 R>>>>/Contents 7 0 R>>
+endobj
+7 0 obj
+<</Length 403>>
+stream
+BT /F1 11 Tf 56 760 Td () Tj ET
+BT /F1 11 Tf 56 744 Td (Out of scope) Tj ET
+BT /F1 11 Tf 56 728 Td () Tj ET
+BT /F1 11 Tf 56 712 Td (Table reservations and the in-restaurant point of sale, which stay on the) Tj ET
+BT /F1 11 Tf 56 696 Td (existing till system. Supplier and stock ordering is a later phase and is not) Tj ET
+BT /F1 11 Tf 56 680 Td (part of this work.) Tj ET
+BT /F1 11 Tf 56 664 Td () Tj ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000054 00000 n 
+0000000111 00000 n 
+0000000199 00000 n 
+0000000311 00000 n 
+0000004094 00000 n 
+0000004206 00000 n 
+trailer<</Size 8/Root 1 0 R>>
+startxref
+4658
+%%EOF

@@ -1,0 +1,94 @@
+%PDF-1.4
+1 0 obj
+<</Type/Catalog/Pages 2 0 R>>
+endobj
+2 0 obj
+<</Type/Pages/Kids[4 0 R 6 0 R]/Count 2>>
+endobj
+3 0 obj
+<</Type/Font/Subtype/Type1/BaseFont/Helvetica/Encoding/WinAnsiEncoding>>
+endobj
+4 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</Font<</F1 3 0 R>>>>/Contents 5 0 R>>
+endobj
+5 0 obj
+<</Length 3566>>
+stream
+BT /F1 11 Tf 56 760 Td (Client Brief — Central Library Borrowing System) Tj ET
+BT /F1 11 Tf 56 744 Td () Tj ET
+BT /F1 11 Tf 56 728 Td (Prepared for Northwind Digital) Tj ET
+BT /F1 11 Tf 56 712 Td (Contact: Dr Rehana Karim, Chief Librarian, Central University Library) Tj ET
+BT /F1 11 Tf 56 696 Td () Tj ET
+BT /F1 11 Tf 56 680 Td (Background) Tj ET
+BT /F1 11 Tf 56 664 Td () Tj ET
+BT /F1 11 Tf 56 648 Td (The Central University Library holds about ninety thousand titles and serves) Tj ET
+BT /F1 11 Tf 56 632 Td (eleven thousand students. Borrowing is recorded in a ledger at the issue desk,) Tj ET
+BT /F1 11 Tf 56 616 Td (so a student who wants to know whether a book is on the shelf has to walk to) Tj ET
+BT /F1 11 Tf 56 600 Td (the third floor and look. Overdue notices are typed by hand once a fortnight,) Tj ET
+BT /F1 11 Tf 56 584 Td (by which time a book has usually been missing for a month, and the queue at the) Tj ET
+BT /F1 11 Tf 56 568 Td (issue desk during examination weeks runs past the entrance.) Tj ET
+BT /F1 11 Tf 56 552 Td () Tj ET
+BT /F1 11 Tf 56 536 Td (They want a system where students search the catalogue from their phone, borrow) Tj ET
+BT /F1 11 Tf 56 520 Td (and return at a self-service kiosk, and librarians see overdue loans without) Tj ET
+BT /F1 11 Tf 56 504 Td (counting anything by hand.) Tj ET
+BT /F1 11 Tf 56 488 Td () Tj ET
+BT /F1 11 Tf 56 472 Td (What we need built) Tj ET
+BT /F1 11 Tf 56 456 Td () Tj ET
+BT /F1 11 Tf 56 440 Td (- Build the student catalogue search screen for finding a title and checking availability) Tj ET
+BT /F1 11 Tf 56 424 Td (- Create the borrowing API that issues, renews and returns a copy) Tj ET
+BT /F1 11 Tf 56 408 Td (- Set up the database schema for titles, copies, members and loans) Tj ET
+BT /F1 11 Tf 56 392 Td (- Design the wireframes and branding for the borrowing kiosk) Tj ET
+BT /F1 11 Tf 56 376 Td (- Build the librarian dashboard reporting overdue loans and the most borrowed titles) Tj ET
+BT /F1 11 Tf 56 360 Td (- Integrate the SMS gateway so a member is reminded before a loan falls due) Tj ET
+BT /F1 11 Tf 56 344 Td (- Write end to end tests for the issue, renew and return paths) Tj ET
+BT /F1 11 Tf 56 328 Td (- Research how two other university libraries handle reservation queues) Tj ET
+BT /F1 11 Tf 56 312 Td (- Deploy the system to a staging environment for the main reading room to trial) Tj ET
+BT /F1 11 Tf 56 296 Td (- Draft the library assistant training manual with screenshots) Tj ET
+BT /F1 11 Tf 56 280 Td (- Prepare the announcement campaign for the student newsletter) Tj ET
+BT /F1 11 Tf 56 264 Td (- Update the borrowing policy to cover the new renewal limits) Tj ET
+BT /F1 11 Tf 56 248 Td () Tj ET
+BT /F1 11 Tf 56 232 Td (Constraints) Tj ET
+BT /F1 11 Tf 56 216 Td () Tj ET
+BT /F1 11 Tf 56 200 Td (The catalogue search screen and the borrowing API are critical. The library has) Tj ET
+BT /F1 11 Tf 56 184 Td (committed to running the new system from the start of the next semester and) Tj ET
+BT /F1 11 Tf 56 168 Td (neither of those can slip.) Tj ET
+BT /F1 11 Tf 56 152 Td () Tj ET
+BT /F1 11 Tf 56 136 Td (The librarian dashboard is important but can follow three weeks later, once loan) Tj ET
+BT /F1 11 Tf 56 120 Td (data is actually being recorded.) Tj ET
+BT /F1 11 Tf 56 104 Td () Tj ET
+BT /F1 11 Tf 56 88 Td (The student newsletter campaign and the library assistant training manual are) Tj ET
+BT /F1 11 Tf 56 72 Td (nice to have for the opening week and can be finished afterwards if time runs) Tj ET
+BT /F1 11 Tf 56 56 Td (short.) Tj ET
+BT /F1 11 Tf 56 40 Td () Tj ET
+endstream
+endobj
+6 0 obj
+<</Type/Page/Parent 2 0 R/MediaBox[0 0 595 842]/Resources<</Font<</F1 3 0 R>>>>/Contents 7 0 R>>
+endobj
+7 0 obj
+<</Length 506>>
+stream
+BT /F1 11 Tf 56 760 Td (A security review is required before any student records are loaded.) Tj ET
+BT /F1 11 Tf 56 744 Td () Tj ET
+BT /F1 11 Tf 56 728 Td (Out of scope) Tj ET
+BT /F1 11 Tf 56 712 Td () Tj ET
+BT /F1 11 Tf 56 696 Td (Inter-library loans and the journal subscription catalogue, which stay with the) Tj ET
+BT /F1 11 Tf 56 680 Td (existing supplier. Fine collection and payment is a later phase and is not part) Tj ET
+BT /F1 11 Tf 56 664 Td (of this work.) Tj ET
+BT /F1 11 Tf 56 648 Td () Tj ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000054 00000 n 
+0000000111 00000 n 
+0000000199 00000 n 
+0000000311 00000 n 
+0000003927 00000 n 
+0000004039 00000 n 
+trailer<</Size 8/Root 1 0 R>>
+startxref
+4594
+%%EOF
