@@ -4,7 +4,7 @@ const API_ROOT = 'https://generativelanguage.googleapis.com/v1beta/models'
 const TIMEOUT_MS = 120000
 
 const isConfigured = () => Boolean(process.env.GEMINI_API_KEY)
-const modelName = () => process.env.GEMINI_MODEL || 'gemini-2.5-flash'
+const modelName = () => process.env.GEMINI_MODEL || 'gemini-3.6-flash'
 
 // Gemini accepts an OpenAPI-style schema and will only answer with JSON that matches it.
 const PLAN_SCHEMA = {
